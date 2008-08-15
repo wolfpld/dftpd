@@ -8,7 +8,8 @@ INCLUDES =
 
 OBJ = \
 	Listener.o \
-	Main.o
+	Main.o \
+	Session.o
 
 all: dftpd
 
