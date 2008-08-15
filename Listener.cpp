@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string.h>
 #include <unistd.h>
+#include <errno.h>
 #include <netdb.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -15,7 +16,11 @@ Listener::Listener()
 	char buf[128];
 	gethostname( buf, 128 );
 	
-	struct hostent* h = gethostbyname( buf );
+	struct hostent* h;
+	if( ( h = gethostbyname( buf ) ) == (void*)-1 )
+	{
+		throw strerror( errno );
+	}
 	m_ipaddr = inet_ntoa( *((struct in_addr*)h->h_addr) );
 }
 
@@ -24,7 +29,10 @@ Listener::~Listener()
 	if( m_sock != 0 )
 	{
 		std::cout << "[Listener] Closing socket" << std::endl;
-		close( m_sock );
+		if( close( m_sock ) == -1 )
+		{
+			throw strerror( errno );
+		}
 	}
 }
 
@@ -32,7 +40,10 @@ void Listener::Listen()
 {
 	std::cout << "[Listener] Opening socket" << std::endl;
 
-	m_sock = socket( PF_INET, SOCK_STREAM, 0 );
+	if( ( m_sock = socket( PF_INET, SOCK_STREAM, 0 ) ) == -1 )
+	{
+		throw strerror( errno );
+	}
 
 	struct sockaddr_in addr;
 	addr.sin_family = AF_INET;
@@ -40,5 +51,8 @@ void Listener::Listen()
 	addr.sin_addr.s_addr = inet_addr( m_ipaddr.c_str() );
 	memset( addr.sin_zero, 0, sizeof( addr.sin_zero ) );
 
-	bind( m_sock, (struct sockaddr*)&addr, sizeof( addr ) );
+	if( bind( m_sock, (struct sockaddr*)&addr, sizeof( addr ) ) == -1 )
+	{
+		throw strerror( errno );
+	}
 }
