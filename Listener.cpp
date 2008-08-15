@@ -55,4 +55,9 @@ void Listener::Listen()
 	{
 		throw strerror( errno );
 	}
+
+	if( listen( m_sock, 5 ) == -1 )
+	{
+		throw strerror( errno );
+	}
 }
