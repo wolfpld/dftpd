@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <netdb.h>
+#include <fcntl.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -45,6 +46,12 @@ void Listener::Listen()
 		throw strerror( errno );
 	}
 
+	// Set socket to non-blocking
+	if( fcntl( m_sock, F_SETFL, O_NONBLOCK ) == -1 )
+	{
+		throw strerror( errno );
+	}
+
 	struct sockaddr_in addr;
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons( 21 );
@@ -60,4 +67,24 @@ void Listener::Listen()
 	{
 		throw strerror( errno );
 	}
+}
+
+void Listener::Tick()
+{
+	// Check if there are some incoming connections
+	struct sockaddr_in addr;
+	socklen_t size = sizeof( addr );
+
+	int incoming = accept( m_sock, (struct sockaddr*)&addr, &size );
+	if( incoming == -1 )
+	{
+		if( errno == EAGAIN )
+		{
+			// No error, just no connections in queue
+			return;
+		}
+		throw strerror( errno );
+	}
+
+	std::cout << "Incoming connection\n";
 }

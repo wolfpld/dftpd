@@ -7,6 +7,7 @@ public:
 	~Listener();
 
 	void Listen();
+	void Tick();
 
 	const std::string& GetIPAddr() const { return m_ipaddr; }
 

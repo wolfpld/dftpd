@@ -1,4 +1,5 @@
 #include <iostream>
+#include <unistd.h>
 #include "Listener.hpp"
 
 void Run()
@@ -8,6 +9,12 @@ void Run()
 	std::cout << "Dumb FTP server\nIP: " << l.GetIPAddr() << std::endl;
 
 	l.Listen();
+
+	for(;;)
+	{
+		l.Tick();
+		usleep(10000);
+	}
 }
 
 int main()
