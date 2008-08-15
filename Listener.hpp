@@ -6,6 +6,8 @@ public:
 	Listener();
 	~Listener();
 
+	void Listen();
+
 	const std::string& GetIPAddr() const { return m_ipaddr; }
 
 private:

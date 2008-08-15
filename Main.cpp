@@ -7,5 +7,7 @@ int main()
 
 	std::cout << "Dumb FTP server\nIP: " << l.GetIPAddr() << std::endl;
 
+	l.Listen();
+
 	return 0;
 }
