@@ -38,10 +38,10 @@ void Server::Tick()
 
 void Server::IncomingConnection( int sock )
 {
-	struct sockaddr_in addr;
-	socklen_t size = sizeof( struct sockaddr_in );
+	sockaddr_in addr;
+	socklen_t size = sizeof( sockaddr_in );
 
-	if( getpeername( sock, (struct sockaddr*)&addr, &size ) == -1 )
+	if( getpeername( sock, (sockaddr*)&addr, &size ) == -1 )
 	{
 		throw strerror( errno );
 	}

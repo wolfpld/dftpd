@@ -18,12 +18,12 @@ Listener::Listener()
 	char buf[128];
 	gethostname( buf, 128 );
 	
-	struct hostent* h;
+	hostent* h;
 	if( ( h = gethostbyname( buf ) ) == (void*)-1 )
 	{
 		throw strerror( errno );
 	}
-	m_ipaddr = inet_ntoa( *((struct in_addr*)h->h_addr) );
+	m_ipaddr = inet_ntoa( *((in_addr*)h->h_addr) );
 }
 
 Listener::~Listener()
@@ -50,13 +50,13 @@ void Listener::Listen()
 		throw strerror( errno );
 	}
 
-	struct sockaddr_in addr;
+	sockaddr_in addr;
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons( 21 );
 	addr.sin_addr.s_addr = inet_addr( m_ipaddr.c_str() );
 	memset( addr.sin_zero, 0, sizeof( addr.sin_zero ) );
 
-	if( bind( m_sock, (struct sockaddr*)&addr, sizeof( addr ) ) == -1 )
+	if( bind( m_sock, (sockaddr*)&addr, sizeof( addr ) ) == -1 )
 	{
 		throw strerror( errno );
 	}
@@ -70,10 +70,10 @@ void Listener::Listen()
 void Listener::Tick()
 {
 	// Check if there are some incoming connections
-	struct sockaddr_in addr;
+	sockaddr_in addr;
 	socklen_t size = sizeof( addr );
 
-	int incoming = accept( m_sock, (struct sockaddr*)&addr, &size );
+	int incoming = accept( m_sock, (sockaddr*)&addr, &size );
 	if( incoming == -1 )
 	{
 		if( errno == EAGAIN )
