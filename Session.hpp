@@ -9,6 +9,8 @@ public:
 	Session( int controlSock );
 	~Session();
 
+	void Tick();
+
 private:
 	int m_controlSock;
 	int m_id;

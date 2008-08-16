@@ -20,3 +20,7 @@ Session::~Session()
 		close( m_controlSock );
 	}
 }
+
+void Session::Tick()
+{
+}
