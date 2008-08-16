@@ -48,7 +48,7 @@ void Server::IncomingConnection( int sock )
 
 	std::cout << "Incoming connection from " << inet_ntoa( addr.sin_addr ) << std::endl;
 
-	m_sessionController->Add( SessionPtr( new Session( sock ) ) );
+	m_sessionController->Add( SessionPtr( new Session( sock, m_sessionController ) ) );
 }
 
 void Server::InitListener()

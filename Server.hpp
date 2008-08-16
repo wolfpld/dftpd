@@ -8,9 +8,8 @@
 class Server
 {
 public:
-	~Server();
-
 	static ServerPtr Create();
+	~Server();
 
 	void Tick();
 

@@ -3,8 +3,8 @@
 
 #include <list>
 #include <queue>
-#include <boost/shared_ptr.hpp>
 #include "Session.hpp"
+#include "SessionControllerPtr.hpp"
 
 class SessionController
 {
@@ -21,7 +21,5 @@ private:
 	std::list<SessionPtr> m_list;
 	std::queue<SessionPtr> m_removeList;
 };
-
-typedef boost::shared_ptr<SessionController> SessionControllerPtr;
 
 #endif

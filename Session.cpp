@@ -5,9 +5,10 @@
 
 int Session::m_counter = 0;
 
-Session::Session( int controlSock )
+Session::Session( int controlSock, const SessionControllerPtr& sessionController )
 	: m_controlSock( controlSock )
 	, m_id( m_counter++ )
+	, m_sessionController( sessionController )
 {
 	std::cout << "Initializing session " << m_id << std::endl;
 }
