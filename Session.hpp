@@ -11,6 +11,9 @@ public:
 
 private:
 	int m_controlSock;
+	int m_id;
+
+	static int m_counter;
 };
 
 typedef boost::shared_ptr<Session> SessionPtr;

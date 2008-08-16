@@ -13,6 +13,8 @@ public:
 
 	void Tick();
 
+	void Add( const SessionPtr& session );
+
 private:
 	std::list<SessionPtr> m_list;
 };
