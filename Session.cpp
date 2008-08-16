@@ -13,7 +13,7 @@ Session::Session( int controlSock, const SessionControllerPtr& sessionController
 	: m_control( new Telnet( controlSock ) )
 	, m_controlSock( controlSock )
 	, m_id( m_counter++ )
-	, m_state( GREETING )
+	, m_state( S_GREETING )
 	, m_sessionController( sessionController )
 {
 	std::cout << "[Session] Initializing session " << m_id << std::endl;
@@ -50,17 +50,32 @@ void Session::Tick()
 		{
 			switch( m_state )
 			{
-			case GREETING:
+			case S_GREETING:
 				SendGreeting();
-				m_state = LOGIN;
+				m_state = S_LOGIN;
 				break;
 
-			case LOGIN:
+			case S_LOGIN:
 				if( AwaitLogin() )
 				{
-					m_state = PASSWORD;
+					m_state = S_PASSWORD;
 				}
 				break;
+
+			case S_PASSWORD:
+			{
+				PassState state = AwaitPassword();
+
+				if( state == PS_LOGGEDIN )
+				{
+					m_state = S_READY;
+				}
+				else if( state == PS_BADPASS )
+				{
+					m_state = S_LOGIN;
+				}
+				break;
+			}
 
 			default:
 				break;
@@ -105,6 +120,11 @@ void Session::SendSyntaxError()
 	m_control->Write( "500 Syntax error" );
 }
 
+void Session::SendNotLoggedIn()
+{
+	m_control->Write( "530 Not logged in" );
+}
+
 bool Session::AwaitLogin()
 {
 	if( m_control->Read() )
@@ -130,10 +150,42 @@ bool Session::AwaitLogin()
 		}
 		else
 		{
-			m_control->Write( "530 Not logged in" );
-			return false;
+			SendNotLoggedIn();
 		}
 	}
 
 	return false;
+}
+
+Session::PassState Session::AwaitPassword()
+{
+	if( m_control->Read() )
+	{
+		Command cmd = GetCommand();
+
+		if( cmd[0] == "PASS" )
+		{
+			if( cmd.size() != 2 )
+			{
+				throw SyntaxErrorException;
+			}
+
+			std::cout << "[Session] Password " << cmd[1] << " on session " << m_id << std::endl;
+
+			m_control->Write( "230 Logged in" );
+
+			return PS_LOGGEDIN;
+		}
+		else if( cmd[0] == "QUIT" )
+		{
+			throw QuitRequestedException;
+		}
+		else
+		{
+			SendNotLoggedIn();
+			return PS_BADPASS;
+		}
+	}
+
+	return PS_NONE;
 }

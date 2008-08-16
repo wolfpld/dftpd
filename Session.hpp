@@ -12,10 +12,17 @@ class Session
 {
 	enum State
 	{
-		GREETING,
-		LOGIN,
-		PASSWORD,
-		READY
+		S_GREETING,
+		S_LOGIN,
+		S_PASSWORD,
+		S_READY
+	};
+
+	enum PassState
+	{
+		PS_NONE,
+		PS_LOGGEDIN,
+		PS_BADPASS
 	};
 
 public:
@@ -31,7 +38,9 @@ private:
 
 	void SendGreeting();
 	void SendSyntaxError();
+	void SendNotLoggedIn();
 	bool AwaitLogin();
+	PassState AwaitPassword();
 
 	Command GetCommand() { return ParseCommand( m_control->GetBuf() ); }
 
