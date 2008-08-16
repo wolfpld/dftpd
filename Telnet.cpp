@@ -22,12 +22,20 @@ bool Telnet::Read()
 	int size = recv( m_sock, buf, 1024, 0 );
 	if( size == -1 )
 	{
+		if( errno == EAGAIN )
+		{
+			// No error, just nothing to be read from socket
+			return false;
+		}
+
 		throw strerror( errno );
 	}
 	else if( size == 0 )
 	{
 		throw ConnectionTerminatedException;
 	}
+
+	return true;
 }
 
 std::string Telnet::GetBuf()
