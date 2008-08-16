@@ -30,6 +30,7 @@ private:
 	void Remove();
 
 	void SendGreeting();
+	void SendSyntaxError();
 	bool AwaitLogin();
 
 	Command GetCommand() { return ParseCommand( m_control->GetBuf() ); }

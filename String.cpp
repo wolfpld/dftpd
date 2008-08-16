@@ -1,6 +1,7 @@
 #include <ctype.h>
 #include <algorithm>
 #include "String.hpp"
+#include "Exceptions.hpp"
 
 inline static bool IsSpace( char c )
 {
@@ -39,6 +40,11 @@ std::vector<std::string> Split( const std::string& str )
 std::vector<std::string> ParseCommand( const std::string& cmd )
 {
 	std::vector<std::string> ret( Split( cmd ) );
+
+	if( cmd.size() == 0 )
+	{
+		throw SyntaxErrorException;
+	}
 
 	std::transform( ret[0].begin(), ret[0].end(), ret[0].begin(), toupper );
 

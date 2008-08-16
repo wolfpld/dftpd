@@ -3,8 +3,7 @@
 #include <string.h>
 #include <errno.h>
 #include "Telnet.hpp"
-
-ConnectionTerminated ConnectionTerminatedException;
+#include "Exceptions.hpp"
 
 const char CRLF[] = { 13, 10, 0 };
 

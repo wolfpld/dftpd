@@ -7,6 +7,7 @@ INCLUDES =
 # --
 
 OBJ = \
+	Exceptions.o \
 	Listener.o \
 	Main.o \
 	Server.o \

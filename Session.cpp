@@ -5,6 +5,7 @@
 #include "Session.hpp"
 #include "SessionController.hpp"
 #include "String.hpp"
+#include "Exceptions.hpp"
 
 int Session::m_counter = 0;
 
@@ -45,22 +46,29 @@ void Session::Tick()
 {
 	try
 	{
-		switch( m_state )
+		try
 		{
-		case GREETING:
-			SendGreeting();
-			m_state = LOGIN;
-			break;
-
-		case LOGIN:
-			if( AwaitLogin() )
+			switch( m_state )
 			{
-				m_state = PASSWORD;
-			}
-			break;
+			case GREETING:
+				SendGreeting();
+				m_state = LOGIN;
+				break;
 
-		default:
-			break;
+			case LOGIN:
+				if( AwaitLogin() )
+				{
+					m_state = PASSWORD;
+				}
+				break;
+
+			default:
+				break;
+			}
+		}
+		catch( SyntaxError& e )
+		{
+			SendSyntaxError();
 		}
 	}
 	catch( ConnectionTerminated& e )
@@ -87,6 +95,11 @@ void Session::SendGreeting()
 	m_control->Write( "220 Dumb FTP Server ready" );
 }
 
+void Session::SendSyntaxError()
+{
+	m_control->Write( "500 Syntax error" );
+}
+
 bool Session::AwaitLogin()
 {
 	if( m_control->Read() )
@@ -97,14 +110,22 @@ bool Session::AwaitLogin()
 		{
 			if( cmd.size() != 2 )
 			{
-				m_control->Write( "500 Syntax error" );
-				return false;
+				throw SyntaxErrorException;
 			}
 
 			std::cout << "[Session] User " << cmd[1] << " on session " << m_id << std::endl;
 
 			m_control->Write( "331 Need password" );
+
 			return true;
+		}
+		else if( cmd[0] == "QUIT" )
+		{
+		}
+		else
+		{
+			m_control->Write( "530 Not logged in" );
+			return false;
 		}
 	}
 
