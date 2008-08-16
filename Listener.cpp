@@ -50,6 +50,13 @@ void Listener::Listen()
 		throw strerror( errno );
 	}
 
+	// Reuse port
+	int yes = 1;
+	if( setsockopt( m_sock, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof( int ) ) == -1 )
+	{
+		throw strerror( errno );
+	}
+
 	sockaddr_in addr;
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons( 21 );
