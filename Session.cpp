@@ -70,6 +70,11 @@ void Session::Tick()
 		{
 			SendSyntaxError();
 		}
+		catch( QuitRequested& e )
+		{
+			m_control->Write( "221 Bye" );
+			Remove();
+		}
 	}
 	catch( ConnectionTerminated& e )
 	{
@@ -121,6 +126,7 @@ bool Session::AwaitLogin()
 		}
 		else if( cmd[0] == "QUIT" )
 		{
+			throw QuitRequestedException;
 		}
 		else
 		{

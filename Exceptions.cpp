@@ -2,3 +2,4 @@
 
 ConnectionTerminated ConnectionTerminatedException;
 SyntaxError SyntaxErrorException;
+QuitRequested QuitRequestedException;

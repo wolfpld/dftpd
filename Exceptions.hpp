@@ -3,8 +3,10 @@
 
 class ConnectionTerminated {};
 class SyntaxError {};
+class QuitRequested {};
 
 extern ConnectionTerminated ConnectionTerminatedException;
 extern SyntaxError SyntaxErrorException;
+extern QuitRequested QuitRequestedException;
 
 #endif
