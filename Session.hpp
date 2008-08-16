@@ -7,6 +7,14 @@
 
 class Session
 {
+	enum State
+	{
+		GREETING,
+		LOGIN,
+		PASSWORD,
+		READY
+	};
+
 public:
 	static SessionPtr Create( int controlSock, const SessionControllerPtr& sessionController );
 	~Session();
@@ -18,11 +26,15 @@ private:
 
 	void Remove();
 
+	void SendGreeting();
+
 	TelnetPtr m_control;
 	int m_controlSock;
 
 	int m_id;
 	static int m_counter;
+
+	State m_state;
 
 	SessionControllerWPtr m_sessionController;
 	SessionWPtr m_this;

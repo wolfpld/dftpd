@@ -11,6 +11,7 @@ Session::Session( int controlSock, const SessionControllerPtr& sessionController
 	: m_control( new Telnet( controlSock ) )
 	, m_controlSock( controlSock )
 	, m_id( m_counter++ )
+	, m_state( GREETING )
 	, m_sessionController( sessionController )
 {
 	std::cout << "[Session] Initializing session " << m_id << std::endl;
@@ -43,7 +44,17 @@ void Session::Tick()
 {
 	try
 	{
-		m_control->Read();
+		switch( m_state )
+		{
+		case GREETING:
+			SendGreeting();
+			m_state = LOGIN;
+			break;
+
+		default:
+			break;
+		}
+		//m_control->Read();
 	}
 	catch( ConnectionTerminated& e )
 	{
@@ -62,4 +73,9 @@ void Session::Remove()
 	}
 
 	sessionController->Remove( m_this.lock() );
+}
+
+void Session::SendGreeting()
+{
+	m_control->Write( "220 Dumb FTP Server ready" );
 }
