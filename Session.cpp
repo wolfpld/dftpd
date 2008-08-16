@@ -34,7 +34,15 @@ SessionPtr Session::Create( int controlSock, const SessionControllerPtr& session
 
 void Session::Tick()
 {
-	Remove();
+	try
+	{
+		m_control->Read();
+	}
+	catch( ConnectionTerminated& e )
+	{
+		std::cout << "[Session] Connection " << m_id << " terminated\n";
+		Remove();
+	}
 }
 
 void Session::Remove()
