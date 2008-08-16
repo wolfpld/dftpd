@@ -2,6 +2,7 @@
 #include <string.h>
 #include <errno.h>
 #include "Session.hpp"
+#include "SessionController.hpp"
 
 int Session::m_counter = 0;
 
@@ -22,6 +23,22 @@ Session::~Session()
 	}
 }
 
+SessionPtr Session::Create( int controlSock, const SessionControllerPtr& sessionController )
+{
+	SessionPtr ret( new Session( controlSock, sessionController ) );
+	ret->m_this = ret;
+
+	return ret;
+}
+
 void Session::Tick()
 {
+	SessionControllerPtr sessionController = m_sessionController.lock();
+
+	if( !sessionController )
+	{
+		throw "Session lost SessionController";
+	}
+
+	sessionController->Remove( m_this.lock() );
 }
