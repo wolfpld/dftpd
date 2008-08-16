@@ -12,11 +12,11 @@ void RequestExit( int signum )
 
 void Run()
 {
-	Server server;
+	ServerPtr server( Server::Create() );
 
 	while( !g_exitRequested )
 	{
-		server.Tick();
+		server->Tick();
 		usleep(10000);
 	}
 }

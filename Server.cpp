@@ -15,8 +15,23 @@ Server::~Server()
 	std::cout << "Shutting down server\n";
 }
 
+ServerPtr Server::Create()
+{
+	ServerPtr ret( new Server );
+	ret->m_this = ret;
+
+	ret->InitListener();
+
+	return ret;
+}
+
 void Server::Tick()
 {
 	m_listener->Tick();
 	m_sessionController->Tick();
+}
+
+void Server::InitListener()
+{
+	m_listener->SetServer( m_this );
 }
