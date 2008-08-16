@@ -1,0 +1,46 @@
+#include <ctype.h>
+#include <algorithm>
+#include "String.hpp"
+
+inline static bool IsSpace( char c )
+{
+	return isspace( c );
+}
+
+inline static bool IsNotSpace( char c )
+{
+	return !isspace( c );
+}
+
+std::vector<std::string> Split( const std::string& str )
+{
+	std::vector<std::string> ret;
+
+	typedef std::string::const_iterator Iter;
+
+	Iter i = str.begin(), j;
+
+	while( i != str.end() )
+	{
+		i = std::find_if( i, str.end(), IsNotSpace );
+		j = std::find_if( i, str.end(), IsSpace );
+
+		if( i != str.end() )
+		{
+			ret.push_back( std::string( i, j ) );
+		}
+
+		i = j;
+	}
+
+	return ret;
+}
+
+std::vector<std::string> ParseCommand( const std::string& cmd )
+{
+	std::vector<std::string> ret( Split( cmd ) );
+
+	std::transform( ret[0].begin(), ret[0].end(), ret[0].begin(), toupper );
+
+	return ret;
+}
