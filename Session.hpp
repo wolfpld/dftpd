@@ -44,6 +44,10 @@ private:
 	PassState AwaitPassword();
 	void AwaitReady();
 
+	void HandleMode( const Command& cmd );
+	void HandleType( const Command& cmd );
+	void HandleStru( const Command& cmd );
+
 	Command GetCommand() { return ParseCommand( m_control->GetBuf() ); }
 
 

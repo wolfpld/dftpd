@@ -140,7 +140,8 @@ bool Session::AwaitLogin()
 		{
 			if( cmd.size() != 2 )
 			{
-				throw SyntaxErrorException;
+				SendSyntaxError();
+				return false;
 			}
 
 			if( m_auth->Login( cmd[1] ) )
@@ -177,7 +178,8 @@ Session::PassState Session::AwaitPassword()
 		{
 			if( cmd.size() != 2 )
 			{
-				throw SyntaxErrorException;
+				SendSyntaxError();
+				return PS_BADPASS;
 			}
 
 			if( m_auth->Password( cmd[1] ) )
@@ -219,9 +221,109 @@ void Session::AwaitReady()
 		{
 			m_control->Write( "200 OK" );
 		}
+		else if( cmd[0] == "MODE" )
+		{
+			HandleMode( cmd );
+		}
+		else if( cmd[0] == "TYPE" )
+		{
+			HandleType( cmd );
+		}
+		else if( cmd[0] == "STRU" )
+		{
+			HandleStru( cmd );
+		}
 		else
 		{
 			throw SyntaxErrorException;
 		}
+	}
+}
+
+void Session::HandleMode( const Command& cmd )
+{
+	if( cmd.size() != 2 )
+	{
+		throw SyntaxErrorException;
+	}
+
+	std::string param = cmd[1];
+	ToUpper( param );
+
+	if( param == "S" )
+	{
+		m_control->Write( "200 OK" );
+	}
+	else if( param == "B" || param == "C" )
+	{
+		m_control->Write( "504 Not implemented" );
+	}
+	else
+	{
+		throw SyntaxErrorException;
+	}
+}
+
+void Session::HandleType( const Command& cmd )
+{
+	if( cmd.size() < 2 || cmd.size() > 3)
+	{
+		throw SyntaxErrorException;
+	}
+
+	std::string param = cmd[1];
+	ToUpper( param );
+
+	if( param == "A" )
+	{
+		if( cmd.size() == 3 )
+		{
+			std::string param2 = cmd[2];
+			ToUpper( param2 );
+
+			if( param2 != "N" )
+			{
+				m_control->Write( "504 Not implemented" );
+				return;
+			}
+		}
+
+		m_control->Write( "200 OK" );
+	}
+	else if( param == "E" || param == "I" || param == "L" )
+	{
+		m_control->Write( "504 Not implemented" );
+	}
+	else
+	{
+		throw SyntaxErrorException;
+	}
+}
+
+void Session::HandleStru( const Command& cmd )
+{
+	if( cmd.size() != 2 )
+	{
+		throw SyntaxErrorException;
+	}
+
+	std::string param = cmd[1];
+	ToUpper( param );
+
+	if( param == "F" )
+	{
+		m_control->Write( "200 OK" );
+	}
+	else if( param == "R" )
+	{
+		throw "STRU R not implemented";
+	}
+	else if( param == "P" )
+	{
+		m_control->Write( "504 Not implemented" );
+	}
+	else
+	{
+		throw SyntaxErrorException;
 	}
 }
