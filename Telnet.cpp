@@ -95,7 +95,7 @@ std::string Telnet::GetBuf()
 
 	ret = m_readBuf.substr( 0, pos );
 
-	m_readBuf.erase( 0, pos + 1 );
+	m_readBuf.erase( 0, pos + 2 );
 
 	return ret;
 }
