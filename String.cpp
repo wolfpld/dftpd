@@ -46,7 +46,12 @@ std::vector<std::string> ParseCommand( const std::string& cmd )
 		throw SyntaxErrorException;
 	}
 
-	std::transform( ret[0].begin(), ret[0].end(), ret[0].begin(), toupper );
+	ToUpper( ret[0] );
 
 	return ret;
+}
+
+void ToUpper( std::string& str )
+{
+	std::transform( str.begin(), str.end(), str.begin(), toupper );
 }
