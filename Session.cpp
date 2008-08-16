@@ -12,9 +12,6 @@ Session::~Session()
 	if( m_controlSock != 0 )
 	{
 		std::cout << "[Session] Closing control socket" << std::endl;
-		if( close( m_controlSock ) == -1 )
-		{
-			throw strerror( errno );
-		}
+		close( m_controlSock );
 	}
 }

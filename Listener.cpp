@@ -30,10 +30,7 @@ Listener::~Listener()
 	if( m_sock != 0 )
 	{
 		std::cout << "[Listener] Closing socket" << std::endl;
-		if( close( m_sock ) == -1 )
-		{
-			throw strerror( errno );
-		}
+		close( m_sock );
 	}
 }
 
