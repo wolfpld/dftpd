@@ -5,6 +5,7 @@
 #include "SessionControllerPtr.hpp"
 #include "String.hpp"
 #include "Telnet.hpp"
+#include "Auth.hpp"
 
 typedef std::vector<std::string> Command;
 
@@ -26,13 +27,13 @@ class Session
 	};
 
 public:
-	static SessionPtr Create( int controlSock, const SessionControllerPtr& sessionController );
+	static SessionPtr Create( int controlSock, const SessionControllerPtr& sessionController, const AuthPtr& auth );
 	~Session();
 
 	void Tick();
 
 private:
-	Session( int controlSock, const SessionControllerPtr& sessionController );
+	Session( int controlSock, const SessionControllerPtr& sessionController, const AuthPtr& auth );
 
 	void Remove();
 
@@ -55,6 +56,7 @@ private:
 
 	SessionControllerWPtr m_sessionController;
 	SessionWPtr m_this;
+	AuthPtr m_auth;
 };
 
 #endif

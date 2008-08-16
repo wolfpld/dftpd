@@ -7,6 +7,7 @@ INCLUDES =
 # --
 
 OBJ = \
+	AuthNone.o \
 	Exceptions.o \
 	Listener.o \
 	Main.o \

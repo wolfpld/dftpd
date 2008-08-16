@@ -9,12 +9,13 @@
 
 int Session::m_counter = 0;
 
-Session::Session( int controlSock, const SessionControllerPtr& sessionController )
+Session::Session( int controlSock, const SessionControllerPtr& sessionController, const AuthPtr& auth )
 	: m_control( new Telnet( controlSock ) )
 	, m_controlSock( controlSock )
 	, m_id( m_counter++ )
 	, m_state( S_GREETING )
 	, m_sessionController( sessionController )
+	, m_auth( auth )
 {
 	std::cout << "[Session] Initializing session " << m_id << std::endl;
 
@@ -34,9 +35,9 @@ Session::~Session()
 	}
 }
 
-SessionPtr Session::Create( int controlSock, const SessionControllerPtr& sessionController )
+SessionPtr Session::Create( int controlSock, const SessionControllerPtr& sessionController, const AuthPtr& auth )
 {
-	SessionPtr ret( new Session( controlSock, sessionController ) );
+	SessionPtr ret( new Session( controlSock, sessionController, auth ) );
 	ret->m_this = ret;
 
 	return ret;
@@ -138,11 +139,16 @@ bool Session::AwaitLogin()
 				throw SyntaxErrorException;
 			}
 
-			std::cout << "[Session] User " << cmd[1] << " on session " << m_id << std::endl;
-
-			m_control->Write( "331 Need password" );
-
-			return true;
+			if( m_auth->Login( cmd[1] ) )
+			{
+				m_control->Write( "331 Need password" );
+				return true;
+			}
+			else
+			{
+				SendNotLoggedIn();
+				return false;
+			}
 		}
 		else if( cmd[0] == "QUIT" )
 		{
@@ -170,11 +176,16 @@ Session::PassState Session::AwaitPassword()
 				throw SyntaxErrorException;
 			}
 
-			std::cout << "[Session] Password " << cmd[1] << " on session " << m_id << std::endl;
-
-			m_control->Write( "230 Logged in" );
-
-			return PS_LOGGEDIN;
+			if( m_auth->Password( cmd[1] ) )
+			{
+				m_control->Write( "230 Logged in" );
+				return PS_LOGGEDIN;
+			}
+			else
+			{
+				SendNotLoggedIn();
+				return PS_BADPASS;
+			}
 		}
 		else if( cmd[0] == "QUIT" )
 		{

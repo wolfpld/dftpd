@@ -5,10 +5,12 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include "Server.hpp"
+#include "AuthNone.hpp"
 
 Server::Server()
 	: m_listener( new Listener )
 	, m_sessionController( new SessionController )
+	, m_auth( new AuthNone )
 {
 	std::cout << "Dumb FTP server\nIP: " << m_listener->GetIPAddr() << std::endl;
 
@@ -48,7 +50,7 @@ void Server::IncomingConnection( int sock )
 
 	std::cout << "[Server] Incoming connection from " << inet_ntoa( addr.sin_addr ) << std::endl;
 
-	m_sessionController->Add( Session::Create( sock, m_sessionController ) );
+	m_sessionController->Add( Session::Create( sock, m_sessionController, m_auth ) );
 }
 
 void Server::InitListener()

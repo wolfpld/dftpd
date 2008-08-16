@@ -4,6 +4,7 @@
 #include "ServerPtr.hpp"
 #include "Listener.hpp"
 #include "SessionController.hpp"
+#include "Auth.hpp"
 
 class Server
 {
@@ -24,6 +25,7 @@ private:
 
 	ListenerPtr m_listener;
 	SessionControllerPtr m_sessionController;
+	AuthPtr m_auth;
 };
 
 #endif
