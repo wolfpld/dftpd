@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string.h>
 #include <errno.h>
+#include <fcntl.h>
 #include "Session.hpp"
 #include "SessionController.hpp"
 
@@ -13,6 +14,12 @@ Session::Session( int controlSock, const SessionControllerPtr& sessionController
 	, m_sessionController( sessionController )
 {
 	std::cout << "[Session] Initializing session " << m_id << std::endl;
+
+	// Set socket to non-blocking
+	if( fcntl( m_controlSock, F_SETFL, O_NONBLOCK ) == -1 )
+	{
+		throw strerror( errno );
+	}
 }
 
 Session::~Session()
