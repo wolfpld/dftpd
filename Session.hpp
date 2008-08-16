@@ -62,6 +62,8 @@ private:
 	SessionControllerWPtr m_sessionController;
 	SessionWPtr m_this;
 	AuthPtr m_auth;
+
+	std::string m_user;
 };
 
 #endif

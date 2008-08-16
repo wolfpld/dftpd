@@ -147,6 +147,7 @@ bool Session::AwaitLogin()
 			if( m_auth->Login( cmd[1] ) )
 			{
 				m_control->Write( "331 Need password" );
+				m_user = cmd[1];
 				return true;
 			}
 			else
