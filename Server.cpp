@@ -12,6 +12,7 @@ Server::Server()
 
 Server::~Server()
 {
+	std::cout << "Shutting down server\n";
 }
 
 void Server::Tick()

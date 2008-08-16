@@ -1,12 +1,20 @@
 #include <iostream>
 #include <unistd.h>
+#include <signal.h>
 #include "Server.hpp"
+
+bool g_exitRequested = false;
+
+void RequestExit( int signum )
+{
+	g_exitRequested = true;
+}
 
 void Run()
 {
 	Server server;
 
-	for(;;)
+	while( !g_exitRequested )
 	{
 		server.Tick();
 		usleep(10000);
@@ -15,6 +23,8 @@ void Run()
 
 int main()
 {
+	signal( SIGINT, RequestExit );
+
 	try
 	{
 		Run();
