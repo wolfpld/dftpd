@@ -6,6 +6,8 @@
 
 ConnectionTerminated ConnectionTerminatedException;
 
+const char CRLF[] = { 10, 13, 0 };
+
 Telnet::Telnet( int sock )
 	: m_sock( sock )
 {
@@ -17,27 +19,58 @@ Telnet::~Telnet()
 
 bool Telnet::Read()
 {
-	char buf[1024];
+	std::string buf;
 
-	int size = recv( m_sock, buf, 1024, 0 );
-	if( size == -1 )
+	// Read all that's waiting on the socket
+	for(;;)
 	{
-		if( errno == EAGAIN )
+		char tmpBuf[1024];
+		int size = recv( m_sock, tmpBuf, 1024, 0 );
+
+		if( size == -1 )
 		{
-			// No error, just nothing to be read from socket
-			return false;
+			if( errno == EAGAIN )
+			{
+				// No error, just nothing to be read from socket
+				break;
+			}
+
+			throw strerror( errno );
+		}
+		else if( size == 0 )
+		{
+			throw ConnectionTerminatedException;
 		}
 
-		throw strerror( errno );
-	}
-	else if( size == 0 )
-	{
-		throw ConnectionTerminatedException;
+		buf.append( tmpBuf, size );
 	}
 
-	return true;
+	// Parse according to telnet protocol
+	/*
+	for( unsigned int i=0; i<buf.size(); i++ )
+	{
+
+	}
+	*/
+	// temporary
+	m_readBuf.append( buf );
+
+	return m_readBuf.find( CRLF ) != std::string::npos;
 }
 
 std::string Telnet::GetBuf()
 {
+	std::string ret;
+
+	unsigned int pos = m_readBuf.find( CRLF );
+	if( pos == std::string::npos )
+	{
+		throw "Trying to get telnet buffer when buffer not ready";
+	}
+
+	ret = m_readBuf.substr( 0, pos );
+
+	m_readBuf.erase( 0, pos + 1 );
+
+	return ret;
 }
