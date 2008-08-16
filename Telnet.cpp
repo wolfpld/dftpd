@@ -6,7 +6,7 @@
 
 ConnectionTerminated ConnectionTerminatedException;
 
-const char CRLF[] = { 10, 13, 0 };
+const char CRLF[] = { 13, 10, 0 };
 
 Telnet::Telnet( int sock )
 	: m_sock( sock )
