@@ -15,6 +15,8 @@ public:
 private:
 	Session( int controlSock, const SessionControllerPtr& sessionController );
 
+	void Remove();
+
 	int m_controlSock;
 	int m_id;
 

@@ -33,6 +33,11 @@ SessionPtr Session::Create( int controlSock, const SessionControllerPtr& session
 
 void Session::Tick()
 {
+	Remove();
+}
+
+void Session::Remove()
+{
 	SessionControllerPtr sessionController = m_sessionController.lock();
 
 	if( !sessionController )
