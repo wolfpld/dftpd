@@ -7,7 +7,8 @@
 int Session::m_counter = 0;
 
 Session::Session( int controlSock, const SessionControllerPtr& sessionController )
-	: m_controlSock( controlSock )
+	: m_control( new Telnet( controlSock ) )
+	, m_controlSock( controlSock )
 	, m_id( m_counter++ )
 	, m_sessionController( sessionController )
 {

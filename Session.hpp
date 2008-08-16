@@ -3,6 +3,7 @@
 
 #include "SessionPtr.hpp"
 #include "SessionControllerPtr.hpp"
+#include "Telnet.hpp"
 
 class Session
 {
@@ -17,9 +18,10 @@ private:
 
 	void Remove();
 
+	TelnetPtr m_control;
 	int m_controlSock;
-	int m_id;
 
+	int m_id;
 	static int m_counter;
 
 	SessionControllerWPtr m_sessionController;

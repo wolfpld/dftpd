@@ -11,7 +11,8 @@ OBJ = \
 	Main.o \
 	Session.o \
 	SessionController.o \
-	Server.o
+	Server.o \
+	Telnet.o
 
 all: dftpd
 
