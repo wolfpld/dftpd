@@ -1,3 +1,6 @@
+#ifndef __DFTPD__LISTENER_HPP__
+#define __DFTPD__LISTENER_HPP__
+
 #include <string>
 #include <boost/shared_ptr.hpp>
 
@@ -18,3 +21,5 @@ private:
 };
 
 typedef boost::shared_ptr<Listener> ListenerPtr;
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef __DFTPD__SESSIONCONTROLLER_HPP__
+#define __DFTPD__SESSIONCONTROLLER_HPP__
+
 #include <list>
 #include <boost/shared_ptr.hpp>
 #include "Session.hpp"
@@ -15,3 +18,5 @@ private:
 };
 
 typedef boost::shared_ptr<SessionController> SessionControllerPtr;
+
+#endif

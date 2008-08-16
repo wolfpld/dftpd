@@ -1,3 +1,6 @@
+#ifndef __DFTPD__SERVER_HPP__
+#define __DFTPD__SERVER_HPP__
+
 #include "Listener.hpp"
 #include "SessionController.hpp"
 
@@ -13,3 +16,5 @@ private:
 	ListenerPtr m_listener;
 	SessionControllerPtr m_sessionController;
 };
+
+#endif
