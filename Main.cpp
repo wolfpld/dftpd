@@ -1,18 +1,14 @@
 #include <iostream>
 #include <unistd.h>
-#include "Listener.hpp"
+#include "Server.hpp"
 
 void Run()
 {
-	Listener l;
-
-	std::cout << "Dumb FTP server\nIP: " << l.GetIPAddr() << std::endl;
-
-	l.Listen();
+	Server server;
 
 	for(;;)
 	{
-		l.Tick();
+		server.Tick();
 		usleep(10000);
 	}
 }

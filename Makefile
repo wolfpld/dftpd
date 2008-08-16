@@ -9,7 +9,9 @@ INCLUDES =
 OBJ = \
 	Listener.o \
 	Main.o \
-	Session.o
+	Session.o \
+	SessionController.o \
+	Server.o
 
 all: dftpd
 

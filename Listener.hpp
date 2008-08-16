@@ -1,4 +1,5 @@
 #include <string>
+#include <boost/shared_ptr.hpp>
 
 class Listener
 {
@@ -15,3 +16,5 @@ private:
 	int m_sock;
 	std::string m_ipaddr;
 };
+
+typedef boost::shared_ptr<Listener> ListenerPtr;
