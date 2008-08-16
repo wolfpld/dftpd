@@ -42,6 +42,7 @@ private:
 	void SendNotLoggedIn();
 	bool AwaitLogin();
 	PassState AwaitPassword();
+	void AwaitReady();
 
 	Command GetCommand() { return ParseCommand( m_control->GetBuf() ); }
 

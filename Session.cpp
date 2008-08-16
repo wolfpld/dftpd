@@ -78,6 +78,10 @@ void Session::Tick()
 				break;
 			}
 
+			case S_READY:
+				AwaitReady();
+				break;
+
 			default:
 				break;
 			}
@@ -199,4 +203,25 @@ Session::PassState Session::AwaitPassword()
 	}
 
 	return PS_NONE;
+}
+
+void Session::AwaitReady()
+{
+	if( m_control->Read() )
+	{
+		Command cmd = GetCommand();
+
+		if( cmd[0] == "QUIT" )
+		{
+			throw QuitRequestedException;
+		}
+		else if( cmd[0] == "NOOP" )
+		{
+			m_control->Write( "200 OK" );
+		}
+		else
+		{
+			throw SyntaxErrorException;
+		}
+	}
 }
