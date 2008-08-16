@@ -58,6 +58,32 @@ bool Telnet::Read()
 	return m_readBuf.find( CRLF ) != std::string::npos;
 }
 
+void Telnet::Write( const std::string& msg )
+{
+	std::string buf( msg );
+	buf.append( CRLF );
+
+	unsigned int pos = 0;
+	char *ptr = (char*)buf.c_str();
+
+	while( pos != buf.size() )
+	{
+		int size = send( m_sock, ptr, buf.size() - pos, 0 );
+
+		if( size == -1 )
+		{
+			throw strerror( errno );
+		}
+		else if( size == 0 )
+		{
+			throw ConnectionTerminatedException;
+		}
+
+		pos += size;
+		ptr += size;
+	}
+}
+
 std::string Telnet::GetBuf()
 {
 	std::string ret;

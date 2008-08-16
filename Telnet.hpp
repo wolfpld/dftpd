@@ -13,6 +13,8 @@ public:
 	~Telnet();
 
 	bool Read();
+	void Write( const std::string& msg );
+
 	std::string GetBuf();
 
 private:
