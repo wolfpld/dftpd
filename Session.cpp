@@ -11,7 +11,7 @@ Session::Session( int controlSock, const SessionControllerPtr& sessionController
 	, m_id( m_counter++ )
 	, m_sessionController( sessionController )
 {
-	std::cout << "Initializing session " << m_id << std::endl;
+	std::cout << "[Session] Initializing session " << m_id << std::endl;
 }
 
 Session::~Session()

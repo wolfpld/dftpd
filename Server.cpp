@@ -17,7 +17,7 @@ Server::Server()
 
 Server::~Server()
 {
-	std::cout << "Shutting down server\n";
+	std::cout << "[Server] Shutting down\n";
 }
 
 ServerPtr Server::Create()
@@ -46,7 +46,7 @@ void Server::IncomingConnection( int sock )
 		throw strerror( errno );
 	}
 
-	std::cout << "Incoming connection from " << inet_ntoa( addr.sin_addr ) << std::endl;
+	std::cout << "[Server] Incoming connection from " << inet_ntoa( addr.sin_addr ) << std::endl;
 
 	m_sessionController->Add( Session::Create( sock, m_sessionController ) );
 }
