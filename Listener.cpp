@@ -9,6 +9,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include "Listener.hpp"
+#include "Server.hpp"
 
 Listener::Listener()
 	: m_sock( 0 )
@@ -83,5 +84,10 @@ void Listener::Tick()
 		throw strerror( errno );
 	}
 
-	std::cout << "Incoming connection\n";
+	ServerPtr server = m_server.lock();
+	if( !server )
+	{
+		throw "Listener lost server";
+	}
+	server->IncomingConnection( incoming );
 }

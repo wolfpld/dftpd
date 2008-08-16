@@ -31,6 +31,11 @@ void Server::Tick()
 	m_sessionController->Tick();
 }
 
+void Server::IncomingConnection( int sock )
+{
+	std::cout << "Incoming connection\n";
+}
+
 void Server::InitListener()
 {
 	m_listener->SetServer( m_this );

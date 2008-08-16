@@ -14,6 +14,8 @@ public:
 
 	void Tick();
 
+	void IncomingConnection( int sock );
+
 private:
 	Server();
 
