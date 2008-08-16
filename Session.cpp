@@ -4,6 +4,7 @@
 #include <fcntl.h>
 #include "Session.hpp"
 #include "SessionController.hpp"
+#include "String.hpp"
 
 int Session::m_counter = 0;
 
@@ -51,10 +52,16 @@ void Session::Tick()
 			m_state = LOGIN;
 			break;
 
+		case LOGIN:
+			if( AwaitLogin() )
+			{
+				m_state = PASSWORD;
+			}
+			break;
+
 		default:
 			break;
 		}
-		//m_control->Read();
 	}
 	catch( ConnectionTerminated& e )
 	{
@@ -78,4 +85,28 @@ void Session::Remove()
 void Session::SendGreeting()
 {
 	m_control->Write( "220 Dumb FTP Server ready" );
+}
+
+bool Session::AwaitLogin()
+{
+	if( m_control->Read() )
+	{
+		Command cmd = GetCommand();
+
+		if( cmd[0] == "USER" )
+		{
+			if( cmd.size() != 2 )
+			{
+				m_control->Write( "500 Syntax error" );
+				return false;
+			}
+
+			std::cout << "[Session] User " << cmd[1] << " on session " << m_id << std::endl;
+
+			m_control->Write( "331 Need password" );
+			return true;
+		}
+	}
+
+	return false;
 }

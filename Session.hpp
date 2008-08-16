@@ -3,7 +3,10 @@
 
 #include "SessionPtr.hpp"
 #include "SessionControllerPtr.hpp"
+#include "String.hpp"
 #include "Telnet.hpp"
+
+typedef std::vector<std::string> Command;
 
 class Session
 {
@@ -27,6 +30,10 @@ private:
 	void Remove();
 
 	void SendGreeting();
+	bool AwaitLogin();
+
+	Command GetCommand() { return ParseCommand( m_control->GetBuf() ); }
+
 
 	TelnetPtr m_control;
 	int m_controlSock;
