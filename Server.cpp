@@ -1,4 +1,9 @@
 #include <iostream>
+#include <string.h>
+#include <errno.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <sys/socket.h>
 #include "Server.hpp"
 
 Server::Server()
@@ -33,7 +38,15 @@ void Server::Tick()
 
 void Server::IncomingConnection( int sock )
 {
-	std::cout << "Incoming connection\n";
+	struct sockaddr_in addr;
+	socklen_t size = sizeof( struct sockaddr_in );
+
+	if( getpeername( sock, (struct sockaddr*)&addr, &size ) == -1 )
+	{
+		throw strerror( errno );
+	}
+
+	std::cout << "Incoming connection from " << inet_ntoa( addr.sin_addr ) << std::endl;
 }
 
 void Server::InitListener()
