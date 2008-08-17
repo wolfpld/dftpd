@@ -34,6 +34,7 @@ public:
 
 	void DataConnectionFinished();
 	void DataConnectionError();
+	void OutOfSpace();
 
 private:
 	Session( int controlSock, const SessionControllerPtr& sessionController, const AuthPtr& auth );
@@ -55,6 +56,7 @@ private:
 	void HandleStru( const Command& cmd );
 	void HandlePort( const Command& cmd );
 	void HandleRetr( const Command& cmd );
+	void HandleStor( const Command& cmd );
 	void HandleAbor();
 
 	void PrintDirectory();
@@ -62,6 +64,7 @@ private:
 	void ChangeDirectory( const std::string& cmd );
 
 	void Upload( const Command& cmd );
+	void Download( const Command& cmd );
 
 	Command GetCommand() { return ParseCommand( m_control->GetBuf() ); }
 

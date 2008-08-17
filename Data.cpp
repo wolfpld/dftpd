@@ -103,4 +103,39 @@ void Data::Send()
 
 void Data::Receive()
 {
+	char tmpBuf[BufSize];
+	int size = recv( m_sock, tmpBuf, BufSize, 0 );
+
+	if( size == -1 )
+	{
+		if( errno == EAGAIN )
+		{
+			return;
+		}
+
+		throw strerror( errno );
+	}
+	else if( size == 0 )
+	{
+		SessionPtr sptr = m_session.lock();
+		if( !sptr )
+		{
+			throw "Data lost its Session";
+		}
+		sptr->DataConnectionFinished();
+	}
+	else
+	{
+		int writeSize = fwrite( tmpBuf, 1, size, m_file );
+
+		if( writeSize != size )
+		{
+			SessionPtr sptr = m_session.lock();
+			if( !sptr )
+			{
+				throw "Data lost its Session";
+			}
+			sptr->OutOfSpace();
+		}
+	}
 }

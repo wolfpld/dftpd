@@ -295,6 +295,10 @@ void Session::AwaitReady()
 		{
 			HandleRetr( cmd );
 		}
+		else if( cmd[0] == "STOR" )
+		{
+			HandleStor( cmd );
+		}
 		else if( cmd[0] == "ABOR" )
 		{
 			HandleAbor();
@@ -429,6 +433,18 @@ void Session::HandleRetr( const Command& cmd )
 	}
 }
 
+void Session::HandleStor( const Command& cmd )
+{
+	if( m_data )
+	{
+		SendDataConnectionBusy();
+	}
+	else
+	{
+		Download( cmd );
+	}
+}
+
 void Session::HandleAbor()
 {
 	if( !m_data )
@@ -507,6 +523,35 @@ void Session::Upload( const Command& cmd )
 	}
 }
 
+void Session::Download( const Command& cmd )
+{
+	FILE *f;
+
+	if( cmd.size() != 2 )
+	{
+		throw SyntaxErrorException;
+	}
+
+	if( ( f = m_filesystem->FileOpen( cmd[1], Filesystem::M_WRITE ) ) == NULL )
+	{
+		m_control->Write( std::string( "450 File " ) + cmd[1] + " not accessible" );
+		return;
+	}
+
+	m_data.reset( new Data( m_this, f, Data::M_DOWNLOAD ) );
+
+	if( !m_data->Connect( m_dataAddress, m_dataPort ) )
+	{
+		m_control->Write( "425 Can't open data connection" );
+		m_data.reset();
+	}
+	else
+	{
+		m_control->Write( std::string( "150 Receiving " ) + cmd[1] );
+		std::cout << "[Session] Opened new download on session " << m_id << std::endl;
+	}
+}
+
 void Session::DataConnectionFinished()
 {
 	std::cout << "[Session] Data connection closed on session " << m_id << std::endl;
@@ -521,6 +566,15 @@ void Session::DataConnectionError()
 	std::cout << "[Session] Data connection error on session " << m_id << std::endl;
 
 	m_control->Write( "426 Data connection lost" );
+
+	m_data.reset();
+}
+
+void Session::OutOfSpace()
+{
+	std::cout << "[Session] Out of space on session " << m_id << std::endl;
+
+	m_control->Write( "552 No space left" );
 
 	m_data.reset();
 }
