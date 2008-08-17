@@ -7,13 +7,17 @@
 #include <errno.h>
 #include "Data.hpp"
 
-Data::Data()
+Data::Data( FILE* file, Mode mode )
 	: m_sock( 0 )
+	, m_file( file )
+	, m_mode( mode )
 {
 }
 
 Data::~Data()
 {
+	fclose( m_file );
+
 	if( m_sock != 0 )
 	{
 		close( m_sock );

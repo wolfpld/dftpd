@@ -428,4 +428,17 @@ void Session::Upload( const Command& cmd )
 		m_control->Write( std::string( "450 File " ) + cmd[1] + " not accessible" );
 		return;
 	}
+
+	m_data.reset( new Data( f, Data::M_UPLOAD ) );
+
+	if( !m_data->Connect( m_dataAddress, m_dataPort ) )
+	{
+		m_control->Write( "425 Can't open data connection" );
+		m_data.reset();
+	}
+	else
+	{
+		m_control->Write( std::string( "150 Sending " ) + cmd[1] );
+		std::cout << "[Session] Opened new upload on session " << m_id << std::endl;
+	}
 }
