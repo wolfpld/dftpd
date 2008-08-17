@@ -12,6 +12,7 @@ int Session::m_counter = 0;
 Session::Session( int controlSock, const SessionControllerPtr& sessionController, const AuthPtr& auth )
 	: m_control( new Telnet( controlSock ) )
 	, m_controlSock( controlSock )
+	, m_dataPort( 20 )
 	, m_id( m_counter++ )
 	, m_state( S_GREETING )
 	, m_sessionController( sessionController )

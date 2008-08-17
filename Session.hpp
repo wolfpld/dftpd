@@ -1,12 +1,13 @@
 #ifndef __DFTPD__SESSION_HPP__
 #define __DFTPD__SESSION_HPP__
 
-#include "SessionPtr.hpp"
+#include "Auth.hpp"
+#include "Data.hpp"
+#include "Filesystem.hpp"
 #include "SessionControllerPtr.hpp"
+#include "SessionPtr.hpp"
 #include "String.hpp"
 #include "Telnet.hpp"
-#include "Auth.hpp"
-#include "Filesystem.hpp"
 
 class Session
 {
@@ -56,6 +57,10 @@ private:
 
 	TelnetPtr m_control;
 	int m_controlSock;
+
+	int m_dataPort;
+	std::string m_dataAddress;
+	DataPtr m_data;
 
 	int m_id;
 	static int m_counter;
