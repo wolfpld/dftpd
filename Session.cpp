@@ -239,6 +239,10 @@ void Session::AwaitReady()
 		{
 			HandleStru( cmd );
 		}
+		else if( cmd[0] == "PWD" )
+		{
+			PrintDirectory();
+		}
 		else
 		{
 			throw SyntaxErrorException;
@@ -332,4 +336,9 @@ void Session::HandleStru( const Command& cmd )
 	{
 		throw SyntaxErrorException;
 	}
+}
+
+void Session::PrintDirectory()
+{
+	m_control->Write( std::string( "257 " ) + m_filesystem->GetPath() );
 }

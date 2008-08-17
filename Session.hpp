@@ -49,6 +49,8 @@ private:
 	void HandleType( const Command& cmd );
 	void HandleStru( const Command& cmd );
 
+	void PrintDirectory();
+
 	Command GetCommand() { return ParseCommand( m_control->GetBuf() ); }
 
 

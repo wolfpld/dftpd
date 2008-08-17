@@ -10,8 +10,11 @@ public:
 	Filesystem( const std::string& root );
 	~Filesystem();
 
+	const std::string& GetPath() const { return m_path; }
+
 private:
 	std::string m_root;
+	std::string m_path;
 };
 
 typedef boost::shared_ptr<Filesystem> FilesystemPtr;
