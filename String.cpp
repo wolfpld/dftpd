@@ -13,6 +13,40 @@ inline static bool IsNotSpace( char c )
 	return !isspace( c );
 }
 
+inline static bool IsSlash( char c )
+{
+	return c == '/';
+}
+
+inline static bool IsNotSlash( char c )
+{
+	return c != '/';
+}
+
+std::vector<std::string> SplitPath( const std::string& str )
+{
+	std::vector<std::string> ret;
+
+	typedef std::string::const_iterator Iter;
+
+	Iter i = str.begin(), j;
+
+	while( i != str.end() )
+	{
+		i = std::find_if( i, str.end(), IsNotSlash );
+		j = std::find_if( i, str.end(), IsSlash );
+
+		if( i != str.end() )
+		{
+			ret.push_back( std::string( i, j ) );
+		}
+
+		i = j;
+	}
+
+	return ret;
+}
+
 std::vector<std::string> Split( const std::string& str )
 {
 	std::vector<std::string> ret;
