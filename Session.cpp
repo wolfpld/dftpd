@@ -156,6 +156,12 @@ void Session::SendDataConnectionBusy()
 	m_control->Write( "425 File transfer already takes place" );
 }
 
+void Session::SendSyst()
+{
+	// Is it even relevant?
+	m_control->Write( "215 UNIX" );
+}
+
 bool Session::AwaitLogin()
 {
 	if( m_control->Read() )
@@ -276,6 +282,10 @@ void Session::AwaitReady()
 		else if( cmd[0] == "CDUP" )
 		{
 			ChangeDirectory( ".." );
+		}
+		else if( cmd[0] == "SYST" )
+		{
+			SendSyst();
 		}
 		else if( cmd[0] == "PORT" )
 		{

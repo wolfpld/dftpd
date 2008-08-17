@@ -44,6 +44,8 @@ private:
 	void SendSyntaxError();
 	void SendNotLoggedIn();
 	void SendDataConnectionBusy();
+	void SendSyst();
+
 	bool AwaitLogin();
 	PassState AwaitPassword();
 	void AwaitReady();
