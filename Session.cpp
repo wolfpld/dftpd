@@ -453,7 +453,7 @@ void Session::Upload( const Command& cmd )
 		return;
 	}
 
-	m_data.reset( new Data( f, Data::M_UPLOAD ) );
+	m_data.reset( new Data( m_this, f, Data::M_UPLOAD ) );
 
 	if( !m_data->Connect( m_dataAddress, m_dataPort ) )
 	{

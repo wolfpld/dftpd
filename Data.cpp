@@ -7,10 +7,11 @@
 #include <errno.h>
 #include "Data.hpp"
 
-Data::Data( FILE* file, Mode mode )
+Data::Data( const SessionWPtr& session, FILE* file, Mode mode )
 	: m_sock( 0 )
 	, m_file( file )
 	, m_mode( mode )
+	, m_session( session )
 {
 }
 

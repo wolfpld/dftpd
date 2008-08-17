@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string>
 #include <boost/shared_ptr.hpp>
+#include "SessionPtr.hpp"
 
 class Data
 {
@@ -16,7 +17,7 @@ public:
 		M_DOWNLOAD
 	};
 
-	Data( FILE* file, Mode mode );
+	Data( const SessionWPtr& session, FILE* file, Mode mode );
 	~Data();
 
 	bool Connect( const std::string& addr, int port );
@@ -29,6 +30,7 @@ private:
 	int m_sock;
 	FILE* m_file;
 	Mode m_mode;
+	SessionWPtr m_session;
 };
 
 typedef boost::shared_ptr<Data> DataPtr;
