@@ -43,4 +43,50 @@ bool Data::Connect( const std::string& addr, int port )
 
 void Data::Tick()
 {
+	if( m_mode == M_UPLOAD )
+	{
+		Send();
+	}
+	else
+	{
+		Receive();
+	}
+}
+
+void Data::Send()
+{
+	char buf[BufSize];
+
+	int len = fread( buf, 1, BufSize, m_file );
+
+	if( len == 0 )
+	{
+		// Signal Session
+	}
+	else
+	{
+		int pos = 0;
+		char *ptr = buf;
+
+		while( pos != len )
+		{
+			int size = send( m_sock, ptr, len - pos, 0 );
+
+			if( size == -1 )
+			{
+				throw strerror( errno );
+			}
+			else if( size == 0 )
+			{
+				// Connection closed, signal Session
+			}
+
+			pos += size;
+			ptr += size;
+		}
+	}
+}
+
+void Data::Receive()
+{
 }

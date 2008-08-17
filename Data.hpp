@@ -7,6 +7,8 @@
 
 class Data
 {
+	enum { BufSize = 1024 };
+
 public:
 	enum Mode
 	{
@@ -21,6 +23,9 @@ public:
 	void Tick();
 
 private:
+	void Send();
+	void Receive();
+
 	int m_sock;
 	FILE* m_file;
 	Mode m_mode;
