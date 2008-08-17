@@ -349,7 +349,11 @@ void Session::HandleType( const Command& cmd )
 
 		m_control->Write( "200 OK" );
 	}
-	else if( param == "E" || param == "I" || param == "L" )
+	else if( param == "I" )
+	{
+		m_control->Write( "200 OK" );
+	}
+	else if( param == "E" || param == "L" )
 	{
 		m_control->Write( "504 Not implemented" );
 	}
