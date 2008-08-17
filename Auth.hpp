@@ -12,6 +12,7 @@ public:
 
 	virtual bool Login( const std::string& login ) = 0;
 	virtual bool Password( const std::string& password ) = 0;
+	virtual std::string GetRoot( const std::string& login ) = 0;
 };
 
 typedef boost::shared_ptr<Auth> AuthPtr;

@@ -9,6 +9,7 @@ INCLUDES =
 OBJ = \
 	AuthNone.o \
 	Exceptions.o \
+	Filesystem.o \
 	Listener.o \
 	Main.o \
 	Server.o \

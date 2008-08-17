@@ -186,6 +186,11 @@ Session::PassState Session::AwaitPassword()
 			if( m_auth->Password( cmd[1] ) )
 			{
 				m_control->Write( "230 Logged in" );
+
+				m_filesystem.reset( new Filesystem( m_auth->GetRoot( m_user ) ) );
+
+				std::cout << "[Session] User " << m_user << " logged in on session " << m_id << std::endl;
+
 				return PS_LOGGEDIN;
 			}
 			else

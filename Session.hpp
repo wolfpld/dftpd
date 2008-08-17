@@ -6,6 +6,7 @@
 #include "String.hpp"
 #include "Telnet.hpp"
 #include "Auth.hpp"
+#include "Filesystem.hpp"
 
 typedef std::vector<std::string> Command;
 
@@ -62,6 +63,7 @@ private:
 	SessionControllerWPtr m_sessionController;
 	SessionWPtr m_this;
 	AuthPtr m_auth;
+	FilesystemPtr m_filesystem;
 
 	std::string m_user;
 };
