@@ -1,3 +1,4 @@
 dftpd
 *.o
 *.swp
+*.d
