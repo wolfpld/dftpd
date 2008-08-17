@@ -8,8 +8,6 @@
 #include "Auth.hpp"
 #include "Filesystem.hpp"
 
-typedef std::vector<std::string> Command;
-
 class Session
 {
 	enum State

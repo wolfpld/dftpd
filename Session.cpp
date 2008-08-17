@@ -365,7 +365,7 @@ void Session::ChangeDirectory( const std::string& cd )
 {
 	if( m_filesystem->ChangeDirectory( cd ) )
 	{
-		m_control->Write( "200 OK" );
+		m_control->Write( std::string( "200 Changed directory to " ) + m_filesystem->GetPath() );
 	}
 	else
 	{

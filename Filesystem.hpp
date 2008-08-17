@@ -3,6 +3,7 @@
 
 #include <string>
 #include <boost/shared_ptr.hpp>
+#include "String.hpp"
 
 class Filesystem
 {
@@ -14,6 +15,9 @@ public:
 	bool ChangeDirectory( const std::string& cd );
 
 private:
+	std::string MakePath( const PathVector& pv );
+	bool DirectoryExists( const std::string& dir );
+
 	std::string m_root;
 	std::string m_path;
 };
