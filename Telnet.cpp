@@ -44,15 +44,14 @@ bool Telnet::Read()
 		buf.append( tmpBuf, size );
 	}
 
-	// Parse according to telnet protocol
-	/*
+	// Drop telnet commands
 	for( unsigned int i=0; i<buf.size(); i++ )
 	{
-
+		if( buf[i] >= 0 )
+		{
+			m_readBuf += buf[i];
+		}
 	}
-	*/
-	// temporary
-	m_readBuf.append( buf );
 
 	return m_readBuf.find( CRLF ) != std::string::npos;
 }
