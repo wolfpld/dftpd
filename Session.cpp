@@ -183,7 +183,7 @@ Session::PassState Session::AwaitPassword()
 				return PS_BADPASS;
 			}
 
-			if( m_auth->Password( cmd[1] ) )
+			if( m_auth->Password( m_user, cmd[1] ) )
 			{
 				m_control->Write( "230 Logged in" );
 

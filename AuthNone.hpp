@@ -7,7 +7,7 @@ class AuthNone : public Auth
 {
 public:
 	bool Login( const std::string& login );
-	bool Password( const std::string& password );
+	bool Password( const std::string& login, const std::string& password );
 	std::string GetRoot( const std::string& login );
 };
 
