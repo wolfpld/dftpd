@@ -32,6 +32,9 @@ public:
 
 	void Tick();
 
+	void DataConnectionFinished();
+	void DataConnectionError();
+
 private:
 	Session( int controlSock, const SessionControllerPtr& sessionController, const AuthPtr& auth );
 

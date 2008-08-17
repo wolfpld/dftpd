@@ -6,6 +6,7 @@
 #include <string.h>
 #include <errno.h>
 #include "Data.hpp"
+#include "Session.hpp"
 
 Data::Data( const SessionWPtr& session, FILE* file, Mode mode )
 	: m_sock( 0 )
@@ -62,7 +63,12 @@ void Data::Send()
 
 	if( len == 0 )
 	{
-		// Signal Session
+		SessionPtr sptr = m_session.lock();
+		if( !sptr )
+		{
+			throw "Data lost its Session";
+		}
+		sptr->DataConnectionFinished();
 	}
 	else
 	{
@@ -79,7 +85,14 @@ void Data::Send()
 			}
 			else if( size == 0 )
 			{
-				// Connection closed, signal Session
+				SessionPtr sptr = m_session.lock();
+				if( !sptr )
+				{
+					throw "Data lost its Session";
+				}
+				sptr->DataConnectionError();
+
+				return;
 			}
 
 			pos += size;
