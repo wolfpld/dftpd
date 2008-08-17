@@ -5,6 +5,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <sys/socket.h>
+#include <boost/lexical_cast.hpp>
 #include "Session.hpp"
 #include "SessionController.hpp"
 #include "String.hpp"
@@ -276,6 +277,10 @@ void Session::AwaitReady()
 		{
 			ChangeDirectory( ".." );
 		}
+		else if( cmd[0] == "PORT" )
+		{
+			HandlePort( cmd );
+		}
 		else if( cmd[0] == "RETR" )
 		{
 			if( m_data )
@@ -380,6 +385,25 @@ void Session::HandleStru( const Command& cmd )
 	{
 		throw SyntaxErrorException;
 	}
+}
+
+void Session::HandlePort( const Command& cmd )
+{
+	if( cmd.size() != 2 )
+	{
+		throw SyntaxErrorException;
+	}
+
+	PortVector pv = SplitPort( cmd[1] );
+	if( pv.size() != 6 )
+	{
+		throw SyntaxErrorException;
+	}
+
+	m_dataAddress = pv[0] + "." + pv[1] + "." + pv[2] + "." + pv[3];
+	m_dataPort = ( boost::lexical_cast<int>( pv[4] ) << 8 ) + boost::lexical_cast<int>( pv[5] );
+
+	m_control->Write( "200 OK" );
 }
 
 void Session::PrintDirectory()

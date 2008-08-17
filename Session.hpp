@@ -48,6 +48,7 @@ private:
 	void HandleMode( const Command& cmd );
 	void HandleType( const Command& cmd );
 	void HandleStru( const Command& cmd );
+	void HandlePort( const Command& cmd );
 
 	void PrintDirectory();
 	void ChangeDirectory( const Command& cmd );
