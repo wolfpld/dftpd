@@ -37,32 +37,27 @@ bool Filesystem::ChangeDirectory( const std::string& cd )
 
 bool Filesystem::FileExists( const std::string& file )
 {
-	PathVector reqPath = SplitPath( file );
-
-	// Remove filename from path
-	std::string fname = reqPath.back();
-	reqPath.pop_back();
-
-	PathVector path;
-	if( file[0] == '/' )
-	{
-		path = SplitPath( "/" );
-	}
-	else
-	{
-		path = SplitPath( m_path );
-	}
-
-	if( !TryChangePath( reqPath, path ) )
-	{
-		return false;
-	}
-
-	return CheckFileExists( MakePath( path ) + "/" + fname );
+	return CheckFileExists( GetFilePath( file ) );
 }
 
 FILE* Filesystem::FileOpen( const std::string& file, Mode mode )
 {
+	std::string path = m_root + GetFilePath( file );
+
+	switch( mode )
+	{
+	case M_READ:
+		return fopen( path.c_str(), "rb" );
+		break;
+
+	case M_WRITE:
+		return fopen( path.c_str(), "wb" );
+		break;
+
+	default:
+		break;
+	}
+
 	return NULL;
 }
 
@@ -147,4 +142,30 @@ bool Filesystem::CheckFileExists( const std::string& file )
 	}
 
 	return S_ISREG( s.st_mode );
+}
+
+std::string Filesystem::GetFilePath( const std::string& file )
+{
+	PathVector reqPath = SplitPath( file );
+
+	// Remove filename from path
+	std::string fname = reqPath.back();
+	reqPath.pop_back();
+
+	PathVector path;
+	if( file[0] == '/' )
+	{
+		path = SplitPath( "/" );
+	}
+	else
+	{
+		path = SplitPath( m_path );
+	}
+
+	if( !TryChangePath( reqPath, path ) )
+	{
+		return false;
+	}
+
+	return MakePath( path ) + "/" + fname;
 }

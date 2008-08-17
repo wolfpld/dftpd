@@ -411,6 +411,8 @@ void Session::ChangeDirectory( const std::string& cd )
 
 void Session::Upload( const Command& cmd )
 {
+	FILE *f;
+
 	if( cmd.size() != 2 )
 	{
 		throw SyntaxErrorException;
@@ -421,7 +423,6 @@ void Session::Upload( const Command& cmd )
 		m_control->Write( std::string( "550 File " ) + cmd[1] + " not found" );
 		return;
 	}
-	FILE *f;
 	if( ( f = m_filesystem->FileOpen( cmd[1], Filesystem::M_READ ) ) == NULL )
 	{
 		m_control->Write( std::string( "450 File " ) + cmd[1] + " not accessible" );
