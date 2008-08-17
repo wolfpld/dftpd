@@ -36,3 +36,7 @@ bool Data::Connect( const std::string& addr, int port )
 
 	return connect( m_sock, (sockaddr*)&sa, sizeof( sockaddr ) ) != -1;
 }
+
+void Data::Tick()
+{
+}

@@ -99,6 +99,11 @@ void Session::Tick()
 			default:
 				break;
 			}
+
+			if( m_data )
+			{
+				m_data->Tick();
+			}
 		}
 		catch( SyntaxError& e )
 		{
@@ -142,6 +147,12 @@ void Session::SendSyntaxError()
 void Session::SendNotLoggedIn()
 {
 	m_control->Write( "530 Not logged in" );
+}
+
+void Session::SendDataConnectionBusy()
+{
+	// Is it the correct answer?
+	m_control->Write( "425 File transfer already takes place" );
 }
 
 bool Session::AwaitLogin()
@@ -264,6 +275,16 @@ void Session::AwaitReady()
 		else if( cmd[0] == "CDUP" )
 		{
 			ChangeDirectory( ".." );
+		}
+		else if( cmd[0] == "RETR" )
+		{
+			if( m_data )
+			{
+				SendDataConnectionBusy();
+			}
+			else
+			{
+			}
 		}
 		else
 		{

@@ -40,6 +40,7 @@ private:
 	void SendGreeting();
 	void SendSyntaxError();
 	void SendNotLoggedIn();
+	void SendDataConnectionBusy();
 	bool AwaitLogin();
 	PassState AwaitPassword();
 	void AwaitReady();

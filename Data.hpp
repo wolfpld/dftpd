@@ -11,6 +11,7 @@ public:
 	~Data();
 
 	bool Connect( const std::string& addr, int port );
+	void Tick();
 
 private:
 	int m_sock;
