@@ -284,6 +284,7 @@ void Session::AwaitReady()
 			}
 			else
 			{
+				Upload( cmd );
 			}
 		}
 		else
@@ -405,5 +406,25 @@ void Session::ChangeDirectory( const std::string& cd )
 	else
 	{
 		m_control->Write( "550 Requested action not taken" );
+	}
+}
+
+void Session::Upload( const Command& cmd )
+{
+	if( cmd.size() != 2 )
+	{
+		throw SyntaxErrorException;
+	}
+
+	if( !m_filesystem->FileExists( cmd[1] ) )
+	{
+		m_control->Write( std::string( "550 File " ) + cmd[1] + " not found" );
+		return;
+	}
+	FILE *f;
+	if( ( f = m_filesystem->FileOpen( cmd[1], Filesystem::M_READ ) ) == NULL )
+	{
+		m_control->Write( std::string( "450 File " ) + cmd[1] + " not accessible" );
+		return;
 	}
 }

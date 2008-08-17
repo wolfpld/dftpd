@@ -53,6 +53,8 @@ private:
 	void ChangeDirectory( const Command& cmd );
 	void ChangeDirectory( const std::string& cmd );
 
+	void Upload( const Command& cmd );
+
 	Command GetCommand() { return ParseCommand( m_control->GetBuf() ); }
 
 
