@@ -1,9 +1,4 @@
 #include <iostream>
-#include <string.h>
-#include <errno.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <sys/socket.h>
 #include "Server.hpp"
 #include "AuthNone.hpp"
 
@@ -40,16 +35,6 @@ void Server::Tick()
 
 void Server::IncomingConnection( int sock )
 {
-	sockaddr_in addr;
-	socklen_t size = sizeof( sockaddr_in );
-
-	if( getpeername( sock, (sockaddr*)&addr, &size ) == -1 )
-	{
-		throw strerror( errno );
-	}
-
-	std::cout << "[Server] Incoming connection from " << inet_ntoa( addr.sin_addr ) << std::endl;
-
 	m_sessionController->Add( Session::Create( sock, m_sessionController, m_auth ) );
 }
 
