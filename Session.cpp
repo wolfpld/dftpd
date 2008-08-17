@@ -293,14 +293,7 @@ void Session::AwaitReady()
 		}
 		else if( cmd[0] == "RETR" )
 		{
-			if( m_data )
-			{
-				SendDataConnectionBusy();
-			}
-			else
-			{
-				Upload( cmd );
-			}
+			HandleRetr( cmd );
 		}
 		else if( cmd[0] == "ABOR" )
 		{
@@ -422,6 +415,18 @@ void Session::HandlePort( const Command& cmd )
 	m_dataPort = ( boost::lexical_cast<int>( pv[4] ) << 8 ) + boost::lexical_cast<int>( pv[5] );
 
 	m_control->Write( "200 OK" );
+}
+
+void Session::HandleRetr( const Command& cmd )
+{
+	if( m_data )
+	{
+		SendDataConnectionBusy();
+	}
+	else
+	{
+		Upload( cmd );
+	}
 }
 
 void Session::HandleAbor()
