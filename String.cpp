@@ -23,9 +23,19 @@ inline static bool IsNotSlash( char c )
 	return c != '/';
 }
 
-std::vector<std::string> SplitPath( const std::string& str )
+inline static bool IsComma( char c )
 {
-	std::vector<std::string> ret;
+	return c == ',';
+}
+
+inline static bool IsNotComma( char c )
+{
+	return c != ',';
+}
+
+PathVector SplitPath( const std::string& str )
+{
+	PathVector ret;
 
 	typedef std::string::const_iterator Iter;
 
@@ -47,9 +57,33 @@ std::vector<std::string> SplitPath( const std::string& str )
 	return ret;
 }
 
-std::vector<std::string> Split( const std::string& str )
+PortVector SplitPort( const std::string& str )
 {
-	std::vector<std::string> ret;
+	PortVector ret;
+
+	typedef std::string::const_iterator Iter;
+
+	Iter i = str.begin(), j;
+
+	while( i != str.end() )
+	{
+		i = std::find_if( i, str.end(), IsNotComma );
+		j = std::find_if( i, str.end(), IsComma );
+
+		if( i != str.end() )
+		{
+			ret.push_back( std::string( i, j ) );
+		}
+
+		i = j;
+	}
+
+	return ret;
+}
+
+Command Split( const std::string& str )
+{
+	Command ret;
 
 	typedef std::string::const_iterator Iter;
 
@@ -71,9 +105,9 @@ std::vector<std::string> Split( const std::string& str )
 	return ret;
 }
 
-std::vector<std::string> ParseCommand( const std::string& cmd )
+Command ParseCommand( const std::string& cmd )
 {
-	std::vector<std::string> ret( Split( cmd ) );
+	Command ret( Split( cmd ) );
 
 	if( cmd.size() == 0 )
 	{
