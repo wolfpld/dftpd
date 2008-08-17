@@ -302,6 +302,10 @@ void Session::AwaitReady()
 				Upload( cmd );
 			}
 		}
+		else if( cmd[0] == "ABOR" )
+		{
+			HandleAbor();
+		}
 		else
 		{
 			throw SyntaxErrorException;
@@ -418,6 +422,21 @@ void Session::HandlePort( const Command& cmd )
 	m_dataPort = ( boost::lexical_cast<int>( pv[4] ) << 8 ) + boost::lexical_cast<int>( pv[5] );
 
 	m_control->Write( "200 OK" );
+}
+
+void Session::HandleAbor()
+{
+	if( !m_data )
+	{
+		m_control->Write( "225 No data connection" );
+	}
+	else
+	{
+		m_data.reset();
+
+		m_control->Write( "426 File transfer aborted" );
+		m_control->Write( "226 Data connection closed" );
+	}
 }
 
 void Session::PrintDirectory()
