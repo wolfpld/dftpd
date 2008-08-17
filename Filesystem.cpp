@@ -9,3 +9,8 @@ Filesystem::Filesystem( const std::string& root )
 Filesystem::~Filesystem()
 {
 }
+
+bool Filesystem::ChangeDirectory( const std::string& cd )
+{
+	return false;
+}

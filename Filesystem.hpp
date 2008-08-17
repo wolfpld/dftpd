@@ -11,6 +11,7 @@ public:
 	~Filesystem();
 
 	const std::string& GetPath() const { return m_path; }
+	bool ChangeDirectory( const std::string& cd );
 
 private:
 	std::string m_root;

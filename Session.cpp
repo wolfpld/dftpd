@@ -243,6 +243,14 @@ void Session::AwaitReady()
 		{
 			PrintDirectory();
 		}
+		else if( cmd[0] == "CWD" )
+		{
+			ChangeDirectory( cmd );
+		}
+		else if( cmd[0] == "CDUP" )
+		{
+			ChangeDirectory( ".." );
+		}
 		else
 		{
 			throw SyntaxErrorException;
@@ -341,4 +349,26 @@ void Session::HandleStru( const Command& cmd )
 void Session::PrintDirectory()
 {
 	m_control->Write( std::string( "257 " ) + m_filesystem->GetPath() );
+}
+
+void Session::ChangeDirectory( const Command& cmd )
+{
+	if( cmd.size() != 2 )
+	{
+		throw SyntaxErrorException;
+	}
+
+	ChangeDirectory( cmd[1] );
+}
+
+void Session::ChangeDirectory( const std::string& cd )
+{
+	if( m_filesystem->ChangeDirectory( cd ) )
+	{
+		m_control->Write( "200 OK" );
+	}
+	else
+	{
+		m_control->Write( "550 Requested action not taken" );
+	}
 }

@@ -50,6 +50,8 @@ private:
 	void HandleStru( const Command& cmd );
 
 	void PrintDirectory();
+	void ChangeDirectory( const Command& cmd );
+	void ChangeDirectory( const std::string& cmd );
 
 	Command GetCommand() { return ParseCommand( m_control->GetBuf() ); }
 
