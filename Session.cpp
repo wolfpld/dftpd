@@ -437,6 +437,8 @@ void Session::HandleAbor()
 	}
 	else
 	{
+		std::cout << "[Session] Data connection aborted on session " << m_id << std::endl;
+
 		m_data.reset();
 
 		m_control->Write( "426 File transfer aborted" );
@@ -507,6 +509,8 @@ void Session::Upload( const Command& cmd )
 
 void Session::DataConnectionFinished()
 {
+	std::cout << "[Session] Data connection closed on session " << m_id << std::endl;
+
 	m_control->Write( "226 File transfer completed" );
 
 	m_data.reset();
@@ -514,6 +518,8 @@ void Session::DataConnectionFinished()
 
 void Session::DataConnectionError()
 {
+	std::cout << "[Session] Data connection error on session " << m_id << std::endl;
+
 	m_control->Write( "426 Data connection lost" );
 
 	m_data.reset();
