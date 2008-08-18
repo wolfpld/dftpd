@@ -1,5 +1,6 @@
 #include <sys/stat.h>
 #include <dirent.h>
+#include <time.h>
 #include <boost/lexical_cast.hpp>
 #include "Filesystem.hpp"
 #include "String.hpp"
@@ -91,6 +92,10 @@ std::vector<std::string> Filesystem::GetListing( const std::string& path )
 		return ret;
 	}
 
+	time_t now = time( NULL );
+	tm timeNow;
+	localtime_r( &now, &timeNow );
+
 	dirent* de;
 	struct stat s;
 	while( ( de = readdir( d ) ) )
@@ -108,7 +113,21 @@ std::vector<std::string> Filesystem::GetListing( const std::string& path )
 			entry += "-rw-r--r--";
 		}
 
-		entry += " 1 root root " + boost::lexical_cast<std::string>( s.st_size ) + " jan 01 2008 " + de->d_name;
+		tm timeFile;
+		localtime_r( &s.st_mtime, &timeFile );
+
+		char dateBuf[64];
+		if( now > s.st_mtime && now - s.st_mtime < 60*60*24*180 )
+		{
+			// File is "recent"
+			strftime( dateBuf, sizeof( dateBuf ), " %b %e %H:%M ", &timeFile );
+		}
+		else
+		{
+			strftime( dateBuf, sizeof( dateBuf ), " %b %e  %Y ", &timeFile );
+		}
+
+		entry += " 1 root root " + boost::lexical_cast<std::string>( s.st_size ) + dateBuf + de->d_name;
 
 		ret.push_back( entry );
 	}
