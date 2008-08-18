@@ -303,6 +303,10 @@ void Session::AwaitReady()
 		{
 			HandleAbor();
 		}
+		else if( cmd[0] == "LIST" )
+		{
+			HandleList( cmd );
+		}
 		else
 		{
 			throw SyntaxErrorException;
@@ -459,6 +463,37 @@ void Session::HandleAbor()
 
 		m_control->Write( "426 File transfer aborted" );
 		m_control->Write( "226 Data connection closed" );
+	}
+}
+
+void Session::HandleList( const Command& cmd )
+{
+	std::string path( "" );
+
+	if( cmd.size() > 1 )
+	{
+		path = cmd[1];
+	}
+
+	std::vector<std::string> list = m_filesystem->GetListing( path );
+
+	if( list.empty() )
+	{
+		m_control->Write( "450 Some problems" );
+		return;
+	}
+
+	m_data.reset( new Data( m_this, list ) );
+
+	if( !m_data->Connect( m_dataAddress, m_dataPort ) )
+	{
+		m_control->Write( "425 Can't open data connection" );
+		m_data.reset();
+	}
+	else
+	{
+		m_control->Write( std::string( "150 Listing " ) + path );
+		std::cout << "[Session] Opened new listing on session " << m_id << std::endl;
 	}
 }
 

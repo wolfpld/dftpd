@@ -1,4 +1,6 @@
 #include <sys/stat.h>
+#include <dirent.h>
+#include <boost/lexical_cast.hpp>
 #include "Filesystem.hpp"
 #include "String.hpp"
 
@@ -59,6 +61,61 @@ FILE* Filesystem::FileOpen( const std::string& file, Mode mode )
 	}
 
 	return NULL;
+}
+
+std::vector<std::string> Filesystem::GetListing( const std::string& path )
+{
+	std::vector<std::string> ret;
+
+	PathVector reqPath = SplitPath( path );
+	PathVector pv;
+	if( path[0] == '/' )
+	{
+		pv = SplitPath( "/" );
+	}
+	else
+	{
+		pv = SplitPath( m_path );
+	}
+
+	if( !TryChangePath( reqPath, pv ) )
+	{
+		return ret;
+	}
+
+	std::string newPath = m_root + MakePath( pv );
+
+	DIR *d = opendir( newPath.c_str() );
+	if( !d )
+	{
+		return ret;
+	}
+
+	dirent* de;
+	struct stat s;
+	while( ( de = readdir( d ) ) )
+	{
+		stat( ( newPath + "/" + de->d_name ).c_str(), &s );
+
+		std::string entry;
+
+		if( S_ISDIR( s.st_mode ) )
+		{
+			entry += "drwxr-xr-x";
+		}
+		else
+		{
+			entry += "-rw-r--r--";
+		}
+
+		entry += " 1 root root " + boost::lexical_cast<std::string>( s.st_size ) + " jan 01 2008 " + de->d_name;
+
+		ret.push_back( entry );
+	}
+
+	closedir( d );
+
+	return ret;
 }
 
 std::string Filesystem::MakePath( const PathVector& pv )

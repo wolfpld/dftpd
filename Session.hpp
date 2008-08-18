@@ -58,6 +58,7 @@ private:
 	void HandleRetr( const Command& cmd );
 	void HandleStor( const Command& cmd );
 	void HandleAbor();
+	void HandleList( const Command& cmd );
 
 	void PrintDirectory();
 	void ChangeDirectory( const Command& cmd );

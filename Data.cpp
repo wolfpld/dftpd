@@ -8,6 +8,8 @@
 #include "Data.hpp"
 #include "Session.hpp"
 
+static const char CRLF[] = { 13, 10, 0 };
+
 Data::Data( const SessionWPtr& session, FILE* file, Mode mode )
 	: m_sock( 0 )
 	, m_file( file )
@@ -16,9 +18,22 @@ Data::Data( const SessionWPtr& session, FILE* file, Mode mode )
 {
 }
 
+Data::Data( const SessionWPtr& session, const std::vector<std::string>& list )
+	: m_sock( 0 )
+	, m_file( NULL )
+	, m_mode( M_LISTING )
+	, m_list( list )
+	, m_iter( m_list.begin() )
+	, m_session( session )
+{
+}
+
 Data::~Data()
 {
-	fclose( m_file );
+	if( m_file != NULL )
+	{
+		fclose( m_file );
+	}
 
 	if( m_sock != 0 )
 	{
@@ -49,9 +64,13 @@ void Data::Tick()
 	{
 		Send();
 	}
-	else
+	else if( m_mode == M_DOWNLOAD )
 	{
 		Receive();
+	}
+	else
+	{
+		SendList();
 	}
 }
 
@@ -137,5 +156,50 @@ void Data::Receive()
 			}
 			sptr->OutOfSpace();
 		}
+	}
+}
+
+void Data::SendList()
+{
+	if( m_iter == m_list.end() )
+	{
+		SessionPtr sptr = m_session.lock();
+		if( !sptr )
+		{
+			throw "Data lost its Session";
+		}
+		sptr->DataConnectionFinished();
+	}
+	else
+	{
+		std::string data = *m_iter + CRLF;
+		unsigned int pos = 0;
+		char *ptr = (char*)data.c_str();
+
+		while( pos != data.size() )
+		{
+			int size = send( m_sock, ptr, data.size() - pos, 0 );
+
+			if( size == -1 )
+			{
+				throw strerror( errno );
+			}
+			else if( size == 0 )
+			{
+				SessionPtr sptr = m_session.lock();
+				if( !sptr )
+				{
+					throw "Data lost its Session";
+				}
+				sptr->DataConnectionError();
+
+				return;
+			}
+
+			pos += size;
+			ptr += size;
+		}
+
+		++m_iter;
 	}
 }

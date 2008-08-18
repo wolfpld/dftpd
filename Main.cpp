@@ -29,7 +29,7 @@ int main()
 	{
 		Run();
 	}
-	catch( char* err )
+	catch( char const* err )
 	{
 		std::cout << "Caught error: " << err << "\nExiting\n";
 		return 1;
