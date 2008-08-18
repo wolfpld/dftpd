@@ -468,9 +468,9 @@ void Session::HandleAbor()
 
 void Session::HandleList( const Command& cmd )
 {
-	std::string path( "" );
+	std::string path( "." );
 
-	if( cmd.size() > 1 )
+	if( cmd.size() > 1 && cmd[1].size() > 0 && cmd[1][0] != '-' )
 	{
 		path = cmd[1];
 	}
@@ -493,7 +493,7 @@ void Session::HandleList( const Command& cmd )
 	else
 	{
 		m_control->Write( std::string( "150 Listing " ) + path );
-		std::cout << "[Session] Opened new listing on session " << m_id << std::endl;
+		std::cout << "[Session] Sending listing on session " << m_id << std::endl;
 	}
 }
 
