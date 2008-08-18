@@ -502,7 +502,19 @@ void Session::HandleList( const Command& cmd )
 
 	m_data.reset( new Data( m_this, list ) );
 
-	if( !m_data->Connect( m_dataAddress, m_dataPort ) )
+	bool ok;
+	if( m_listenSock )
+	{
+		ok = m_data->Accept( m_listenSock );
+		close( m_listenSock );
+		m_listenSock = 0;
+	}
+	else
+	{
+		ok = m_data->Connect( m_dataAddress, m_dataPort );
+	}
+
+	if( !ok )
 	{
 		m_control->Write( "425 Can't open data connection" );
 		m_data.reset();
@@ -611,7 +623,19 @@ void Session::Upload( const Command& cmd )
 
 	m_data.reset( new Data( m_this, f, Data::M_UPLOAD ) );
 
-	if( !m_data->Connect( m_dataAddress, m_dataPort ) )
+	bool ok;
+	if( m_listenSock )
+	{
+		ok = m_data->Accept( m_listenSock );
+		close( m_listenSock );
+		m_listenSock = 0;
+	}
+	else
+	{
+		ok = m_data->Connect( m_dataAddress, m_dataPort );
+	}
+
+	if( !ok )
 	{
 		m_control->Write( "425 Can't open data connection" );
 		m_data.reset();
@@ -640,7 +664,19 @@ void Session::Download( const Command& cmd )
 
 	m_data.reset( new Data( m_this, f, Data::M_DOWNLOAD ) );
 
-	if( !m_data->Connect( m_dataAddress, m_dataPort ) )
+	bool ok;
+	if( m_listenSock )
+	{
+		ok = m_data->Accept( m_listenSock );
+		close( m_listenSock );
+		m_listenSock = 0;
+	}
+	else
+	{
+		ok = m_data->Connect( m_dataAddress, m_dataPort );
+	}
+
+	if( !ok )
 	{
 		m_control->Write( "425 Can't open data connection" );
 		m_data.reset();

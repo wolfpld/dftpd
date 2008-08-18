@@ -58,6 +58,23 @@ bool Data::Connect( const std::string& addr, int port )
 	return connect( m_sock, (sockaddr*)&sa, sizeof( sockaddr ) ) != -1;
 }
 
+bool Data::Accept( int sock )
+{
+	sockaddr_in addr;
+	socklen_t size = sizeof( addr );
+
+	int incoming = accept( sock, (sockaddr*)&addr, &size );
+
+	if( incoming == -1 )
+	{
+		return false;
+	}
+
+	m_sock = incoming;
+
+	return true;
+}
+
 void Data::Tick()
 {
 	if( m_mode == M_UPLOAD )

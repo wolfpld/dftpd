@@ -24,6 +24,8 @@ public:
 	~Data();
 
 	bool Connect( const std::string& addr, int port );
+	bool Accept( int sock );
+
 	void Tick();
 
 private:
