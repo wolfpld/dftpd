@@ -35,7 +35,7 @@ void Server::Tick()
 
 void Server::IncomingConnection( int sock )
 {
-	m_sessionController->Add( Session::Create( sock, m_sessionController, m_auth ) );
+	m_sessionController->Add( Session::Create( sock, m_sessionController, m_auth, m_listener->GetIPAddr() ) );
 }
 
 void Server::InitListener()

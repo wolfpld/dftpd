@@ -13,14 +13,16 @@
 
 int Session::m_counter = 0;
 
-Session::Session( int controlSock, const SessionControllerPtr& sessionController, const AuthPtr& auth )
+Session::Session( int controlSock, const SessionControllerPtr& sessionController, const AuthPtr& auth, const std::string& ip )
 	: m_control( new Telnet( controlSock ) )
 	, m_controlSock( controlSock )
+	, m_listenSock( 0 )
 	, m_dataPort( 20 )
 	, m_id( m_counter++ )
 	, m_state( S_GREETING )
 	, m_sessionController( sessionController )
 	, m_auth( auth )
+	, m_ip( ip )
 {
 	sockaddr_in addr;
 	socklen_t size = sizeof( sockaddr_in );
@@ -48,11 +50,16 @@ Session::~Session()
 		std::cout << "[Session] Closing control socket " << m_id << std::endl;
 		close( m_controlSock );
 	}
+
+	if( m_listenSock != 0 )
+	{
+		close( m_listenSock );
+	}
 }
 
-SessionPtr Session::Create( int controlSock, const SessionControllerPtr& sessionController, const AuthPtr& auth )
+SessionPtr Session::Create( int controlSock, const SessionControllerPtr& sessionController, const AuthPtr& auth, const std::string& ip )
 {
-	SessionPtr ret( new Session( controlSock, sessionController, auth ) );
+	SessionPtr ret( new Session( controlSock, sessionController, auth, ip ) );
 	ret->m_this = ret;
 
 	return ret;
@@ -307,6 +314,10 @@ void Session::AwaitReady()
 		{
 			HandleList( cmd );
 		}
+		else if( cmd[0] == "PASV" )
+		{
+			HandlePasv( cmd );
+		}
 		else
 		{
 			throw SyntaxErrorException;
@@ -413,6 +424,12 @@ void Session::HandlePort( const Command& cmd )
 		throw SyntaxErrorException;
 	}
 
+	if( m_listenSock )
+	{
+		close( m_listenSock );
+		m_listenSock = 0;
+	}
+
 	PortVector pv = SplitPort( cmd[1] );
 	if( pv.size() != 6 )
 	{
@@ -495,6 +512,54 @@ void Session::HandleList( const Command& cmd )
 		m_control->Write( std::string( "150 Listing " ) + path );
 		std::cout << "[Session] Sending listing on session " << m_id << std::endl;
 	}
+}
+
+void Session::HandlePasv( const Command& cmd )
+{
+	if( cmd.size() != 1 )
+	{
+		throw SyntaxErrorException;
+	}
+
+	if( !m_listenSock )
+	{
+		if( ( m_listenSock = socket( PF_INET, SOCK_STREAM, 0 ) ) == -1 )
+		{
+			throw strerror( errno );
+		}
+
+		sockaddr_in addr;
+		addr.sin_family = AF_INET;
+		addr.sin_port = 0;
+		inet_aton( m_ip.c_str(), &addr.sin_addr );
+		memset( addr.sin_zero, 0, sizeof( addr.sin_zero ) );
+
+		if( bind( m_listenSock, (sockaddr*)&addr, sizeof( addr ) ) == -1 )
+		{
+			throw strerror( errno );
+		}
+
+		if( listen( m_listenSock, 1 ) == -1 )
+		{
+			throw strerror( errno );
+		}
+	}
+
+	sockaddr_in addr;
+	socklen_t len = sizeof( addr );
+	if( getsockname( m_listenSock, (sockaddr*)&addr, &len ) == -1 )
+	{
+		throw strerror( errno );
+	}
+
+	int port = ntohs( addr.sin_port );
+	std::string ip = inet_ntoa( addr.sin_addr );
+
+	std::replace( ip.begin(), ip.end(), '.', ',' );
+
+	m_control->Write( std::string( "227 Entering passive mode " ) + ip +
+			"," + boost::lexical_cast<std::string>( port >> 8 ) +
+			"," + boost::lexical_cast<std::string>( port & 0xFF ) );
 }
 
 void Session::PrintDirectory()

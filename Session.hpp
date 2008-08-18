@@ -27,7 +27,7 @@ class Session
 	};
 
 public:
-	static SessionPtr Create( int controlSock, const SessionControllerPtr& sessionController, const AuthPtr& auth );
+	static SessionPtr Create( int controlSock, const SessionControllerPtr& sessionController, const AuthPtr& auth, const std::string& ip );
 	~Session();
 
 	void Tick();
@@ -37,7 +37,7 @@ public:
 	void OutOfSpace();
 
 private:
-	Session( int controlSock, const SessionControllerPtr& sessionController, const AuthPtr& auth );
+	Session( int controlSock, const SessionControllerPtr& sessionController, const AuthPtr& auth, const std::string& ip );
 
 	void Remove();
 
@@ -59,6 +59,7 @@ private:
 	void HandleStor( const Command& cmd );
 	void HandleAbor();
 	void HandleList( const Command& cmd );
+	void HandlePasv( const Command& cmd );
 
 	void PrintDirectory();
 	void ChangeDirectory( const Command& cmd );
@@ -72,6 +73,7 @@ private:
 
 	TelnetPtr m_control;
 	int m_controlSock;
+	int m_listenSock;
 
 	int m_dataPort;
 	std::string m_dataAddress;
@@ -88,6 +90,7 @@ private:
 	FilesystemPtr m_filesystem;
 
 	std::string m_user;
+	std::string m_ip;
 };
 
 #endif
