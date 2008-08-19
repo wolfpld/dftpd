@@ -18,6 +18,9 @@ public:
 
 	std::string GetBuf();
 
+	void EraseCharacter();
+	void EraseLine();
+
 private:
 	Telnet( int sock );
 

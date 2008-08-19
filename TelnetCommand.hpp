@@ -12,6 +12,9 @@ public:
 
 	void Reset();
 
+	bool ParsingCommand() const { return m_buf[0] != 0; }
+	bool Parse( unsigned char byte );
+
 private:
 	// RFC 854 specifies that commands are either 2 or 3 byte sequences.
 	unsigned char m_buf[3];

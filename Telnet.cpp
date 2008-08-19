@@ -54,10 +54,17 @@ bool Telnet::Read()
 		buf.append( tmpBuf, size );
 	}
 
-	// Drop telnet commands
+	// Parse telnet commands
 	for( unsigned int i=0; i<buf.size(); i++ )
 	{
-		if( buf[i] >= 0 )
+		if( m_cmd->ParsingCommand() || (unsigned char)buf[i] == 255 )
+		{
+			if( !m_cmd->Parse( buf[i] ) )
+			{
+				throw "Telnet parse error";
+			}
+		}
+		else
 		{
 			m_readBuf += buf[i];
 		}
@@ -107,4 +114,17 @@ std::string Telnet::GetBuf()
 	m_readBuf.erase( 0, pos + 2 );
 
 	return ret;
+}
+
+void Telnet::EraseCharacter()
+{
+	if( m_readBuf.size() > 0 )
+	{
+		m_readBuf.erase( m_readBuf.end() - 1 );
+	}
+}
+
+void Telnet::EraseLine()
+{
+	throw "Unimplemented";
 }
