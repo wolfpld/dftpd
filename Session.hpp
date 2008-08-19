@@ -8,6 +8,7 @@
 #include "SessionPtr.hpp"
 #include "String.hpp"
 #include "Telnet.hpp"
+#include "TelnetPtr.hpp"
 
 class Session
 {

@@ -14,7 +14,7 @@
 int Session::m_counter = 0;
 
 Session::Session( int controlSock, const SessionControllerPtr& sessionController, const AuthPtr& auth, const std::string& ip )
-	: m_control( new Telnet( controlSock ) )
+	: m_control( Telnet::Create( controlSock ) )
 	, m_controlSock( controlSock )
 	, m_listenSock( 0 )
 	, m_dataPort( 20 )

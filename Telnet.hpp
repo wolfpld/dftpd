@@ -2,7 +2,7 @@
 #define __DFTPD__TELNET_HPP__
 
 #include <string>
-#include <boost/shared_ptr.hpp>
+#include "TelnetPtr.hpp"
 #include "TelnetCommand.hpp"
 
 class Telnet
@@ -10,7 +10,7 @@ class Telnet
 	enum { BufSize = 1024 };
 
 public:
-	Telnet( int sock );
+	static TelnetPtr Create( int sock );
 	~Telnet();
 
 	bool Read();
@@ -19,13 +19,14 @@ public:
 	std::string GetBuf();
 
 private:
+	Telnet( int sock );
+
 	// Owned by Session, not by Telnet
 	int m_sock;
 
 	std::string m_readBuf;
 	TelnetCommandPtr m_cmd;
+	TelnetWPtr m_this;
 };
-
-typedef boost::shared_ptr<Telnet> TelnetPtr;
 
 #endif
