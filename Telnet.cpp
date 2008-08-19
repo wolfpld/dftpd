@@ -7,6 +7,7 @@
 #include "Exceptions.hpp"
 
 static const char CRLF[] = { 13, 10, 0 };
+static const char IAC[] = { 255, 0 };
 
 Telnet::Telnet( int sock )
 	: m_sock( sock )
@@ -75,7 +76,16 @@ bool Telnet::Read()
 
 void Telnet::Write( const std::string& msg )
 {
-	std::string buf( msg );
+	std::string buf;
+	for( unsigned int i=0; i<msg.size(); i++ )
+	{
+		buf += msg[i];
+
+		if( (unsigned char)msg[i] == 255 )
+		{
+			buf.append( IAC );
+		}
+	}
 	buf.append( CRLF );
 
 	unsigned int pos = 0;
