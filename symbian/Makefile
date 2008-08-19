@@ -1,16 +1,16 @@
 PWD = ${shell pwd}
 
-SRCS = ${shell find ../ -maxdepth 1 -type f}
+SRCS = ${shell find ../ -maxdepth 1 -type f -name '*.cpp' -or -name '*.hpp'}
 
 all: dftpd.sisx
 
 dftpd.sisx: dftpd.sis
 	signsis dftpd.sis dftpd.sisx
 
-dftpd.sis: $(EPOCROOT)/epoc32/build/$(PWD)/openttd/gcce/urel/dftpd.exe dftpd.pkg
+dftpd.sis: $(EPOCROOT)/epoc32/build/$(PWD)/dftpd/gcce/urel/dftpd.exe dftpd.pkg
 	makesis -d$(EPOCROOT) dftpd.pkg
 
-$(EPOCROOT)/epoc32/build/$(PWD)/openttd/gcce/urel/dftpd.exe: dftpd.gcce $(SRCS)
+$(EPOCROOT)/epoc32/build/$(PWD)/dftpd/gcce/urel/dftpd.exe: dftpd.gcce $(SRCS)
 	+make -f dftpd.gcce UREL
 
 dftpd.gcce: dftpd.mmp $(EPOCROOT)/epoc32/build/$(PWD)/gcce.make
