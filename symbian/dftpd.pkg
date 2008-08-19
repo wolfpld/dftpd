@@ -1,0 +1,17 @@
+&EN
+
+; standard SIS file header
+#{"dftpd"},(0xA0102039),0,1,0
+
+;Localised Vendor name
+%{"Vendor-EN"}
+
+;Unique Vendor name
+:"Vendor"
+
+;Supports Series 60 v 3.0
+[0x101F7961], 0, 0, 0, {"S60ProductID"}
+
+;Files to install
+"\epoc32\release\gcce\urel\dftpd.exe" - "!:\sys\bin\dftpd.exe"
+"\epoc32\data\z\private\10003a3f\import\apps\dftpd_reg.rsc" - "!:\private\10003a3f\import\apps\dftpd_reg.rsc"

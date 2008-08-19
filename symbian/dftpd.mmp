@@ -1,0 +1,41 @@
+target		dftpd.exe
+targettype	exe
+uid		0x100039ce 0xa0102039
+vendorid	0
+
+epocheapsize	0x10000 0x400000
+
+start resource	dftpd_reg.rss
+targetpath	\private\10003a3f\import\apps
+end
+
+systeminclude	\epoc32\include\stdapis
+systeminclude	\epoc32\include\stdapis\stlport
+systeminclude	\epoc32\include
+
+userinclude     ..
+
+sourcepath	..
+
+source		AuthNone.cpp
+source		Data.cpp
+source		Exceptions.cpp
+source		Filesystem.cpp
+source		Listener.cpp
+source		Main.cpp
+source		Server.cpp
+source		Session.cpp
+source		SessionController.cpp
+source		String.cpp
+source		Telnet.cpp
+source		TelnetCommand.cpp
+
+// using main() as entry point
+staticlibrary libcrt0.lib
+
+// libc and euser are always needed when using main() entry point
+library         libc.lib 
+library 	euser.lib
+library		libstdcpp.lib
+
+capability ReadUserData WriteUserData NetworkServices
