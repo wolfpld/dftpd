@@ -208,6 +208,11 @@ std::string Filesystem::GetFilePath( const std::string& file )
 {
 	PathVector reqPath = SplitPath( file );
 
+	if( reqPath.size() == 0 )
+	{
+		return "";
+	}
+
 	// Remove filename from path
 	std::string fname = reqPath.back();
 	reqPath.pop_back();
