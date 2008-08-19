@@ -1,3 +1,4 @@
+#include <iostream>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <string.h>
@@ -23,8 +24,8 @@ bool Telnet::Read()
 	// Read all that's waiting on the socket
 	for(;;)
 	{
-		char tmpBuf[1024];
-		int size = recv( m_sock, tmpBuf, 1024, 0 );
+		char tmpBuf[BufSize];
+		int size = recv( m_sock, tmpBuf, BufSize, 0 );
 
 		if( size == -1 )
 		{

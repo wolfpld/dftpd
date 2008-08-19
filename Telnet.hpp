@@ -6,6 +6,8 @@
 
 class Telnet
 {
+	enum { BufSize = 1024 };
+
 public:
 	Telnet( int sock );
 	~Telnet();
