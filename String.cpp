@@ -54,6 +54,11 @@ PathVector SplitPath( const std::string& str )
 		i = j;
 	}
 
+	if( ret.size() > 0 && ret[0] == "~" )
+	{
+		ret.erase( ret.begin() );
+	}
+
 	return ret;
 }
 

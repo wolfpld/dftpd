@@ -33,6 +33,7 @@ private:
 	bool TryChangePath( const PathVector& reqPath, PathVector& path );
 	bool CheckFileExists( const std::string& file );
 	std::string GetFilePath( const std::string& path );
+	PathVector SplitProperPath( const std::string& path );
 
 	std::string m_root;
 	std::string m_path;

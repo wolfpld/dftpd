@@ -18,15 +18,7 @@ Filesystem::~Filesystem()
 bool Filesystem::ChangeDirectory( const std::string& cd )
 {
 	PathVector reqPath = SplitPath( cd );
-	PathVector path;
-	if( cd[0] == '/' )
-	{
-		path = SplitPath( "/" );
-	}
-	else
-	{
-		path = SplitPath( m_path );
-	}
+	PathVector path = SplitProperPath( cd );
 
 	if( !TryChangePath( reqPath, path ) )
 	{
@@ -69,15 +61,7 @@ std::vector<std::string> Filesystem::GetListing( const std::string& path )
 	std::vector<std::string> ret;
 
 	PathVector reqPath = SplitPath( path );
-	PathVector pv;
-	if( path[0] == '/' )
-	{
-		pv = SplitPath( "/" );
-	}
-	else
-	{
-		pv = SplitPath( m_path );
-	}
+	PathVector pv = SplitProperPath( path );
 
 	if( !TryChangePath( reqPath, pv ) )
 	{
@@ -228,15 +212,7 @@ std::string Filesystem::GetFilePath( const std::string& file )
 	std::string fname = reqPath.back();
 	reqPath.pop_back();
 
-	PathVector path;
-	if( file[0] == '/' )
-	{
-		path = SplitPath( "/" );
-	}
-	else
-	{
-		path = SplitPath( m_path );
-	}
+	PathVector path = SplitProperPath( file );
 
 	if( !TryChangePath( reqPath, path ) )
 	{
@@ -244,4 +220,22 @@ std::string Filesystem::GetFilePath( const std::string& file )
 	}
 
 	return MakePath( path ) + "/" + fname;
+}
+
+PathVector Filesystem::SplitProperPath( const std::string& path )
+{
+	PathVector ret;
+
+	if( path.length() > 0 &&
+	    ( path[0] == '/' ||
+	    ( path.length() > 1 && ( path[0] == '~' && path[1] == '/' ) ) ) )
+	{
+		ret = SplitPath( "/" );
+	}
+	else
+	{
+		ret = SplitPath( m_path );
+	}
+
+	return ret;
 }
