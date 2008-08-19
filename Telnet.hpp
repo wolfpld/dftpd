@@ -3,6 +3,7 @@
 
 #include <string>
 #include <boost/shared_ptr.hpp>
+#include "TelnetCommand.hpp"
 
 class Telnet
 {
@@ -22,6 +23,7 @@ private:
 	int m_sock;
 
 	std::string m_readBuf;
+	TelnetCommandPtr m_cmd;
 };
 
 typedef boost::shared_ptr<Telnet> TelnetPtr;

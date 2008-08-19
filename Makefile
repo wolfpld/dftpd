@@ -17,7 +17,8 @@ OBJ = \
 	SessionController.o \
 	Session.o \
 	String.o \
-	Telnet.o
+	Telnet.o \
+	TelnetCommand.o
 
 all: dftpd
 

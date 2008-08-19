@@ -10,6 +10,7 @@ static const char CRLF[] = { 13, 10, 0 };
 
 Telnet::Telnet( int sock )
 	: m_sock( sock )
+	, m_cmd( new TelnetCommand )
 {
 }
 
