@@ -68,6 +68,8 @@ private:
 	void Upload( const Command& cmd );
 	void Download( const Command& cmd );
 
+	bool OpenDataConnection();
+
 	Command GetCommand() { return ParseCommand( m_control->GetBuf() ); }
 
 
