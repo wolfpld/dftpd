@@ -28,6 +28,9 @@ public:
 
 	void Tick();
 
+	int GetSock() const { return m_sock; }
+	Mode GetMode() const { return m_mode; }
+
 private:
 	void Send();
 	void Receive();

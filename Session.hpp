@@ -1,6 +1,8 @@
 #ifndef __DFTPD__SESSION_HPP__
 #define __DFTPD__SESSION_HPP__
 
+#include <list>
+#include <string>
 #include "Auth.hpp"
 #include "Data.hpp"
 #include "Filesystem.hpp"
@@ -36,6 +38,8 @@ public:
 	void DataConnectionFinished();
 	void DataConnectionError();
 	void OutOfSpace();
+
+	std::list<int> GetFds() const;
 
 private:
 	Session( int controlSock, const SessionControllerPtr& sessionController, const AuthPtr& auth, const std::string& ip );

@@ -18,6 +18,7 @@ public:
 	void Tick();
 
 	const std::string& GetIPAddr() const { return m_ipaddr; }
+	int GetSock() const { return m_sock; }
 
 private:
 	int m_sock;

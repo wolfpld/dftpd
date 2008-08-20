@@ -17,6 +17,8 @@ public:
 	void Add( const SessionPtr& session );
 	void Remove( const SessionPtr& session );
 
+	std::list<int> GetFds() const;
+
 private:
 	std::list<SessionPtr> m_list;
 	std::queue<SessionPtr> m_removeList;

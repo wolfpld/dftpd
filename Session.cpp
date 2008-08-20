@@ -696,3 +696,38 @@ bool Session::OpenDataConnection()
 
 	return ok;
 }
+
+std::list<int> Session::GetFds() const
+{
+	std::list<int> ret;
+
+	// Server starts by sending greeting, not waiting for data
+	if( m_state == S_GREETING )
+	{
+		ret.push_back( -m_controlSock );
+	}
+	else
+	{
+		ret.push_back( m_controlSock );
+	}
+
+	if( m_listenSock != 0 )
+	{
+		ret.push_back( m_listenSock );
+	}
+
+	if( m_data && m_data->GetSock() != 0 )
+	{
+		// Hack, mark write descriptors as negative
+		if( m_data->GetMode() == Data::M_DOWNLOAD )
+		{
+			ret.push_back( m_data->GetSock() );
+		}
+		else	// M_UPLOAD, M_LISTING
+		{
+			ret.push_back( -m_data->GetSock() );
+		}
+	}
+
+	return ret;
+}

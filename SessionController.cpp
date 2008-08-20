@@ -35,3 +35,16 @@ void SessionController::Remove( const SessionPtr& session )
 {
 	m_removeList.push( session );
 }
+
+std::list<int> SessionController::GetFds() const
+{
+	std::list<int> ret;
+
+	for( std::list<SessionPtr>::const_iterator it = m_list.begin(); it != m_list.end(); ++it )
+	{
+		std::list<int> fds = (*it)->GetFds();
+		ret.insert( ret.end(), fds.begin(), fds.end() );
+	}
+
+	return ret;
+}
