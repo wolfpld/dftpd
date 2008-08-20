@@ -36,12 +36,6 @@ Session::Session( int controlSock, const SessionControllerPtr& sessionController
 	m_dataAddress = inet_ntoa( addr.sin_addr );
 
 	std::cout << "[Session] Initializing session " << m_id << " for " << m_dataAddress << std::endl;
-
-	// Set socket to non-blocking
-	if( fcntl( m_controlSock, F_SETFL, O_NONBLOCK ) == -1 )
-	{
-		throw strerror( errno );
-	}
 }
 
 Session::~Session()

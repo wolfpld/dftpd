@@ -50,12 +50,6 @@ void Listener::Listen()
 		throw strerror( errno );
 	}
 
-	// Set socket to non-blocking
-	if( fcntl( m_sock, F_SETFL, O_NONBLOCK ) == -1 )
-	{
-		throw strerror( errno );
-	}
-
 	// Reuse port
 	int yes = 1;
 	if( setsockopt( m_sock, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof( int ) ) == -1 )
