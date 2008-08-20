@@ -17,7 +17,6 @@ void Run()
 	while( !g_exitRequested )
 	{
 		server->Tick();
-		usleep(10000);
 	}
 }
 

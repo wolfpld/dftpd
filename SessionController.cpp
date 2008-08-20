@@ -7,11 +7,30 @@ SessionController::~SessionController()
 {
 }
 
-void SessionController::Tick()
+void SessionController::Tick( const std::list<int>& activeFds )
 {
 	for( std::list<SessionPtr>::iterator it = m_list.begin(); it != m_list.end(); ++it )
 	{
-		(*it)->Tick();
+		std::list<int> fds = (*it)->GetFds();
+
+		bool work = false;
+		for( std::list<int>::const_iterator af = activeFds.begin(); af != activeFds.end(); ++af )
+		{
+			for( std::list<int>::const_iterator f = fds.begin(); f != fds.end(); ++f )
+			{
+				if( abs( *f ) == *af )
+				{
+					work = true;
+					break;
+				}
+			}
+			if( work ) break;
+		}
+
+		if( work )
+		{
+			(*it)->Tick();
+		}
 	}
 
 	while( !m_removeList.empty() )

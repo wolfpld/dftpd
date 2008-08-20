@@ -12,7 +12,7 @@ public:
 	SessionController();
 	~SessionController();
 
-	void Tick();
+	void Tick( const std::list<int>& activeFds );
 
 	void Add( const SessionPtr& session );
 	void Remove( const SessionPtr& session );

@@ -3,6 +3,7 @@
 #include <sys/socket.h>
 #include <string.h>
 #include <errno.h>
+#include <sys/select.h>
 #include "Telnet.hpp"
 #include "Exceptions.hpp"
 
@@ -35,6 +36,19 @@ bool Telnet::Read()
 	for(;;)
 	{
 		char tmpBuf[BufSize];
+
+		fd_set fd;
+		FD_ZERO( &fd );
+		FD_SET( m_sock, &fd );
+		timeval tv;
+		tv.tv_sec = 0;
+		tv.tv_usec = 0;
+		select( m_sock + 1, &fd, NULL, NULL, &tv );
+		if( !FD_ISSET( m_sock, &fd ) )
+		{
+			break;
+		}
+
 		int size = recv( m_sock, tmpBuf, BufSize, 0 );
 
 		if( size == -1 )
