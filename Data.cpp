@@ -146,11 +146,6 @@ void Data::Receive()
 
 	if( size == -1 )
 	{
-		if( errno == EAGAIN )
-		{
-			return;
-		}
-
 		throw SessionErrorException;
 	}
 	else if( size == 0 )

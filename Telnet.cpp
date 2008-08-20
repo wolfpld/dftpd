@@ -53,12 +53,6 @@ bool Telnet::Read()
 
 		if( size == -1 )
 		{
-			if( errno == EAGAIN )
-			{
-				// No error, just nothing to be read from socket
-				break;
-			}
-
 			throw SessionErrorException;
 		}
 		else if( size == 0 )

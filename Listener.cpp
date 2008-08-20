@@ -83,11 +83,6 @@ void Listener::Tick()
 	int incoming = accept( m_sock, (sockaddr*)&addr, &size );
 	if( incoming == -1 )
 	{
-		if( errno == EAGAIN )
-		{
-			// No error, just no connections in queue
-			return;
-		}
 		throw strerror( errno );
 	}
 
