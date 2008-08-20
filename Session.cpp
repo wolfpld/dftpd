@@ -123,6 +123,10 @@ void Session::Tick()
 			m_control->Write( "221 Bye" );
 			Remove();
 		}
+		catch( SessionError& e )
+		{
+			std::cout << "[Session] " << m_id << " encountered problems (" << strerror( errno ) << ")\n";
+		}
 	}
 	catch( ConnectionTerminated& e )
 	{
@@ -406,7 +410,7 @@ void Session::HandleStru( const Command& cmd )
 	}
 	else if( param == "R" )
 	{
-		throw "STRU R not implemented";
+		throw SessionErrorException;
 	}
 	else if( param == "P" )
 	{
@@ -526,7 +530,7 @@ void Session::HandlePasv( const Command& cmd )
 	{
 		if( ( m_listenSock = socket( PF_INET, SOCK_STREAM, 0 ) ) == -1 )
 		{
-			throw strerror( errno );
+			throw SessionErrorException;
 		}
 
 		sockaddr_in addr;
@@ -537,12 +541,12 @@ void Session::HandlePasv( const Command& cmd )
 
 		if( bind( m_listenSock, (sockaddr*)&addr, sizeof( addr ) ) == -1 )
 		{
-			throw strerror( errno );
+			throw SessionErrorException;
 		}
 
 		if( listen( m_listenSock, 1 ) == -1 )
 		{
-			throw strerror( errno );
+			throw SessionErrorException;
 		}
 	}
 
@@ -550,7 +554,7 @@ void Session::HandlePasv( const Command& cmd )
 	socklen_t len = sizeof( addr );
 	if( getsockname( m_listenSock, (sockaddr*)&addr, &len ) == -1 )
 	{
-		throw strerror( errno );
+		throw SessionErrorException;
 	}
 
 	int port = ntohs( addr.sin_port );

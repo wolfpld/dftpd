@@ -45,7 +45,7 @@ bool Telnet::Read()
 				break;
 			}
 
-			throw strerror( errno );
+			throw SessionErrorException;
 		}
 		else if( size == 0 )
 		{
@@ -62,7 +62,7 @@ bool Telnet::Read()
 		{
 			if( !m_cmd->Parse( buf[i] ) )
 			{
-				throw "Telnet parse error";
+				throw SessionErrorException;
 			}
 		}
 		else
@@ -97,7 +97,7 @@ void Telnet::Write( const std::string& msg )
 
 		if( size == -1 )
 		{
-			throw strerror( errno );
+			throw SessionErrorException;
 		}
 		else if( size == 0 )
 		{
@@ -116,7 +116,7 @@ std::string Telnet::GetBuf()
 	unsigned int pos = m_readBuf.find( CRLF );
 	if( pos == std::string::npos )
 	{
-		throw "Trying to get telnet buffer when buffer not ready";
+		throw SessionErrorException;
 	}
 
 	ret = m_readBuf.substr( 0, pos );
@@ -136,5 +136,5 @@ void Telnet::EraseCharacter()
 
 void Telnet::EraseLine()
 {
-	throw "Unimplemented";
+	throw SessionErrorException;
 }

@@ -7,6 +7,7 @@
 #include <errno.h>
 #include "Data.hpp"
 #include "Session.hpp"
+#include "Exceptions.hpp"
 
 static const char CRLF[] = { 13, 10, 0 };
 
@@ -45,7 +46,7 @@ bool Data::Connect( const std::string& addr, int port )
 {
 	if( ( m_sock = socket( PF_INET, SOCK_STREAM, 0 ) ) == -1 )
 	{
-		throw strerror( errno );
+		throw SessionErrorException;
 	}
 
 	sockaddr_in sa;
@@ -117,7 +118,7 @@ void Data::Send()
 
 			if( size == -1 )
 			{
-				throw strerror( errno );
+				throw SessionErrorException;
 			}
 			else if( size == 0 )
 			{
@@ -149,7 +150,7 @@ void Data::Receive()
 			return;
 		}
 
-		throw strerror( errno );
+		throw SessionErrorException;
 	}
 	else if( size == 0 )
 	{
@@ -199,7 +200,7 @@ void Data::SendList()
 
 			if( size == -1 )
 			{
-				throw strerror( errno );
+				throw SessionErrorException;
 			}
 			else if( size == 0 )
 			{

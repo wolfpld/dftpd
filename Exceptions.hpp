@@ -4,9 +4,11 @@
 class ConnectionTerminated {};
 class SyntaxError {};
 class QuitRequested {};
+class SessionError {};
 
 extern ConnectionTerminated ConnectionTerminatedException;
 extern SyntaxError SyntaxErrorException;
 extern QuitRequested QuitRequestedException;
+extern SessionError SessionErrorException;
 
 #endif
