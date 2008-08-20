@@ -25,9 +25,10 @@ source		Filesystem.cpp
 source		Listener.cpp
 source		MainSymbian.cpp
 source		Server.cpp
-source		Session.cpp
 source		SessionController.cpp
+source		Session.cpp
 source		String.cpp
+source		SymbianNetwork.cpp
 source		Telnet.cpp
 source		TelnetCommand.cpp
 
