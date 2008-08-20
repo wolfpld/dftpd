@@ -13,7 +13,6 @@ void Run()
 	for(;;)
 	{
 		server->Tick();
-		usleep(10000);
 	}
 }
 
