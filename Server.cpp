@@ -12,6 +12,16 @@ Server::Server()
 	m_listener->Listen();
 }
 
+Server::Server( const std::string& ip )
+	: m_listener( new Listener( ip ) )
+	, m_sessionController( new SessionController )
+	, m_auth( new AuthNone )
+{
+	std::cout << "Dumb FTP server\nIP: " << m_listener->GetIPAddr() << std::endl;
+
+	m_listener->Listen();
+}
+
 Server::~Server()
 {
 	std::cout << "[Server] Shutting down\n";
@@ -20,6 +30,16 @@ Server::~Server()
 ServerPtr Server::Create()
 {
 	ServerPtr ret( new Server );
+	ret->m_this = ret;
+
+	ret->InitListener();
+
+	return ret;
+}
+
+ServerPtr Server::Create( const std::string& ip )
+{
+	ServerPtr ret( new Server( ip ) );
 	ret->m_this = ret;
 
 	ret->InitListener();

@@ -1,13 +1,14 @@
 #include <iostream>
+#include <string>
 #include <unistd.h>
 #include "Server.hpp"
 #include "SymbianNetwork.hpp"
 
 void Run()
 {
-	EstablishConnection();
+	std::string ip = EstablishConnection();
 
-	ServerPtr server( Server::Create() );
+	ServerPtr server( Server::Create( ip ) );
 
 	for(;;)
 	{

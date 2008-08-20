@@ -1,6 +1,7 @@
 #ifndef __DFTPD__SERVER_HPP__
 #define __DFTPD__SERVER_HPP__
 
+#include <string>
 #include "ServerPtr.hpp"
 #include "Listener.hpp"
 #include "SessionController.hpp"
@@ -10,6 +11,7 @@ class Server
 {
 public:
 	static ServerPtr Create();
+	static ServerPtr Create( const std::string& ip );
 	~Server();
 
 	void Tick();
@@ -18,6 +20,7 @@ public:
 
 private:
 	Server();
+	Server( const std::string& ip );
 
 	void InitListener();
 

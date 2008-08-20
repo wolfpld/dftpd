@@ -26,6 +26,12 @@ Listener::Listener()
 	m_ipaddr = inet_ntoa( *((in_addr*)h->h_addr) );
 }
 
+Listener::Listener( const std::string& ip )
+	: m_sock( 0 )
+	, m_ipaddr( ip )
+{
+}
+
 Listener::~Listener()
 {
 	if( m_sock != 0 )

@@ -9,6 +9,7 @@ class Listener
 {
 public:
 	Listener();
+	Listener( const std::string& ip );
 	~Listener();
 
 	void SetServer( const ServerWPtr& server ) { m_server = server; }
