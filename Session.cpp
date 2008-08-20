@@ -126,6 +126,7 @@ void Session::Tick()
 		catch( SessionError& e )
 		{
 			std::cout << "[Session] " << m_id << " encountered problems (" << strerror( errno ) << ")\n";
+			Remove();
 		}
 	}
 	catch( ConnectionTerminated& e )
