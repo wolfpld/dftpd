@@ -4,6 +4,7 @@ uid		0x100039ce 0xa0102039
 vendorid	0
 
 epocheapsize	0x10000 0x400000
+epocstacksize	0xA000
 
 start resource	dftpd_reg.rss
 targetpath	\private\10003a3f\import\apps
