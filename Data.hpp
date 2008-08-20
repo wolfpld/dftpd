@@ -42,6 +42,7 @@ private:
 	std::vector<std::string> m_list;
 	std::vector<std::string>::const_iterator m_iter;
 	SessionWPtr m_session;
+	char* m_buf;
 };
 
 typedef boost::shared_ptr<Data> DataPtr;

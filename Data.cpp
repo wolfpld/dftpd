@@ -17,6 +17,7 @@ Data::Data( const SessionWPtr& session, FILE* file, Mode mode )
 	, m_mode( mode )
 	, m_session( session )
 {
+	m_buf = new char[BufSize];
 }
 
 Data::Data( const SessionWPtr& session, const std::vector<std::string>& list )
@@ -27,10 +28,13 @@ Data::Data( const SessionWPtr& session, const std::vector<std::string>& list )
 	, m_iter( m_list.begin() )
 	, m_session( session )
 {
+	m_buf = new char[BufSize];
 }
 
 Data::~Data()
 {
+	delete[] m_buf;
+
 	if( m_file != NULL )
 	{
 		fclose( m_file );
@@ -94,9 +98,7 @@ void Data::Tick()
 
 void Data::Send()
 {
-	char buf[BufSize];
-
-	int len = fread( buf, 1, BufSize, m_file );
+	int len = fread( m_buf, 1, BufSize, m_file );
 
 	if( len == 0 )
 	{
@@ -110,7 +112,7 @@ void Data::Send()
 	else
 	{
 		int pos = 0;
-		char *ptr = buf;
+		char *ptr = m_buf;
 
 		while( pos != len )
 		{
@@ -140,8 +142,7 @@ void Data::Send()
 
 void Data::Receive()
 {
-	char tmpBuf[BufSize];
-	int size = recv( m_sock, tmpBuf, BufSize, 0 );
+	int size = recv( m_sock, m_buf, BufSize, 0 );
 
 	if( size == -1 )
 	{
@@ -163,7 +164,7 @@ void Data::Receive()
 	}
 	else
 	{
-		int writeSize = fwrite( tmpBuf, 1, size, m_file );
+		int writeSize = fwrite( m_buf, 1, size, m_file );
 
 		if( writeSize != size )
 		{
