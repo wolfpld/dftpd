@@ -23,7 +23,7 @@ source		Data.cpp
 source		Exceptions.cpp
 source		Filesystem.cpp
 source		Listener.cpp
-source		Main.cpp
+source		MainSymbian.cpp
 source		Server.cpp
 source		Session.cpp
 source		SessionController.cpp
