@@ -11,10 +11,11 @@
 #include "SessionController.hpp"
 #include "String.hpp"
 #include "Exceptions.hpp"
+#include "Server.hpp"
 
 int Session::m_counter = 0;
 
-Session::Session( int controlSock, const SessionControllerPtr& sessionController, const AuthPtr& auth, const std::string& ip )
+Session::Session( int controlSock, const SessionControllerPtr& sessionController, const AuthPtr& auth, const std::string& ip, const ServerWPtr& server )
 	: m_control( Telnet::Create( controlSock ) )
 	, m_controlSock( controlSock )
 	, m_listenSock( 0 )
@@ -23,6 +24,7 @@ Session::Session( int controlSock, const SessionControllerPtr& sessionController
 	, m_state( S_GREETING )
 	, m_sessionController( sessionController )
 	, m_auth( auth )
+	, m_server( server )
 	, m_ip( ip )
 {
 	sockaddr_in addr;
@@ -52,9 +54,9 @@ Session::~Session()
 	}
 }
 
-SessionPtr Session::Create( int controlSock, const SessionControllerPtr& sessionController, const AuthPtr& auth, const std::string& ip )
+SessionPtr Session::Create( int controlSock, const SessionControllerPtr& sessionController, const AuthPtr& auth, const std::string& ip, const ServerWPtr& server )
 {
-	SessionPtr ret( new Session( controlSock, sessionController, auth, ip ) );
+	SessionPtr ret( new Session( controlSock, sessionController, auth, ip, server ) );
 	ret->m_this = ret;
 
 	return ret;
@@ -144,6 +146,18 @@ void Session::Remove()
 
 void Session::SendGreeting()
 {
+	ServerPtr server = m_server.lock();
+	if( !server )
+	{
+		throw "Session lost Server";
+	}
+	const std::list<std::string> welcome = server->GetWelcomeMessage();
+
+	for( std::list<std::string>::const_iterator it = welcome.begin(); it != welcome.end(); ++it )
+	{
+		m_control->Write( "220-" + *it );
+	}
+
 	m_control->Write( "220 Dumb FTP Server ready" );
 }
 

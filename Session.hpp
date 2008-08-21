@@ -6,6 +6,7 @@
 #include "Auth.hpp"
 #include "Data.hpp"
 #include "Filesystem.hpp"
+#include "ServerPtr.hpp"
 #include "SessionControllerPtr.hpp"
 #include "SessionPtr.hpp"
 #include "String.hpp"
@@ -30,7 +31,7 @@ class Session
 	};
 
 public:
-	static SessionPtr Create( int controlSock, const SessionControllerPtr& sessionController, const AuthPtr& auth, const std::string& ip );
+	static SessionPtr Create( int controlSock, const SessionControllerPtr& sessionController, const AuthPtr& auth, const std::string& ip, const ServerWPtr& server );
 	~Session();
 
 	void Tick();
@@ -42,7 +43,7 @@ public:
 	std::list<int> GetFds() const;
 
 private:
-	Session( int controlSock, const SessionControllerPtr& sessionController, const AuthPtr& auth, const std::string& ip );
+	Session( int controlSock, const SessionControllerPtr& sessionController, const AuthPtr& auth, const std::string& ip, const ServerWPtr& server );
 
 	void Remove();
 
@@ -95,6 +96,7 @@ private:
 	SessionWPtr m_this;
 	AuthPtr m_auth;
 	FilesystemPtr m_filesystem;
+	ServerWPtr m_server;
 
 	std::string m_user;
 	std::string m_ip;

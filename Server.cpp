@@ -12,6 +12,8 @@ Server::Server()
 {
 	std::cout << "Dumb FTP server\nIP: " << m_listener->GetIPAddr() << std::endl;
 
+	LoadWelcomeMessage();
+
 	m_listener->Listen();
 }
 
@@ -21,6 +23,8 @@ Server::Server( const std::string& ip )
 	, m_auth( new AuthNone )
 {
 	std::cout << "Dumb FTP server\nIP: " << m_listener->GetIPAddr() << std::endl;
+
+	LoadWelcomeMessage();
 
 	m_listener->Listen();
 }
@@ -115,10 +119,32 @@ void Server::Tick()
 
 void Server::IncomingConnection( int sock )
 {
-	m_sessionController->Add( Session::Create( sock, m_sessionController, m_auth, m_listener->GetIPAddr() ) );
+	m_sessionController->Add( Session::Create( sock, m_sessionController, m_auth, m_listener->GetIPAddr(), m_this ) );
 }
 
 void Server::InitListener()
 {
 	m_listener->SetServer( m_this );
+}
+
+void Server::LoadWelcomeMessage()
+{
+	FILE *f = fopen( "welcome", "r" );
+	if( !f )
+	{
+		return;
+	}
+
+	char buf[256];
+	while( fgets( buf, 256, f ) )
+	{
+		if( buf[strlen( buf ) -  1] == '\n' )
+		{
+			buf[strlen( buf ) - 1] = 0;
+		}
+
+		m_welcome.push_back( buf );
+	}
+
+	fclose( f );
 }
