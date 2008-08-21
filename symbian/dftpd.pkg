@@ -15,3 +15,5 @@
 ;Files to install
 "\epoc32\release\gcce\urel\dftpd.exe" - "!:\sys\bin\dftpd.exe"
 "\epoc32\data\z\private\10003a3f\import\apps\dftpd_reg.rsc" - "!:\private\10003a3f\import\apps\dftpd_reg.rsc"
+
+"welcome" - "!:\private\a0102039\welcome"

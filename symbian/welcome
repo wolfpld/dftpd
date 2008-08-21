@@ -1,0 +1,15 @@
+Welcome to the S60 Dumb FTP Server (dftpd)
+      THE first Symbian FTP server
+
+     To contact the author write to:
+   Bartosz Taudul <wolf.pld@gmail.com>
+
+Please keep in mind that this server is
+highly experimental and by design doesn't
+support extravagant FTP commands. You
+won't be able to transmit EBCDIC encoded
+39-bit byte record-structured files with
+telnet format controls in block mode to
+your DEC TOPS-20s mainframe. But you will
+be able to send and receive photos,
+videos, programs, etc.
