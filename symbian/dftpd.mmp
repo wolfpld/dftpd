@@ -20,6 +20,8 @@ sourcepath	..
 
 source		AuthNone.cpp
 source		Data.cpp
+source		DataBufferFile.cpp
+source		DataBufferListing.cpp
 source		Exceptions.cpp
 source		Filesystem.cpp
 source		Listener.cpp

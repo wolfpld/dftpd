@@ -9,6 +9,8 @@ INCLUDES =
 OBJ = \
 	AuthNone.o \
 	Data.o \
+	DataBufferFile.o \
+	DataBufferListing.o \
 	Exceptions.o \
 	Filesystem.o \
 	Listener.o \
