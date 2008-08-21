@@ -16,7 +16,7 @@ Data::Data( const SessionWPtr& session, FILE* file, Mode mode )
 	, m_mode( mode )
 	, m_session( session )
 	, m_buf( new char[BufSize] )
-	, m_data( new DataBufferFile )
+	, m_data( new DataBufferFile( file ) )
 {
 }
 
