@@ -17,7 +17,7 @@ Data::Data( const SessionWPtr& session, FILE* file, Mode mode )
 	, m_mode( mode )
 	, m_session( session )
 	, m_buf( new char[BufSize] )
-	, m_data( new DataBufferFile( file ) )
+	, m_data( new DataBufferFile( file, BufSize ) )
 {
 }
 
@@ -99,7 +99,7 @@ void Data::Send()
 		int pos = 0;
 		char *ptr = m_buf;
 
-		while( pos != len )
+		while( pos != len && CanSend() )
 		{
 			int size = send( m_sock, ptr, len - pos, 0 );
 
@@ -115,6 +115,11 @@ void Data::Send()
 
 			pos += size;
 			ptr += size;
+		}
+
+		if( pos != len )
+		{
+			m_data->Store( ptr, len - pos );
 		}
 	}
 }

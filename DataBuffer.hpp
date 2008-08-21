@@ -9,6 +9,7 @@ public:
 	virtual ~DataBuffer() {}
 	virtual int Read( void* ptr, int size ) { throw "Read not supported"; }
 	virtual int Write( void* ptr, int size ) { throw "Write not supported"; }
+	virtual void Store( void* ptr, int size ) { throw "Store not supported"; }
 
 protected:
 	DataBuffer() {}
