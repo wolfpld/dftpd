@@ -8,37 +8,30 @@
 #include "Data.hpp"
 #include "Session.hpp"
 #include "Exceptions.hpp"
-
-static const char CRLF[] = { 13, 10, 0 };
+#include "DataBufferFile.hpp"
+#include "DataBufferListing.hpp"
 
 Data::Data( const SessionWPtr& session, FILE* file, Mode mode )
 	: m_sock( 0 )
-	, m_file( file )
 	, m_mode( mode )
 	, m_session( session )
+	, m_buf( new char[BufSize] )
+	, m_data( new DataBufferFile )
 {
-	m_buf = new char[BufSize];
 }
 
 Data::Data( const SessionWPtr& session, const std::list<std::string>& list )
 	: m_sock( 0 )
-	, m_file( NULL )
-	, m_mode( M_LISTING )
-	, m_list( list )
-	, m_iter( m_list.begin() )
+	, m_mode( M_UPLOAD )
 	, m_session( session )
+	, m_buf( new char[BufSize] )
+	, m_data( new DataBufferListing( list ) )
 {
-	m_buf = new char[BufSize];
 }
 
 Data::~Data()
 {
 	delete[] m_buf;
-
-	if( m_file != NULL )
-	{
-		fclose( m_file );
-	}
 
 	if( m_sock != 0 )
 	{
@@ -86,19 +79,15 @@ void Data::Tick()
 	{
 		Send();
 	}
-	else if( m_mode == M_DOWNLOAD )
-	{
-		Receive();
-	}
 	else
 	{
-		SendList();
+		Receive();
 	}
 }
 
 void Data::Send()
 {
-	int len = fread( m_buf, 1, BufSize, m_file );
+	int len = m_data->Read( m_buf, BufSize );
 
 	if( len == 0 )
 	{
@@ -159,7 +148,7 @@ void Data::Receive()
 	}
 	else
 	{
-		int writeSize = fwrite( m_buf, 1, size, m_file );
+		int writeSize = m_data->Write( m_buf, size );
 
 		if( writeSize != size )
 		{
@@ -170,50 +159,5 @@ void Data::Receive()
 			}
 			sptr->OutOfSpace();
 		}
-	}
-}
-
-void Data::SendList()
-{
-	if( m_iter == m_list.end() )
-	{
-		SessionPtr sptr = m_session.lock();
-		if( !sptr )
-		{
-			throw "Data lost its Session";
-		}
-		sptr->DataConnectionFinished();
-	}
-	else
-	{
-		std::string data = *m_iter + CRLF;
-		unsigned int pos = 0;
-		char *ptr = (char*)data.c_str();
-
-		while( pos != data.size() )
-		{
-			int size = send( m_sock, ptr, data.size() - pos, 0 );
-
-			if( size == -1 )
-			{
-				throw SessionErrorException;
-			}
-			else if( size == 0 )
-			{
-				SessionPtr sptr = m_session.lock();
-				if( !sptr )
-				{
-					throw "Data lost its Session";
-				}
-				sptr->DataConnectionError();
-
-				return;
-			}
-
-			pos += size;
-			ptr += size;
-		}
-
-		++m_iter;
 	}
 }

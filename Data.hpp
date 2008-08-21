@@ -6,6 +6,7 @@
 #include <list>
 #include <boost/shared_ptr.hpp>
 #include "SessionPtr.hpp"
+#include "DataBuffer.hpp"
 
 class Data
 {
@@ -16,7 +17,6 @@ public:
 	{
 		M_UPLOAD,
 		M_DOWNLOAD,
-		M_LISTING
 	};
 
 	Data( const SessionWPtr& session, FILE* file, Mode mode );
@@ -34,15 +34,12 @@ public:
 private:
 	void Send();
 	void Receive();
-	void SendList();
 
 	int m_sock;
-	FILE* m_file;
 	Mode m_mode;
-	std::list<std::string> m_list;
-	std::list<std::string>::const_iterator m_iter;
 	SessionWPtr m_session;
 	char* m_buf;
+	DataBufferPtr m_data;
 };
 
 typedef boost::shared_ptr<Data> DataPtr;
