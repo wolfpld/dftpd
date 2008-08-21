@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 #include <string>
-#include <vector>
+#include <list>
 #include <boost/shared_ptr.hpp>
 #include "String.hpp"
 
@@ -25,7 +25,7 @@ public:
 	bool FileExists( const std::string& file );
 	FILE* FileOpen( const std::string& file, Mode mode );
 
-	std::vector<std::string> GetListing( const std::string& path );
+	std::list<std::string> GetListing( const std::string& path );
 
 private:
 	std::string MakePath( const PathVector& pv );

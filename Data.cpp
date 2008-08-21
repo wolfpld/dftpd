@@ -20,7 +20,7 @@ Data::Data( const SessionWPtr& session, FILE* file, Mode mode )
 	m_buf = new char[BufSize];
 }
 
-Data::Data( const SessionWPtr& session, const std::vector<std::string>& list )
+Data::Data( const SessionWPtr& session, const std::list<std::string>& list )
 	: m_sock( 0 )
 	, m_file( NULL )
 	, m_mode( M_LISTING )

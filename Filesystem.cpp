@@ -56,9 +56,9 @@ FILE* Filesystem::FileOpen( const std::string& file, Mode mode )
 	return NULL;
 }
 
-std::vector<std::string> Filesystem::GetListing( const std::string& path )
+std::list<std::string> Filesystem::GetListing( const std::string& path )
 {
-	std::vector<std::string> ret;
+	std::list<std::string> ret;
 
 	PathVector reqPath = SplitPath( path );
 	PathVector pv = SplitProperPath( path );

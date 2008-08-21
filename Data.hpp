@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 #include <string>
-#include <vector>
+#include <list>
 #include <boost/shared_ptr.hpp>
 #include "SessionPtr.hpp"
 
@@ -20,7 +20,7 @@ public:
 	};
 
 	Data( const SessionWPtr& session, FILE* file, Mode mode );
-	Data( const SessionWPtr& session, const std::vector<std::string>& list );
+	Data( const SessionWPtr& session, const std::list<std::string>& list );
 	~Data();
 
 	bool Connect( const std::string& addr, int port );
@@ -39,8 +39,8 @@ private:
 	int m_sock;
 	FILE* m_file;
 	Mode m_mode;
-	std::vector<std::string> m_list;
-	std::vector<std::string>::const_iterator m_iter;
+	std::list<std::string> m_list;
+	std::list<std::string>::const_iterator m_iter;
 	SessionWPtr m_session;
 	char* m_buf;
 };

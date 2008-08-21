@@ -506,7 +506,7 @@ void Session::HandleList( const Command& cmd )
 		path = cmd[1];
 	}
 
-	std::vector<std::string> list = m_filesystem->GetListing( path );
+	std::list<std::string> list = m_filesystem->GetListing( path );
 
 	if( list.empty() )
 	{
