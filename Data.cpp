@@ -92,12 +92,7 @@ void Data::Send()
 
 	if( len == 0 )
 	{
-		SessionPtr sptr = m_session.lock();
-		if( !sptr )
-		{
-			throw "Data lost its Session";
-		}
-		sptr->DataConnectionFinished();
+		m_session.lock()->DataConnectionFinished();
 	}
 	else
 	{
@@ -114,13 +109,7 @@ void Data::Send()
 			}
 			else if( size == 0 )
 			{
-				SessionPtr sptr = m_session.lock();
-				if( !sptr )
-				{
-					throw "Data lost its Session";
-				}
-				sptr->DataConnectionError();
-
+				m_session.lock()->DataConnectionError();
 				return;
 			}
 
@@ -132,34 +121,32 @@ void Data::Send()
 
 void Data::Receive()
 {
-	int size = recv( m_sock, m_buf, BufSize, 0 );
+	int total = 0;
 
-	if( size == -1 )
+	while( total < BufSize && CanReceive() )
 	{
-		throw SessionErrorException;
-	}
-	else if( size == 0 )
-	{
-		SessionPtr sptr = m_session.lock();
-		if( !sptr )
+		int size = recv( m_sock, m_buf, BufSize - total, 0 );
+		if( size == -1 )
 		{
-			throw "Data lost its Session";
+			throw SessionErrorException;
 		}
-		sptr->DataConnectionFinished();
-	}
-	else
-	{
-		int writeSize = m_data->Write( m_buf, size );
-
-		if( writeSize != size )
+		else if( size == 0 )
 		{
-			SessionPtr sptr = m_session.lock();
-			if( !sptr )
+			m_session.lock()->DataConnectionFinished();
+			return;
+		}
+		else
+		{
+			int writeSize = m_data->Write( m_buf, size );
+
+			if( writeSize != size )
 			{
-				throw "Data lost its Session";
+				m_session.lock()->OutOfSpace();
+				return;
 			}
-			sptr->OutOfSpace();
 		}
+
+		total += size;
 	}
 }
 
