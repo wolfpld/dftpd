@@ -35,6 +35,9 @@ private:
 	void Send();
 	void Receive();
 
+	bool CanSend();
+	bool CanReceive();
+
 	int m_sock;
 	Mode m_mode;
 	SessionWPtr m_session;

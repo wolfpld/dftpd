@@ -5,6 +5,7 @@
 #include <arpa/inet.h>
 #include <string.h>
 #include <errno.h>
+#include <sys/select.h>
 #include "Data.hpp"
 #include "Session.hpp"
 #include "Exceptions.hpp"
@@ -160,4 +161,30 @@ void Data::Receive()
 			sptr->OutOfSpace();
 		}
 	}
+}
+
+bool Data::CanSend()
+{
+	fd_set fd;
+	FD_ZERO( &fd );
+	FD_SET( m_sock, &fd );
+	timeval tv;
+	tv.tv_sec = 0;
+	tv.tv_usec = 0;
+	select( m_sock + 1, NULL, &fd, NULL, &tv );
+
+	return FD_ISSET( m_sock, &fd );
+}
+
+bool Data::CanReceive()
+{
+	fd_set fd;
+	FD_ZERO( &fd );
+	FD_SET( m_sock, &fd );
+	timeval tv;
+	tv.tv_sec = 0;
+	tv.tv_usec = 0;
+	select( m_sock + 1, &fd, NULL, NULL, &tv );
+
+	return FD_ISSET( m_sock, &fd );
 }
