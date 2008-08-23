@@ -4,7 +4,6 @@ UID2 KUidAppRegistrationResourceFile
 UID3 0xA0102039
 
 RESOURCE APP_REGISTRATION_INFO
-  {
-  app_file="dftpd";
-  }
-
+{
+	app_file = "dftpd";
+}

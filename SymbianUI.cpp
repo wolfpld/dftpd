@@ -50,7 +50,7 @@ public:
 
 void FtpAppUi::ConstructL()
 {
-	BaseConstructL(ENoAppResourceFile);
+	BaseConstructL( 0 );
 	iAppView = new FtpAppView( ClientRect() );
 }
 

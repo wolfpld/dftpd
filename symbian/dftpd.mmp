@@ -3,11 +3,19 @@ targettype	exe
 uid		0x100039ce 0xa0102039
 vendorid	0
 
+lang sc 01 27
+
 epocheapsize	0x10000 0x400000
 epocstacksize	0xA000
 
 start resource	dftpd_reg.rss
 targetpath	\private\10003a3f\import\apps
+end
+
+sourcepath	..\resource
+start resource	dftpd.rss
+header
+targetpath	resource\apps
 end
 
 systeminclude	\epoc32\include\stdapis
@@ -19,28 +27,36 @@ userinclude     ..
 sourcepath	..
 
 source		AuthNone.cpp
-source		Data.cpp
 source		DataBufferFile.cpp
 source		DataBufferListing.cpp
+source		Data.cpp
 source		Exceptions.cpp
 source		Filesystem.cpp
 source		Listener.cpp
 source		LogSTDOUT.cpp
-source		MainSymbian.cpp
 source		Server.cpp
 source		SessionController.cpp
 source		Session.cpp
 source		String.cpp
 source		SymbianNetwork.cpp
-source		Telnet.cpp
+source		SymbianUI.cpp
 source		TelnetCommand.cpp
+source		Telnet.cpp
+
+source		MainSymbian.cpp
 
 // using main() as entry point
-staticlibrary libcrt0.lib
+//staticlibrary	libcrt0.lib
 
 // libc and euser are always needed when using main() entry point
-library         libc.lib 
-library 	euser.lib
+library		libc.lib
+library		euser.lib
 library		libstdcpp.lib
+
+library		apparc.lib
+library		avkon.lib
+library		cone.lib
+library		eikcore.lib
+library		eiksrv.lib
 
 capability ReadUserData WriteUserData NetworkServices

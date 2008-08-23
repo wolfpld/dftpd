@@ -1,0 +1,3 @@
+rls_string STRING_r_ftpd_caption_string "Dumb FTP Server"
+rls_string STRING_r_ftpd_short_caption_string "DFTPD"
+rls_string STRING_r_ftpd_exit "Exit"

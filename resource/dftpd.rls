@@ -1,0 +1,7 @@
+#ifdef LANGUAGE_SC
+#include "dftpd_01.rls"   // default u.k. english
+#elif defined LANGUAGE_01
+#include "dftpd_01.rls"   // u.k. english
+#elif defined LANGUAGE_27
+#include "dftpd_27.rls"   // polish
+#endif
