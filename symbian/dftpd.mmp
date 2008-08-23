@@ -43,8 +43,6 @@ source		SymbianUI.cpp
 source		TelnetCommand.cpp
 source		Telnet.cpp
 
-source		MainSymbian.cpp
-
 // using main() as entry point
 //staticlibrary	libcrt0.lib
 

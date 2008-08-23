@@ -3,6 +3,9 @@
 #include <akndoc.h>
 #include <aknappui.h>
 #include <coecntrl.h>
+#include "LogNull.hpp"
+
+Log* g_log = new LogNull;
 
 // FtpAppView
 
