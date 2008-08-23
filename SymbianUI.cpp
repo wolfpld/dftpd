@@ -44,26 +44,38 @@ void FtpAppView::Draw( const TRect& aRect ) const
 class FtpAppUi : public CAknAppUi
 {
 public:
-	FtpAppUi() : iAppView( NULL ) {}
-	virtual ~FtpAppUi() { delete iAppView; }
+	FtpAppUi() : iAppView( NULL ), m_starter( NULL ) {}
+	virtual ~FtpAppUi();
 
 	void ConstructL();
 
 	void HandleCommandL( TInt aCommand );
 	void HandleResourceChangeL( TInt aType );
 
+	static TBool StartL( TAny* aThis );
+
 	FtpAppView* iAppView;
 	ServerPtr m_server;
+	CIdle* m_starter;
 };
+
+FtpAppUi::~FtpAppUi()
+{
+	if( m_starter )
+	{
+		m_starter->Cancel();
+	}
+	delete m_starter;
+	delete iAppView;
+}
 
 void FtpAppUi::ConstructL()
 {
 	BaseConstructL( 0 );
 	iAppView = new FtpAppView( ClientRect() );
 
-	std::string ip = EstablishConnection();
-
-	m_server = Server::Create( ip );
+	m_starter = CIdle::NewL( CActive::EPriorityLow );
+	m_starter->Start( TCallBack( StartL, this ) );
 }
 
 void FtpAppUi::HandleCommandL( TInt aCommand )
@@ -87,6 +99,14 @@ void FtpAppUi::HandleResourceChangeL( TInt aType )
 	{
 		iAppView->SetRect( ClientRect() );
 	}
+}
+
+TBool FtpAppUi::StartL( TAny* aThis )
+{
+	std::string ip = EstablishConnection();
+	static_cast<FtpAppUi*>( aThis )->m_server = Server::Create( ip );
+
+	return EFalse;
 }
 
 // FtpDocument
