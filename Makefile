@@ -14,6 +14,7 @@ OBJ = \
 	Exceptions.o \
 	Filesystem.o \
 	Listener.o \
+	LogSTDOUT.o \
 	Main.o \
 	Server.o \
 	SessionController.o \

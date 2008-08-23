@@ -25,6 +25,7 @@ source		DataBufferListing.cpp
 source		Exceptions.cpp
 source		Filesystem.cpp
 source		Listener.cpp
+source		LogSTDOUT.cpp
 source		MainSymbian.cpp
 source		Server.cpp
 source		SessionController.cpp

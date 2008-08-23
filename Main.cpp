@@ -2,8 +2,10 @@
 #include <unistd.h>
 #include <signal.h>
 #include "Server.hpp"
+#include "LogSTDOUT.hpp"
 
 bool g_exitRequested = false;
+Log* g_log = new LogSTDOUT;
 
 void RequestExit( int signum )
 {
@@ -30,9 +32,11 @@ int main()
 	}
 	catch( char const* err )
 	{
-		std::cout << "Caught error: " << err << "\nExiting\n";
+		g_log->Print( std::string("Caught error: ") + err + "\nExiting" );
+		delete g_log;
 		return 1;
 	}
 
+	delete g_log;
 	return 0;
 }

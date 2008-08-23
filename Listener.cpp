@@ -10,6 +10,7 @@
 #include <arpa/inet.h>
 #include "Listener.hpp"
 #include "Server.hpp"
+#include "Log.hpp"
 
 Listener::Listener()
 	: m_sock( 0 )
@@ -36,14 +37,14 @@ Listener::~Listener()
 {
 	if( m_sock != 0 )
 	{
-		std::cout << "[Listener] Closing socket" << std::endl;
+		g_log->Print( "[Listener] Closing socket" );
 		close( m_sock );
 	}
 }
 
 void Listener::Listen()
 {
-	std::cout << "[Listener] Opening socket" << std::endl;
+	g_log->Print( "[Listener] Opening socket" );
 
 	if( ( m_sock = socket( PF_INET, SOCK_STREAM, 0 ) ) == -1 )
 	{

@@ -4,13 +4,14 @@
 #include <errno.h>
 #include "Server.hpp"
 #include "AuthNone.hpp"
+#include "Log.hpp"
 
 Server::Server()
 	: m_listener( new Listener )
 	, m_sessionController( new SessionController )
 	, m_auth( new AuthNone )
 {
-	std::cout << "Dumb FTP server\nIP: " << m_listener->GetIPAddr() << std::endl;
+	g_log->Print( std::string("Dumb FTP server\nIP: ") + m_listener->GetIPAddr() );
 
 	LoadWelcomeMessage();
 
@@ -22,7 +23,7 @@ Server::Server( const std::string& ip )
 	, m_sessionController( new SessionController )
 	, m_auth( new AuthNone )
 {
-	std::cout << "Dumb FTP server\nIP: " << m_listener->GetIPAddr() << std::endl;
+	g_log->Print( std::string("Dumb FTP server\nIP: ") + m_listener->GetIPAddr() );
 
 	LoadWelcomeMessage();
 
@@ -31,7 +32,7 @@ Server::Server( const std::string& ip )
 
 Server::~Server()
 {
-	std::cout << "[Server] Shutting down\n";
+	g_log->Print( "[Server] Shutting down" );
 }
 
 ServerPtr Server::Create()

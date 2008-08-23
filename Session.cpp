@@ -12,6 +12,7 @@
 #include "String.hpp"
 #include "Exceptions.hpp"
 #include "Server.hpp"
+#include "Log.hpp"
 
 int Session::m_counter = 0;
 
@@ -37,14 +38,14 @@ Session::Session( int controlSock, const SessionControllerPtr& sessionController
 
 	m_dataAddress = inet_ntoa( addr.sin_addr );
 
-	std::cout << "[Session] Initializing session " << m_id << " for " << m_dataAddress << std::endl;
+	g_log->Print( std::string("[Session] Initializing session ") + boost::lexical_cast<std::string>( m_id ) + " for " + m_dataAddress );
 }
 
 Session::~Session()
 {
 	if( m_controlSock != 0 )
 	{
-		std::cout << "[Session] Closing control socket " << m_id << std::endl;
+		g_log->Print( std::string("[Session] Closing control socket ") + boost::lexical_cast<std::string>( m_id ) );
 		close( m_controlSock );
 	}
 
@@ -121,13 +122,13 @@ void Session::Tick()
 		}
 		catch( SessionError& e )
 		{
-			std::cout << "[Session] " << m_id << " encountered problems (" << strerror( errno ) << ")\n";
+			g_log->Print( std::string("[Session] ") + boost::lexical_cast<std::string>( m_id ) + " encountered problems (" + strerror( errno ) + ")" );
 			Remove();
 		}
 	}
 	catch( ConnectionTerminated& e )
 	{
-		std::cout << "[Session] Connection " << m_id << " terminated\n";
+		g_log->Print( std::string("[Session] Connection ") + boost::lexical_cast<std::string>( m_id ) + " terminated" );
 		Remove();
 	}
 }
@@ -242,7 +243,7 @@ Session::PassState Session::AwaitPassword()
 
 				m_filesystem.reset( new Filesystem( m_auth->GetRoot( m_user ) ) );
 
-				std::cout << "[Session] User " << m_user << " logged in on session " << m_id << std::endl;
+				g_log->Print( std::string("[Session] User ") + m_user + " logged in on session " + boost::lexical_cast<std::string>( m_id ) );
 
 				return PS_LOGGEDIN;
 			}
@@ -488,7 +489,7 @@ void Session::HandleAbor()
 	}
 	else
 	{
-		std::cout << "[Session] Data connection aborted on session " << m_id << std::endl;
+		g_log->Print( std::string("[Session] Data connection aborted on session ") + boost::lexical_cast<std::string>( m_id ) );
 
 		m_data.reset();
 
@@ -524,7 +525,7 @@ void Session::HandleList( const Command& cmd )
 	else
 	{
 		m_control->Write( std::string( "150 Listing " ) + path );
-		std::cout << "[Session] Sending listing on session " << m_id << std::endl;
+		g_log->Print( std::string("[Session] Sending listing on session ") + boost::lexical_cast<std::string>( m_id ) );
 	}
 }
 
@@ -633,7 +634,7 @@ void Session::Upload( const Command& cmd )
 	else
 	{
 		m_control->Write( std::string( "150 Sending " ) + cmd[1] );
-		std::cout << "[Session] Opened new upload on session " << m_id << std::endl;
+		g_log->Print( std::string("[Session] Opened new upload on session ") + boost::lexical_cast<std::string>( m_id ) );
 	}
 }
 
@@ -662,13 +663,13 @@ void Session::Download( const Command& cmd )
 	else
 	{
 		m_control->Write( std::string( "150 Receiving " ) + cmd[1] );
-		std::cout << "[Session] Opened new download on session " << m_id << std::endl;
+		g_log->Print( std::string("[Session] Opened new download on session ") + boost::lexical_cast<std::string>( m_id ) );
 	}
 }
 
 void Session::DataConnectionFinished()
 {
-	std::cout << "[Session] Data connection closed on session " << m_id << std::endl;
+	g_log->Print( std::string("[Session] Data connection closed on session ") + boost::lexical_cast<std::string>( m_id ) );
 
 	m_control->Write( "226 File transfer completed" );
 
@@ -677,7 +678,7 @@ void Session::DataConnectionFinished()
 
 void Session::DataConnectionError()
 {
-	std::cout << "[Session] Data connection error on session " << m_id << std::endl;
+	g_log->Print( std::string("[Session] Data connection error on session ") + boost::lexical_cast<std::string>( m_id ) );
 
 	m_control->Write( "426 Data connection lost" );
 
@@ -686,7 +687,7 @@ void Session::DataConnectionError()
 
 void Session::OutOfSpace()
 {
-	std::cout << "[Session] Out of space on session " << m_id << std::endl;
+	g_log->Print( std::string("[Session] Out of space on session ") + boost::lexical_cast<std::string>( m_id ) );
 
 	m_control->Write( "552 No space left" );
 
