@@ -41,10 +41,10 @@ void FtpAppView::Draw( const TRect& aRect ) const
 
 // FtpAppUi
 
-class FtpAppUi : public CAknAppUi
+class FtpAppUi : public CAknAppUi, public CActive
 {
 public:
-	FtpAppUi() : iAppView( NULL ), m_starter( NULL ) {}
+	FtpAppUi() : CActive( EPriorityStandard ), iAppView( NULL ), m_starter( NULL ) {}
 	virtual ~FtpAppUi();
 
 	void ConstructL();
@@ -54,13 +54,19 @@ public:
 
 	static TBool StartL( TAny* aThis );
 
+	void RunL();
+	void DoCancel();
+
 	FtpAppView* iAppView;
 	ServerPtr m_server;
 	CIdle* m_starter;
+	RTimer m_timer;
 };
 
 FtpAppUi::~FtpAppUi()
 {
+	Cancel();
+
 	if( m_starter )
 	{
 		m_starter->Cancel();
@@ -73,6 +79,8 @@ void FtpAppUi::ConstructL()
 {
 	BaseConstructL( 0 );
 	iAppView = new FtpAppView( ClientRect() );
+
+	CActiveScheduler::Add( this );
 
 	m_starter = CIdle::NewL( CActive::EPriorityLow );
 	m_starter->Start( TCallBack( StartL, this ) );
@@ -103,10 +111,29 @@ void FtpAppUi::HandleResourceChangeL( TInt aType )
 
 TBool FtpAppUi::StartL( TAny* aThis )
 {
+	FtpAppUi* app = static_cast<FtpAppUi*>( aThis );
+
 	std::string ip = EstablishConnection();
-	static_cast<FtpAppUi*>( aThis )->m_server = Server::Create( ip );
+	app->m_server = Server::Create( ip );
+
+	app->m_timer.CreateLocal();
+	app->m_timer.After( app->iStatus, 10 );
+	app->SetActive();
 
 	return EFalse;
+}
+
+void FtpAppUi::RunL()
+{
+	m_server->Tick();
+
+	m_timer.After( iStatus, 10 );
+	SetActive();
+}
+
+void FtpAppUi::DoCancel()
+{
+	m_timer.Close();
 }
 
 // FtpDocument

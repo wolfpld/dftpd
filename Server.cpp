@@ -83,7 +83,7 @@ void Server::Tick()
 
 	timeval tv;
 	tv.tv_sec = 0;
-	tv.tv_usec = 1000000;
+	tv.tv_usec = 50000;
 
 	int ret = select( maxfd + 1, &read, &write, NULL, &tv );
 
