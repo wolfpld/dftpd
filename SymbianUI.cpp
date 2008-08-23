@@ -3,7 +3,11 @@
 #include <akndoc.h>
 #include <aknappui.h>
 #include <coecntrl.h>
+#include <string>
 #include "LogNull.hpp"
+#include "Server.hpp"
+#include "ServerPtr.hpp"
+#include "SymbianNetwork.hpp"
 
 Log* g_log = new LogNull;
 
@@ -49,12 +53,17 @@ public:
 	void HandleResourceChangeL( TInt aType );
 
 	FtpAppView* iAppView;
+	ServerPtr m_server;
 };
 
 void FtpAppUi::ConstructL()
 {
 	BaseConstructL( 0 );
 	iAppView = new FtpAppView( ClientRect() );
+
+	std::string ip = EstablishConnection();
+
+	m_server = Server::Create( ip );
 }
 
 void FtpAppUi::HandleCommandL( TInt aCommand )
@@ -96,6 +105,7 @@ const TUid FtpUid = { 0xA0102039 };
 class FtpApplication : public CAknApplication
 {
 public:
+	virtual ~FtpApplication() { delete g_log; }
 	TUid AppDllUid() const { return FtpUid; }
 	CApaDocument* CreateDocumentL() { return static_cast<CApaDocument*>( new FtpDocument( *this ) ); }
 };
