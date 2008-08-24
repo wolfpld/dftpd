@@ -3,7 +3,8 @@
 
 enum TDFTPDIds
 {
-	EGenerateToken = 0x6001
+	EGenerateToken = 0x6001,
+	EAbout
 };
 
 #endif

@@ -4,6 +4,7 @@
 #include <aknappui.h>
 #include <aknnavide.h>
 #include <eikedwin.h>
+#include <aknmessagequerydialog.h>
 #include <string>
 #include "Log.hpp"
 #include "LogNull.hpp"
@@ -12,6 +13,7 @@
 #include "SymbianNetwork.hpp"
 #include "AuthToken.hpp"
 #include "resource/dftpd.hrh"
+#include <dftpd.rsg>
 
 Log* g_log = NULL;
 
@@ -122,6 +124,13 @@ void FtpAppUi::HandleCommandL( TInt aCommand )
 
 	case EGenerateToken:
 		((AuthToken*)m_auth.get())->GenerateToken();
+		break;
+
+	case EAbout:
+		{
+			CAknMessageQueryDialog* dlg = new CAknMessageQueryDialog;
+			dlg->ExecuteLD( R_DFTPD_ABOUT );
+		}
 		break;
 
 	default:
