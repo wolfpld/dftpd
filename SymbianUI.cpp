@@ -2,7 +2,7 @@
 #include <aknapp.h>
 #include <akndoc.h>
 #include <aknappui.h>
-#include <coecntrl.h>
+#include <aknnavide.h>
 #include <string>
 #include "LogNull.hpp"
 #include "Server.hpp"
@@ -53,6 +53,7 @@ public:
 	void HandleResourceChangeL( TInt aType );
 
 	static TBool StartL( TAny* aThis );
+	void StartL();
 
 	void RunL();
 	void DoCancel();
@@ -111,16 +112,27 @@ void FtpAppUi::HandleResourceChangeL( TInt aType )
 
 TBool FtpAppUi::StartL( TAny* aThis )
 {
-	FtpAppUi* app = static_cast<FtpAppUi*>( aThis );
-
-	std::string ip = EstablishConnection();
-	app->m_server = Server::Create( ip );
-
-	app->m_timer.CreateLocal();
-	app->m_timer.After( app->iStatus, 10 );
-	app->SetActive();
-
+	static_cast<FtpAppUi*>( aThis )->StartL();
 	return EFalse;
+}
+
+void FtpAppUi::StartL()
+{
+	std::string ip = EstablishConnection();
+	m_server = Server::Create( ip );
+
+	CEikStatusPane* sp = iEikonEnv->AppUiFactory()->StatusPane();
+	CAknNavigationControlContainer* iNaviPane = (CAknNavigationControlContainer*)sp->ControlL( TUid::Uid( EEikStatusPaneUidNavi ) );
+	iNaviPane->Pop();
+	TPtrC8 ptr( reinterpret_cast<const TUint8*>( ip.c_str() ) );
+	TBuf<16> naviLabel;
+	naviLabel.FillZ();
+	naviLabel.Copy( ptr );
+	iNaviPane->PushL( *iNaviPane->CreateNavigationLabelL( naviLabel ) );
+
+	m_timer.CreateLocal();
+	m_timer.After( iStatus, 10 );
+	SetActive();
 }
 
 void FtpAppUi::RunL()

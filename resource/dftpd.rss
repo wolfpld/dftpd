@@ -19,6 +19,7 @@ RESOURCE EIK_APP_INFO
 {
 	menubar = r_dftpd_menubar;
 	cba = R_AVKON_SOFTKEYS_OPTIONS_EXIT;
+	status_pane = r_dftpd_status_pane;
 }
 
 RESOURCE MENU_BAR r_dftpd_menubar
@@ -51,5 +52,27 @@ RESOURCE LOCALISABLE_APP_INFO r_helloworldbasic_localisable_app_info
 
 		number_of_icons = 1;
 		icon_file = "\\resource\\apps\\dftpd.mif";
+	};
+}
+
+RESOURCE STATUS_PANE_APP_MODEL r_dftpd_status_pane
+{
+	panes =
+	{
+		SPANE_PANE
+		{
+			id = EEikStatusPaneUidNavi;
+			type = EAknCtNaviPane;
+			resource = r_navi_decorator;
+		}
+	};
+}
+
+RESOURCE NAVI_DECORATOR r_navi_decorator
+{
+	type = ENaviDecoratorLabel;
+	control = NAVI_LABEL
+	{
+		txt="0.0.0.0";
 	};
 }

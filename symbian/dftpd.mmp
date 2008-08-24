@@ -58,5 +58,6 @@ library		avkon.lib
 library		cone.lib
 library		eikcore.lib
 library		eiksrv.lib
+library		eikcoctl.lib
 
 capability ReadUserData WriteUserData NetworkServices
