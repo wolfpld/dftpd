@@ -90,21 +90,16 @@ Command Split( const std::string& str )
 {
 	Command ret;
 
-	typedef std::string::const_iterator Iter;
+	std::string::const_iterator it = std::find_if( str.begin(), str.end(), IsSpace );
 
-	Iter i = str.begin(), j;
-
-	while( i != str.end() )
+	if( it == str.end() )
 	{
-		i = std::find_if( i, str.end(), IsNotSpace );
-		j = std::find_if( i, str.end(), IsSpace );
-
-		if( i != str.end() )
-		{
-			ret.push_back( std::string( i, j ) );
-		}
-
-		i = j;
+		ret.push_back( str );
+	}
+	else
+	{
+		ret.push_back( std::string( str.begin(), it ) );
+		ret.push_back( std::string( it + 1, str.end() ) );
 	}
 
 	return ret;
