@@ -118,7 +118,7 @@ RESOURCE DIALOG r_dftpd_about
 			id = EAknMessageQueryContentId;
 			control = AVKON_MESSAGE_QUERY
 			{
-				message = "Dumb FTP Server\n\nMade by Bartosz Taudul\nemail: wolf.pld@gmail.com";
+				message = "Dumb FTP Server\n\nMade by Bartosz Taudul\nemail: wolf.pld@gmail.com\nhttp://repo.or.cz/w/dftpd.git";
 			};
 		}
 	};
