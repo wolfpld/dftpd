@@ -333,6 +333,10 @@ void Session::AwaitReady()
 		{
 			HandlePasv( cmd );
 		}
+		else if( cmd[0] == "DELE" )
+		{
+			HandleDele( cmd );
+		}
 		else
 		{
 			throw SyntaxErrorException;
@@ -575,6 +579,23 @@ void Session::HandlePasv( const Command& cmd )
 	m_control->Write( std::string( "227 Entering passive mode " ) + ip +
 			"," + boost::lexical_cast<std::string>( port >> 8 ) +
 			"," + boost::lexical_cast<std::string>( port & 0xFF ) );
+}
+
+void Session::HandleDele( const Command& cmd )
+{
+	if( cmd.size() != 2 )
+	{
+		throw SyntaxErrorException;
+	}
+
+	if( m_filesystem->Delete( cmd[1] ) )
+	{
+		m_control->Write( std::string( "250 Deleted " ) + cmd[1] );
+	}
+	else
+	{
+		m_control->Write( std::string( "550 No access to " ) + cmd[1] + " (" + strerror( errno ) + ")" );
+	}
 }
 
 void Session::PrintDirectory()

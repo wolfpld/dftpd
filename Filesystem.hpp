@@ -27,6 +27,8 @@ public:
 
 	std::list<std::string> GetListing( const std::string& path );
 
+	bool Delete( const std::string& file );
+
 private:
 	std::string MakePath( const PathVector& pv );
 	bool DirectoryExists( const std::string& dir );

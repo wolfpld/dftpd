@@ -1,6 +1,7 @@
 #include <sys/stat.h>
 #include <dirent.h>
 #include <time.h>
+#include <unistd.h>
 #include <boost/lexical_cast.hpp>
 #include "Filesystem.hpp"
 #include "String.hpp"
@@ -149,6 +150,13 @@ std::list<std::string> Filesystem::GetListing( const std::string& path )
 	closedir( d );
 
 	return ret;
+}
+
+bool Filesystem::Delete( const std::string& file )
+{
+	std::string path = m_root + GetFilePath( file );
+
+	return unlink( path.c_str() ) == 0;
 }
 
 std::string Filesystem::MakePath( const PathVector& pv )
