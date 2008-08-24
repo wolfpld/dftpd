@@ -60,6 +60,37 @@ std::list<std::string> Filesystem::GetListing( const std::string& path )
 {
 	std::list<std::string> ret;
 
+	time_t now = time( NULL );
+
+	std::string filePath = GetFilePath( path );
+	if( CheckFileExists( filePath ) )
+	{
+		struct stat s;
+		stat( ( m_root + filePath ).c_str(), &s );
+
+		std::string entry = "-rw-r--r--";
+
+		tm timeFile;
+		localtime_r( &s.st_mtime, &timeFile );
+
+		char dateBuf[64];
+		if( now > s.st_mtime && now - s.st_mtime < 60*60*24*180 )
+		{
+			// File is "recent"
+			strftime( dateBuf, sizeof( dateBuf ), " %b %e %H:%M ", &timeFile );
+		}
+		else
+		{
+			strftime( dateBuf, sizeof( dateBuf ), " %b %e  %Y ", &timeFile );
+		}
+
+		entry += " 1 root root " + boost::lexical_cast<std::string>( s.st_size ) + dateBuf + path;
+
+		ret.push_back( entry );
+
+		return ret;
+	}
+
 	PathVector reqPath = SplitPath( path );
 	PathVector pv = SplitProperPath( path );
 
@@ -76,7 +107,6 @@ std::list<std::string> Filesystem::GetListing( const std::string& path )
 		return ret;
 	}
 
-	time_t now = time( NULL );
 	tm timeNow;
 	localtime_r( &now, &timeNow );
 
