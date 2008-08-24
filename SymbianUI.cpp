@@ -102,7 +102,7 @@ FtpAppUi::~FtpAppUi()
 
 void FtpAppUi::ConstructL()
 {
-	BaseConstructL( 0 );
+	BaseConstructL( EAknEnableSkin );
 	iAppView = new FtpAppView( ClientRect() );
 
 	CActiveScheduler::Add( this );
