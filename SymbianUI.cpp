@@ -6,6 +6,7 @@
 #include <eikedwin.h>
 #include <string>
 #include "Log.hpp"
+#include "LogNull.hpp"
 #include "Server.hpp"
 #include "ServerPtr.hpp"
 #include "SymbianNetwork.hpp"
@@ -85,6 +86,8 @@ public:
 FtpAppUi::~FtpAppUi()
 {
 	Cancel();
+
+	g_log = new LogNull;
 
 	if( m_starter )
 	{
