@@ -18,6 +18,9 @@
 
 "welcome" - "!:\private\a0102039\welcome"
 
+"\epoc32\data\z\resource\apps\dftpd_loc.rsc" - "!:\resource\apps\dftpd_loc.rsc"
+"dftpd.mif" - "!:\resource\apps\dftpd.mif"
+
 {
 "\epoc32\data\z\resource\apps\dftpd.rsc"
 "\epoc32\data\z\resource\apps\dftpd.r27"

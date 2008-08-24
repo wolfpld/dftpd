@@ -49,7 +49,7 @@ RESOURCE LOCALISABLE_APP_INFO r_helloworldbasic_localisable_app_info
 	{
 		caption = STRING_r_ftpd_caption_string;
 
-		number_of_icons = 0;
-		icon_file = "";
+		number_of_icons = 1;
+		icon_file = "\\resource\\apps\\dftpd.mif";
 	};
 }

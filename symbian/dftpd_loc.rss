@@ -1,0 +1,15 @@
+#include <appinfo.rh>
+
+RESOURCE LOCALISABLE_APP_INFO
+{
+	short_caption = "DFTPD";
+	caption_and_icon =
+	{
+		CAPTION_AND_ICON_INFO
+		{
+			caption = "Dumb FTP Server";
+			number_of_icons = 1;
+			icon_file = "\\resource\\apps\\dftpd.mif";
+		}
+	};
+}

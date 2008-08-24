@@ -12,6 +12,10 @@ start resource	dftpd_reg.rss
 targetpath	\private\10003a3f\import\apps
 end
 
+start resource	dftpd_loc.rss
+targetpath	\resource\apps
+end
+
 sourcepath	..\resource
 start resource	dftpd.rss
 header

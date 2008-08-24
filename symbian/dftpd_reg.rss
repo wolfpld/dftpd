@@ -6,4 +6,5 @@ UID3 0xA0102039
 RESOURCE APP_REGISTRATION_INFO
 {
 	app_file = "dftpd";
+	localisable_resource_file = "\\resource\\apps\\dftpd_loc";
 }
