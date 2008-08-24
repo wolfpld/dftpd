@@ -3,6 +3,7 @@
 #include <akndoc.h>
 #include <aknappui.h>
 #include <aknnavide.h>
+#include <eikedwin.h>
 #include <string>
 #include "LogNull.hpp"
 #include "Server.hpp"
@@ -19,24 +20,23 @@ public:
 	FtpAppView( const TRect& aRect );
 	virtual ~FtpAppView() {}
 	
-	void Draw( const TRect& aRect ) const;
-	virtual void SizeChanged() {}
+	void Draw( const TRect& aRect ) const { m_view->Draw( aRect ); };
+	virtual void SizeChanged() { m_view->SetRect( Rect() ); }
+
+	CEikEdwin* m_view;
 };
 
 FtpAppView::FtpAppView( const TRect& aRect )
 {
 	CreateWindowL();
+
+	m_view = new CEikEdwin;
+	m_view->SetContainerWindowL( *this );
+	m_view->ConstructL( EEikEdwinDisplayOnly | EEikEdwinNoAutoSelection );
+	m_view->CreateScrollBarFrameL()->SetScrollBarVisibilityL( CEikScrollBarFrame::EOff, CEikScrollBarFrame::EAuto );
+
 	SetRect( aRect );
 	ActivateL();
-}
-
-void FtpAppView::Draw( const TRect& aRect ) const
-{
-	CWindowGc& gc = SystemGc();
-	gc.SetPenStyle( CGraphicsContext::ENullPen );
-	gc.SetBrushColor( KRgbWhite );
-	gc.SetBrushStyle( CGraphicsContext::ESolidBrush );
-	gc.Clear( Rect() );
 }
 
 // FtpAppUi
