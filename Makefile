@@ -8,6 +8,7 @@ INCLUDES =
 
 OBJ = \
 	AuthNone.o \
+	AuthToken.o \
 	Data.o \
 	DataBufferFile.o \
 	DataBufferListing.o \
