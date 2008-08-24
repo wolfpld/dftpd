@@ -10,6 +10,8 @@
 #include "Server.hpp"
 #include "ServerPtr.hpp"
 #include "SymbianNetwork.hpp"
+#include "AuthToken.hpp"
+#include "resource/dftpd.hrh"
 
 Log* g_log = NULL;
 
@@ -81,6 +83,7 @@ public:
 	ServerPtr m_server;
 	CIdle* m_starter;
 	RTimer m_timer;
+	AuthPtr m_auth;
 };
 
 FtpAppUi::~FtpAppUi()
@@ -117,6 +120,10 @@ void FtpAppUi::HandleCommandL( TInt aCommand )
 		Exit();
 		break;
 
+	case EGenerateToken:
+		((AuthToken*)m_auth.get())->GenerateToken();
+		break;
+
 	default:
 		break;
 	}
@@ -139,8 +146,9 @@ TBool FtpAppUi::StartL( TAny* aThis )
 
 void FtpAppUi::StartL()
 {
+	m_auth.reset( new AuthToken );
 	std::string ip = EstablishConnection();
-	m_server = Server::Create( ip );
+	m_server = Server::Create( m_auth, ip );
 
 	CEikStatusPane* sp = iEikonEnv->AppUiFactory()->StatusPane();
 	CAknNavigationControlContainer* iNaviPane = (CAknNavigationControlContainer*)sp->ControlL( TUid::Uid( EEikStatusPaneUidNavi ) );

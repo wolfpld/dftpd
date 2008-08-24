@@ -4,6 +4,7 @@ NAME FTPD
 #include <avkon.rh>
 #include <avkon.rsg>
 #include <appinfo.rh>
+#include "dftpd.hrh"
 #include "dftpd.rls"
 
 RESOURCE RSS_SIGNATURE
@@ -34,6 +35,12 @@ RESOURCE MENU_PANE r_dftpd_menu
 {
 	items =
 	{
+		MENU_ITEM
+		{
+			command = EGenerateToken;
+			txt = STRING_r_ftpd_generate_token;
+		}
+		,
 		MENU_ITEM
 		{
 			command = EAknSoftkeyExit;

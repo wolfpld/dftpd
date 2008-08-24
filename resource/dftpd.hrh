@@ -1,0 +1,9 @@
+#ifndef __DFTPD__DFTPD_HRH__
+#define __DFTPD__DFTPD_HRH__
+
+enum TDFTPDIds
+{
+	EGenerateToken = 0x6001
+};
+
+#endif
