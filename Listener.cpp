@@ -11,6 +11,7 @@
 #include "Listener.hpp"
 #include "Server.hpp"
 #include "Log.hpp"
+#include "Exceptions.hpp"
 
 Listener::Listener()
 	: m_sock( 0 )
@@ -22,7 +23,8 @@ Listener::Listener()
 	hostent* h;
 	if( ( h = gethostbyname( buf ) ) == (void*)-1 )
 	{
-		throw strerror( errno );
+		g_log->Print( strerror( errno ) );
+		throw ServerCrashException;
 	}
 	m_ipaddr = inet_ntoa( *((in_addr*)h->h_addr) );
 }
@@ -48,14 +50,16 @@ void Listener::Listen()
 
 	if( ( m_sock = socket( PF_INET, SOCK_STREAM, 0 ) ) == -1 )
 	{
-		throw strerror( errno );
+		g_log->Print( strerror( errno ) );
+		throw ServerCrashException;
 	}
 
 	// Reuse port
 	int yes = 1;
 	if( setsockopt( m_sock, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof( int ) ) == -1 )
 	{
-		throw strerror( errno );
+		g_log->Print( strerror( errno ) );
+		throw ServerCrashException;
 	}
 
 	sockaddr_in addr;
@@ -66,12 +70,14 @@ void Listener::Listen()
 
 	if( bind( m_sock, (sockaddr*)&addr, sizeof( addr ) ) == -1 )
 	{
-		throw strerror( errno );
+		g_log->Print( strerror( errno ) );
+		throw ServerCrashException;
 	}
 
 	if( listen( m_sock, 5 ) == -1 )
 	{
-		throw strerror( errno );
+		g_log->Print( strerror( errno ) );
+		throw ServerCrashException;
 	}
 }
 
@@ -84,7 +90,8 @@ void Listener::Tick()
 	int incoming = accept( m_sock, (sockaddr*)&addr, &size );
 	if( incoming == -1 )
 	{
-		throw strerror( errno );
+		g_log->Print( strerror( errno ) );
+		throw ServerCrashException;
 	}
 
 	ServerPtr server = m_server.lock();

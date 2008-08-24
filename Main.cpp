@@ -4,6 +4,7 @@
 #include "Server.hpp"
 #include "LogSTDOUT.hpp"
 #include "AuthNone.hpp"
+#include "Exceptions.hpp"
 
 bool g_exitRequested = false;
 Log* g_log = new LogSTDOUT;
@@ -31,10 +32,9 @@ int main()
 	{
 		Run();
 	}
-	catch( char const* err )
+	catch( ServerCrash& e )
 	{
-		g_log->Print( std::string("Caught error: ") + err );
-		g_log->Print( "Exiting" );
+		g_log->Print( "Server crashed" );
 		delete g_log;
 		return 1;
 	}

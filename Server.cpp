@@ -5,6 +5,7 @@
 #include "Server.hpp"
 #include "Auth.hpp"
 #include "Log.hpp"
+#include "Exceptions.hpp"
 
 Server::Server( const AuthPtr& auth )
 	: m_listener( new Listener )
@@ -91,7 +92,8 @@ void Server::Tick()
 
 	if( ret == -1 )
 	{
-		throw strerror( errno );
+		g_log->Print( strerror( errno ) );
+		throw ServerCrashException;
 	}
 	else if( ret == 0 )
 	{

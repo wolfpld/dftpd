@@ -1,4 +1,6 @@
 #include "SessionController.hpp"
+#include "Exceptions.hpp"
+#include "Log.hpp"
 
 SessionController::SessionController()
 {}
@@ -40,7 +42,8 @@ void SessionController::Tick( const std::list<int>& activeFds )
 		m_removeList.pop();
 		if( m_list.size() != size - 1 )
 		{
-			throw "[SessionController] Requested removal of non-existant session";
+			g_log->Print( "Removal of not registered session was requested" );
+			throw ServerCrashException;
 		}
 	}
 }

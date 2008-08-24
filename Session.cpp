@@ -33,7 +33,8 @@ Session::Session( int controlSock, const SessionControllerPtr& sessionController
 
 	if( getpeername( m_controlSock, (sockaddr*)&addr, &size ) == -1 )
 	{
-		throw strerror( errno );
+		g_log->Print( strerror( errno ) );
+		throw ServerCrashException;
 	}
 
 	m_dataAddress = inet_ntoa( addr.sin_addr );

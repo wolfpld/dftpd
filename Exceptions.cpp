@@ -4,3 +4,4 @@ ConnectionTerminated ConnectionTerminatedException;
 SyntaxError SyntaxErrorException;
 QuitRequested QuitRequestedException;
 SessionError SessionErrorException;
+ServerCrash ServerCrashException;
