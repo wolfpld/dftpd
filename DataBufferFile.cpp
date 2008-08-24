@@ -23,7 +23,7 @@ DataBufferFile::~DataBufferFile()
 	// Dump buffer to disk if needed
 	if( m_mode == M_WRITE && m_offset != 0 )
 	{
-		fwrite( m_buf, 1, m_offset, m_file );
+		SaveBuffer();
 	}
 
 	delete[] m_buf;
@@ -57,8 +57,7 @@ int DataBufferFile::Write( void* _ptr, int _size )
 
 		if( m_offset == BufSize )
 		{
-			fwrite( m_buf, 1, BufSize, m_file );
-			m_offset = 0;
+			SaveBuffer();
 		}
 	}
 
@@ -69,4 +68,10 @@ void DataBufferFile::Store( void* ptr, int size )
 {
 	memcpy( m_secBuf, ptr, size );
 	m_secBufSize = size;
+}
+
+void DataBufferFile::SaveBuffer()
+{
+	fwrite( m_buf, 1, m_offset, m_file );
+	m_offset = 0;
 }

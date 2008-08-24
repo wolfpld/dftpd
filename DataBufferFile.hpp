@@ -17,6 +17,8 @@ public:
 	void Store( void* ptr, int size );
 
 private:
+	void SaveBuffer();
+
 	FILE* m_file;
 
 	char* m_buf;
