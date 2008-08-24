@@ -17,8 +17,15 @@ Data::Data( const SessionWPtr& session, FILE* file, Mode mode )
 	, m_mode( mode )
 	, m_session( session )
 	, m_buf( new char[BufSize] )
-	, m_data( new DataBufferFile( file, BufSize ) )
 {
+	if( mode == M_UPLOAD )
+	{
+		m_data.reset( new DataBufferFile( file, BufSize, DataBuffer::M_READ ) );
+	}
+	else
+	{
+		m_data.reset( new DataBufferFile( file, BufSize, DataBuffer::M_WRITE ) );
+	}
 }
 
 Data::Data( const SessionWPtr& session, const std::list<std::string>& list )

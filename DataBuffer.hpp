@@ -6,6 +6,12 @@
 class DataBuffer
 {
 public:
+	enum Mode
+	{
+		M_READ,
+		M_WRITE
+	};
+
 	virtual ~DataBuffer() {}
 	virtual int Read( void* ptr, int size ) { throw "Read not supported"; }
 	virtual int Write( void* ptr, int size ) { throw "Write not supported"; }

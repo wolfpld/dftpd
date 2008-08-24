@@ -7,7 +7,7 @@
 class DataBufferFile : public DataBuffer
 {
 public:
-	DataBufferFile( FILE* f, int secondaryBufferSize );
+	DataBufferFile( FILE* f, int secondaryBufferSize, Mode mode );
 	~DataBufferFile();
 
 	int Read( void* ptr, int size );
@@ -18,6 +18,8 @@ private:
 	FILE* m_file;
 	char* m_secBuf;
 	int m_secBufSize;
+
+	Mode m_mode;
 };
 
 #endif

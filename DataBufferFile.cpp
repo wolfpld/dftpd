@@ -1,10 +1,11 @@
 #include <string.h>
 #include "DataBufferFile.hpp"
 
-DataBufferFile::DataBufferFile( FILE* f, int secondaryBufferSize )
+DataBufferFile::DataBufferFile( FILE* f, int secondaryBufferSize, Mode mode )
 	: m_file( f )
 	, m_secBuf( new char[secondaryBufferSize] )
 	, m_secBufSize( 0 )
+	, m_mode( mode )
 {
 }
 
