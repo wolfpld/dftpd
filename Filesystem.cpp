@@ -221,7 +221,7 @@ std::string Filesystem::GetFilePath( const std::string& file )
 
 	if( !TryChangePath( reqPath, path ) )
 	{
-		return false;
+		return "";
 	}
 
 	return MakePath( path ) + "/" + fname;
