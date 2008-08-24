@@ -88,9 +88,5 @@ void Listener::Tick()
 	}
 
 	ServerPtr server = m_server.lock();
-	if( !server )
-	{
-		throw "Listener lost server";
-	}
 	server->IncomingConnection( incoming );
 }

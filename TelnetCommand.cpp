@@ -30,11 +30,6 @@ bool TelnetCommand::Parse( unsigned char byte )
 	m_buf[m_byte++] = byte;
 
 	TelnetPtr parent = m_parent.lock();
-	if( !parent )
-	{
-		throw "TelnetCommand lost its Telnet";
-	}
-
 	if( m_byte == 1 )
 	{
 		if( m_buf[0] != 255 )

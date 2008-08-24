@@ -136,22 +136,12 @@ void Session::Tick()
 void Session::Remove()
 {
 	SessionControllerPtr sessionController = m_sessionController.lock();
-
-	if( !sessionController )
-	{
-		throw "Session lost SessionController";
-	}
-
 	sessionController->Remove( m_this.lock() );
 }
 
 void Session::SendGreeting()
 {
 	ServerPtr server = m_server.lock();
-	if( !server )
-	{
-		throw "Session lost Server";
-	}
 	const std::list<std::string> welcome = server->GetWelcomeMessage();
 
 	for( std::list<std::string>::const_iterator it = welcome.begin(); it != welcome.end(); ++it )
