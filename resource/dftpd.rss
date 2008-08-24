@@ -92,7 +92,7 @@ RESOURCE NAVI_DECORATOR r_navi_decorator
 	type = ENaviDecoratorLabel;
 	control = NAVI_LABEL
 	{
-		txt="0.0.0.0";
+		txt="";
 	};
 }
 
