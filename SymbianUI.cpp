@@ -5,12 +5,12 @@
 #include <aknnavide.h>
 #include <eikedwin.h>
 #include <string>
-#include "LogNull.hpp"
+#include "Log.hpp"
 #include "Server.hpp"
 #include "ServerPtr.hpp"
 #include "SymbianNetwork.hpp"
 
-Log* g_log = new LogNull;
+Log* g_log = NULL;
 
 // FtpAppView
 
@@ -22,6 +22,8 @@ public:
 	
 	void Draw( const TRect& aRect ) const { m_view->Draw( aRect ); };
 	virtual void SizeChanged() { m_view->SetRect( Rect() ); }
+
+	void Log( const std::string& text );
 
 	CEikEdwin* m_view;
 };
@@ -39,12 +41,26 @@ FtpAppView::FtpAppView( const TRect& aRect )
 	ActivateL();
 }
 
+void FtpAppView::Log( const std::string& _text )
+{
+	std::string text = _text + '\f';
+
+	TPtrC8 ptr( reinterpret_cast<const TUint8*>( text.c_str() ) );
+	TBuf<512> log;
+	log.FillZ();
+	log.Copy( ptr );
+
+	m_view->Text()->InsertL( m_view->Text()->DocumentLength(), log );
+	m_view->HandleTextChangedL();
+	m_view->SetCursorPosL( m_view->Text()->DocumentLength(), EFalse );
+}
+
 // FtpAppUi
 
-class FtpAppUi : public CAknAppUi, public CActive
+class FtpAppUi : public CAknAppUi, public CActive, public Log
 {
 public:
-	FtpAppUi() : CActive( EPriorityStandard ), iAppView( NULL ), m_starter( NULL ) {}
+	FtpAppUi() : CActive( EPriorityStandard ), iAppView( NULL ), m_starter( NULL ) { g_log = this; }
 	virtual ~FtpAppUi();
 
 	void ConstructL();
@@ -57,6 +73,8 @@ public:
 
 	void RunL();
 	void DoCancel();
+
+	void Print( const std::string& text );
 
 	FtpAppView* iAppView;
 	ServerPtr m_server;
@@ -148,6 +166,11 @@ void FtpAppUi::DoCancel()
 	m_timer.Close();
 }
 
+void FtpAppUi::Print( const std::string& text )
+{
+	iAppView->Log( text );
+}
+
 // FtpDocument
 
 class FtpDocument : public CAknDocument
@@ -164,7 +187,6 @@ const TUid FtpUid = { 0xA0102039 };
 class FtpApplication : public CAknApplication
 {
 public:
-	virtual ~FtpApplication() { delete g_log; }
 	TUid AppDllUid() const { return FtpUid; }
 	CApaDocument* CreateDocumentL() { return static_cast<CApaDocument*>( new FtpDocument( *this ) ); }
 };
