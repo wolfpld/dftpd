@@ -3,6 +3,7 @@
 #include <signal.h>
 #include "Server.hpp"
 #include "LogSTDOUT.hpp"
+#include "AuthNone.hpp"
 
 bool g_exitRequested = false;
 Log* g_log = new LogSTDOUT;
@@ -14,7 +15,7 @@ void RequestExit( int signum )
 
 void Run()
 {
-	ServerPtr server( Server::Create() );
+	ServerPtr server( Server::Create( AuthPtr( new AuthNone ) ) );
 
 	while( !g_exitRequested )
 	{

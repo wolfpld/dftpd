@@ -3,13 +3,13 @@
 #include <string.h>
 #include <errno.h>
 #include "Server.hpp"
-#include "AuthNone.hpp"
+#include "Auth.hpp"
 #include "Log.hpp"
 
-Server::Server()
+Server::Server( const AuthPtr& auth )
 	: m_listener( new Listener )
 	, m_sessionController( new SessionController )
-	, m_auth( new AuthNone )
+	, m_auth( auth )
 {
 	g_log->Print( "Dumb FTP server" );
 	g_log->Print( std::string("IP: ") + m_listener->GetIPAddr() );
@@ -19,10 +19,10 @@ Server::Server()
 	m_listener->Listen();
 }
 
-Server::Server( const std::string& ip )
+Server::Server( const AuthPtr& auth, const std::string& ip )
 	: m_listener( new Listener( ip ) )
 	, m_sessionController( new SessionController )
-	, m_auth( new AuthNone )
+	, m_auth( auth )
 {
 	g_log->Print( "Dumb FTP server" );
 	g_log->Print( std::string("IP: ") + m_listener->GetIPAddr() );
@@ -37,9 +37,9 @@ Server::~Server()
 	g_log->Print( "[Server] Shutting down" );
 }
 
-ServerPtr Server::Create()
+ServerPtr Server::Create( const AuthPtr& auth )
 {
-	ServerPtr ret( new Server );
+	ServerPtr ret( new Server( auth ) );
 	ret->m_this = ret;
 
 	ret->InitListener();
@@ -47,9 +47,9 @@ ServerPtr Server::Create()
 	return ret;
 }
 
-ServerPtr Server::Create( const std::string& ip )
+ServerPtr Server::Create( const AuthPtr& auth, const std::string& ip )
 {
-	ServerPtr ret( new Server( ip ) );
+	ServerPtr ret( new Server( auth, ip ) );
 	ret->m_this = ret;
 
 	ret->InitListener();

@@ -11,8 +11,8 @@
 class Server
 {
 public:
-	static ServerPtr Create();
-	static ServerPtr Create( const std::string& ip );
+	static ServerPtr Create( const AuthPtr& auth );
+	static ServerPtr Create( const AuthPtr& auth, const std::string& ip );
 	~Server();
 
 	void Tick();
@@ -22,8 +22,8 @@ public:
 	const std::list<std::string>& GetWelcomeMessage() const { return m_welcome; }
 
 private:
-	Server();
-	Server( const std::string& ip );
+	Server( const AuthPtr& auth );
+	Server( const AuthPtr& auth, const std::string& ip );
 
 	void InitListener();
 	void LoadWelcomeMessage();
