@@ -11,6 +11,7 @@
 #include "Server.hpp"
 #include "ServerPtr.hpp"
 #include "SymbianNetwork.hpp"
+#include "AuthNone.hpp"
 #include "AuthToken.hpp"
 #include "resource/dftpd.hrh"
 #include <dftpd.rsg>
@@ -65,7 +66,7 @@ void FtpAppView::Log( const std::string& _text )
 class FtpAppUi : public CAknAppUi, public CActive, public Log
 {
 public:
-	FtpAppUi() : CActive( EPriorityStandard ), iAppView( NULL ), m_starter( NULL ) { g_log = this; }
+	FtpAppUi() : CActive( EPriorityStandard ), iAppView( NULL ), m_starter( NULL ), m_authenticationEnabled( true ) { g_log = this; }
 	virtual ~FtpAppUi();
 
 	void ConstructL();
@@ -86,6 +87,8 @@ public:
 	CIdle* m_starter;
 	RTimer m_timer;
 	AuthPtr m_auth;
+
+	bool m_authenticationEnabled;
 };
 
 FtpAppUi::~FtpAppUi()
@@ -123,7 +126,24 @@ void FtpAppUi::HandleCommandL( TInt aCommand )
 		break;
 
 	case EGenerateToken:
+		if( !m_authenticationEnabled )
+		{
+			g_log->Print( "Enabling authentication" );
+			m_auth.reset( new AuthToken );
+			m_server->SetAuth( m_auth );
+			m_authenticationEnabled = true;
+		}
 		((AuthToken*)m_auth.get())->GenerateToken();
+		break;
+
+	case EDisableAuthentication:
+		if( m_authenticationEnabled )
+		{
+			g_log->Print( "Authentication disabled" );
+			m_auth.reset( new AuthNone );
+			m_server->SetAuth( m_auth );
+			m_authenticationEnabled = false;
+		}
 		break;
 
 	case EAbout:

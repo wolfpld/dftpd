@@ -4,6 +4,7 @@
 enum TDFTPDIds
 {
 	EGenerateToken = 0x6001,
+	EDisableAuthentication,
 	EAbout
 };
 

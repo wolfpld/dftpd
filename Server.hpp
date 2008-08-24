@@ -19,6 +19,8 @@ public:
 
 	void IncomingConnection( int sock );
 
+	void SetAuth( const AuthPtr& auth ) { m_auth = auth; }
+
 	const std::list<std::string>& GetWelcomeMessage() const { return m_welcome; }
 
 private:

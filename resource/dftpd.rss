@@ -43,6 +43,12 @@ RESOURCE MENU_PANE r_dftpd_menu
 		,
 		MENU_ITEM
 		{
+			command = EDisableAuthentication;
+			txt = STRING_r_ftpd_disable_authentication;
+		}
+		,
+		MENU_ITEM
+		{
 			command = EAbout;
 			txt = STRING_r_ftpd_about;
 		}
