@@ -47,12 +47,10 @@ source		SymbianUI.cpp
 source		TelnetCommand.cpp
 source		Telnet.cpp
 
-// using main() as entry point
-//staticlibrary	libcrt0.lib
-
 // libc and euser are always needed when using main() entry point
-library		libc.lib
 library		euser.lib
+library		libc.lib
+library		libpthread.lib
 library		libstdcpp.lib
 
 library		apparc.lib

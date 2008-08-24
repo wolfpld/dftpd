@@ -1,7 +1,7 @@
 CFLAGS = -g -Wall
 LDFLAGS = 
 
-LIBS =
+LIBS = -lpthread
 INCLUDES =
 
 # --

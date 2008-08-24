@@ -4,9 +4,11 @@
 DataBufferFile::DataBufferFile( FILE* f, int secondaryBufferSize, Mode mode )
 	: m_file( f )
 	, m_buf( new char[BufSize] )
+	, m_buf2( new char[BufSize] )
 	, m_secBuf( new char[secondaryBufferSize] )
 	, m_secBufSize( 0 )
 	, m_mode( mode )
+	, m_threadRunning( false )
 {
 	if( mode == M_WRITE )
 	{
@@ -25,8 +27,13 @@ DataBufferFile::~DataBufferFile()
 	{
 		SaveBuffer();
 	}
+	if( m_threadRunning )
+	{
+		pthread_join( m_thread, NULL );
+	}
 
 	delete[] m_buf;
+	delete[] m_buf2;
 	delete[] m_secBuf;
 
 	fclose( m_file );
@@ -72,6 +79,31 @@ void DataBufferFile::Store( void* ptr, int size )
 
 void DataBufferFile::SaveBuffer()
 {
-	fwrite( m_buf, 1, m_offset, m_file );
+	if( m_threadRunning )
+	{
+		pthread_join( m_thread, NULL );
+	}
+
+	m_offsetToWrite = m_offset;
 	m_offset = 0;
+	std::swap( m_buf, m_buf2 );
+
+	pthread_create( &m_thread, NULL, &DataBufferFile::SaveBuffer, (void*)this );
+	m_threadRunning = true;
+}
+
+void* DataBufferFile::SaveBuffer( void* _ptr )
+{
+	DataBufferFile* ptr = static_cast<DataBufferFile*>( _ptr );
+
+	if( ptr->m_offsetToWrite == BufSize )
+	{
+		fwrite( ptr->m_buf2, BufSize, 1, ptr->m_file );
+	}
+	else
+	{
+		fwrite( ptr->m_buf2, 1, ptr->m_offsetToWrite, ptr->m_file );
+	}
+
+	return NULL;
 }
