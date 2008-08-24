@@ -7,7 +7,7 @@
 class LogNull : public Log
 {
 public:
-	void Print( const std::string& txt ) const {};
+	void Print( const std::string& txt ) {};
 };
 
 #endif

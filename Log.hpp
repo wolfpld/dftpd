@@ -6,7 +6,7 @@
 class Log
 {
 public:
-	virtual void Print( const std::string& txt ) const = 0;
+	virtual void Print( const std::string& txt ) = 0;
 };
 
 extern Log* g_log;
