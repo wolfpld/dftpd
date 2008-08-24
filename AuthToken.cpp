@@ -46,7 +46,17 @@ void AuthToken::GenerateToken()
 
 	for( int i=0; i<tokenLen; i++ )
 	{
-		char c = 48 + ( rand() % ( 125 - 48 ) );
+		// 49: Start from 1 (0 is too similar to O)
+		// 122: End at z
+		// 7: Hole between 9 and A
+		// 6: Hole between Z and a
+		char c = rand() % ( 122 - 49 - 7 - 6 );
+
+		// Remove holes
+		c += 49;
+		if( c > 57 ) c += 7;
+		if( c > 90 ) c += 6;
+
 		m_token += c;
 	}
 
