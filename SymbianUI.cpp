@@ -13,6 +13,7 @@
 #include "SymbianNetwork.hpp"
 #include "AuthNone.hpp"
 #include "AuthToken.hpp"
+#include "Exceptions.hpp"
 #include "resource/dftpd.hrh"
 #include <dftpd.rsg>
 
@@ -82,6 +83,8 @@ public:
 
 	void Print( const std::string& text );
 
+	void ServerCrashed();
+
 	FtpAppView* iAppView;
 	ServerPtr m_server;
 	CIdle* m_starter;
@@ -126,18 +129,21 @@ void FtpAppUi::HandleCommandL( TInt aCommand )
 		break;
 
 	case EGenerateToken:
-		if( !m_authenticationEnabled )
+		if( m_server )
 		{
-			g_log->Print( "Enabling authentication" );
-			m_auth.reset( new AuthToken );
-			m_server->SetAuth( m_auth );
-			m_authenticationEnabled = true;
+			if( !m_authenticationEnabled )
+			{
+				g_log->Print( "Enabling authentication" );
+				m_auth.reset( new AuthToken );
+				m_server->SetAuth( m_auth );
+				m_authenticationEnabled = true;
+			}
+			((AuthToken*)m_auth.get())->GenerateToken();
 		}
-		((AuthToken*)m_auth.get())->GenerateToken();
 		break;
 
 	case EDisableAuthentication:
-		if( m_authenticationEnabled )
+		if( m_authenticationEnabled && m_server )
 		{
 			g_log->Print( "Authentication disabled" );
 			m_auth.reset( new AuthNone );
@@ -175,9 +181,19 @@ TBool FtpAppUi::StartL( TAny* aThis )
 
 void FtpAppUi::StartL()
 {
-	m_auth.reset( new AuthToken );
-	std::string ip = EstablishConnection();
-	m_server = Server::Create( m_auth, ip );
+	std::string ip;
+
+	try
+	{
+		m_auth.reset( new AuthToken );
+		ip = EstablishConnection();
+		m_server = Server::Create( m_auth, ip );
+	}
+	catch( ServerCrash& e )
+	{
+		ServerCrashed();
+		return;
+	}
 
 	CEikStatusPane* sp = iEikonEnv->AppUiFactory()->StatusPane();
 	CAknNavigationControlContainer* iNaviPane = (CAknNavigationControlContainer*)sp->ControlL( TUid::Uid( EEikStatusPaneUidNavi ) );
@@ -195,7 +211,15 @@ void FtpAppUi::StartL()
 
 void FtpAppUi::RunL()
 {
-	m_server->Tick();
+	try
+	{
+		m_server->Tick();
+	}
+	catch( ServerCrash& e )
+	{
+		ServerCrashed();
+		return;
+	}
 
 	m_timer.After( iStatus, 10 );
 	SetActive();
@@ -209,6 +233,17 @@ void FtpAppUi::DoCancel()
 void FtpAppUi::Print( const std::string& text )
 {
 	iAppView->Log( text );
+}
+
+void FtpAppUi::ServerCrashed()
+{
+	CEikStatusPane* sp = iEikonEnv->AppUiFactory()->StatusPane();
+	CAknNavigationControlContainer* iNaviPane = (CAknNavigationControlContainer*)sp->ControlL( TUid::Uid( EEikStatusPaneUidNavi ) );
+	iNaviPane->Pop();
+	_LIT( naviLabel, "Server crashed" );
+	iNaviPane->PushL( *iNaviPane->CreateNavigationLabelL( naviLabel ) );
+
+	m_server.reset();
 }
 
 // FtpDocument
