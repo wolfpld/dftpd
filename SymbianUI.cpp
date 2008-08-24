@@ -53,6 +53,7 @@ void FtpAppView::Log( const std::string& _text )
 	m_view->Text()->InsertL( m_view->Text()->DocumentLength(), log );
 	m_view->HandleTextChangedL();
 	m_view->SetCursorPosL( m_view->Text()->DocumentLength(), EFalse );
+	m_view->NotifyNewFormatL();
 }
 
 // FtpAppUi
