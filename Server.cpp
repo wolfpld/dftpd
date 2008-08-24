@@ -11,7 +11,8 @@ Server::Server()
 	, m_sessionController( new SessionController )
 	, m_auth( new AuthNone )
 {
-	g_log->Print( std::string("Dumb FTP server\nIP: ") + m_listener->GetIPAddr() );
+	g_log->Print( "Dumb FTP server" );
+	g_log->Print( std::string("IP: ") + m_listener->GetIPAddr() );
 
 	LoadWelcomeMessage();
 
@@ -23,7 +24,8 @@ Server::Server( const std::string& ip )
 	, m_sessionController( new SessionController )
 	, m_auth( new AuthNone )
 {
-	g_log->Print( std::string("Dumb FTP server\nIP: ") + m_listener->GetIPAddr() );
+	g_log->Print( "Dumb FTP server" );
+	g_log->Print( std::string("IP: ") + m_listener->GetIPAddr() );
 
 	LoadWelcomeMessage();
 

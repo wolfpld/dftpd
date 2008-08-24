@@ -32,7 +32,8 @@ int main()
 	}
 	catch( char const* err )
 	{
-		g_log->Print( std::string("Caught error: ") + err + "\nExiting" );
+		g_log->Print( std::string("Caught error: ") + err );
+		g_log->Print( "Exiting" );
 		delete g_log;
 		return 1;
 	}
