@@ -6,6 +6,8 @@
 
 class DataBufferFile : public DataBuffer
 {
+	enum { BufSize = 1048576 };
+
 public:
 	DataBufferFile( FILE* f, int secondaryBufferSize, Mode mode );
 	~DataBufferFile();
@@ -16,6 +18,10 @@ public:
 
 private:
 	FILE* m_file;
+
+	char* m_buf;
+	int m_offset;
+
 	char* m_secBuf;
 	int m_secBufSize;
 
