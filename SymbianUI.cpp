@@ -36,7 +36,6 @@ FtpAppView::FtpAppView( const TRect& aRect )
 	m_view = new CEikEdwin;
 	m_view->SetContainerWindowL( *this );
 	m_view->ConstructL( EEikEdwinDisplayOnly | EEikEdwinNoAutoSelection );
-	m_view->CreateScrollBarFrameL()->SetScrollBarVisibilityL( CEikScrollBarFrame::EOff, CEikScrollBarFrame::EAuto );
 
 	SetRect( aRect );
 	ActivateL();
