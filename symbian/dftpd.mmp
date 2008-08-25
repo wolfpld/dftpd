@@ -8,6 +8,8 @@ lang sc 01 27
 epocheapsize	0x10000 0x400000
 epocstacksize	0xA000
 
+macro		SYMBIAN
+
 start resource	dftpd_reg.rss
 targetpath	\private\10003a3f\import\apps
 end
@@ -33,6 +35,7 @@ sourcepath	..
 source		AuthNone.cpp
 source		AuthToken.cpp
 source		DataBufferFile.cpp
+source		DataBufferFileSymbian.cpp
 source		DataBufferListing.cpp
 source		Data.cpp
 source		Exceptions.cpp
@@ -57,8 +60,9 @@ library		libstdcpp.lib
 library		apparc.lib
 library		avkon.lib
 library		cone.lib
+library		efsrv.lib
+library		eikcoctl.lib
 library		eikcore.lib
 library		eiksrv.lib
-library		eikcoctl.lib
 
 capability ReadUserData WriteUserData NetworkServices

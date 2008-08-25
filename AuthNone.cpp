@@ -12,5 +12,9 @@ bool AuthNone::Password( const std::string& login, const std::string& password )
 
 std::string AuthNone::GetRoot( const std::string& login )
 {
+#ifdef SYMBIAN
+	return "E:";
+#else
 	return "/";
+#endif
 }

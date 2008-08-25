@@ -7,6 +7,10 @@
 #include <boost/shared_ptr.hpp>
 #include "String.hpp"
 
+#ifdef SYMBIAN
+#include <f32file.h>
+#endif
+
 class Filesystem
 {
 public:
@@ -25,6 +29,10 @@ public:
 	bool FileExists( const std::string& file );
 	FILE* FileOpen( const std::string& file, Mode mode );
 
+#ifdef SYMBIAN
+	RFile* FileOpenSymbian( const std::string& file, Mode mode );
+#endif
+
 	std::list<std::string> GetListing( const std::string& path );
 
 	bool Delete( const std::string& file );
@@ -39,6 +47,10 @@ private:
 
 	std::string m_root;
 	std::string m_path;
+
+#ifdef SYMBIAN
+	RFs m_rfs;
+#endif
 };
 
 typedef boost::shared_ptr<Filesystem> FilesystemPtr;

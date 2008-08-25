@@ -8,6 +8,10 @@
 #include "SessionPtr.hpp"
 #include "DataBuffer.hpp"
 
+#ifdef SYMBIAN
+#include <f32file.h>
+#endif
+
 class Data
 {
 	enum { BufSize = 8192 };
@@ -19,6 +23,9 @@ public:
 		M_DOWNLOAD,
 	};
 
+#ifdef SYMBIAN
+	Data( const SessionWPtr& session, RFile* file, Mode mode );
+#endif
 	Data( const SessionWPtr& session, FILE* file, Mode mode );
 	Data( const SessionWPtr& session, const std::list<std::string>& list );
 	~Data();

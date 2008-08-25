@@ -618,7 +618,11 @@ void Session::ChangeDirectory( const std::string& cd )
 
 void Session::Upload( const Command& cmd )
 {
-	FILE *f;
+#ifdef SYMBIAN
+	RFile* f;
+#else
+	FILE* f;
+#endif
 
 	if( cmd.size() != 2 )
 	{
@@ -630,7 +634,12 @@ void Session::Upload( const Command& cmd )
 		m_control->Write( std::string( "550 File " ) + cmd[1] + " not found" );
 		return;
 	}
+
+#ifdef SYMBIAN
+	if( ( f = m_filesystem->FileOpenSymbian( cmd[1], Filesystem::M_READ ) ) == NULL )
+#else
 	if( ( f = m_filesystem->FileOpen( cmd[1], Filesystem::M_READ ) ) == NULL )
+#endif
 	{
 		m_control->Write( std::string( "450 File " ) + cmd[1] + " not accessible" );
 		return;
@@ -652,14 +661,22 @@ void Session::Upload( const Command& cmd )
 
 void Session::Download( const Command& cmd )
 {
-	FILE *f;
+#ifdef SYMBIAN
+	RFile* f;
+#else
+	FILE* f;
+#endif
 
 	if( cmd.size() != 2 )
 	{
 		throw SyntaxErrorException;
 	}
 
+#ifdef SYMBIAN
+	if( ( f = m_filesystem->FileOpenSymbian( cmd[1], Filesystem::M_WRITE ) ) == NULL )
+#else
 	if( ( f = m_filesystem->FileOpen( cmd[1], Filesystem::M_WRITE ) ) == NULL )
+#endif
 	{
 		m_control->Write( std::string( "450 File " ) + cmd[1] + " not accessible" );
 		return;

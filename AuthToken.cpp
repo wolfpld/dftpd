@@ -35,7 +35,11 @@ bool AuthToken::Password( const std::string& login, const std::string& password 
 
 std::string AuthToken::GetRoot( const std::string& login )
 {
+#ifdef SYMBIAN
+	return "E:";
+#else
 	return "/";
+#endif
 }
 
 void AuthToken::GenerateToken()

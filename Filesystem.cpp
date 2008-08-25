@@ -10,10 +10,16 @@ Filesystem::Filesystem( const std::string& root )
 	: m_root( root )
 	, m_path( "/" )
 {
+#ifdef SYMBIAN
+	m_rfs.Connect();
+#endif
 }
 
 Filesystem::~Filesystem()
 {
+#ifdef SYMBIAN
+	m_rfs.Close();
+#endif
 }
 
 bool Filesystem::ChangeDirectory( const std::string& cd )
@@ -56,6 +62,63 @@ FILE* Filesystem::FileOpen( const std::string& file, Mode mode )
 
 	return NULL;
 }
+
+#ifdef SYMBIAN
+RFile* Filesystem::FileOpenSymbian( const std::string& file, Mode mode )
+{
+	RFile* f = new RFile;
+
+	std::string path = m_root + GetFilePath( file );
+
+	for( unsigned int i=0; i<path.size(); i++ )
+	{
+		if( path[i] == '/' || path[i] == '\\' )
+		{
+			if( i>0 && path[i-1] == '\\' )
+			{
+				path.erase( i, 1 );
+				i--;
+			}
+			else
+			{
+				path[i] = '\\';
+			}
+		}
+	}
+
+	TPtrC8 ptr( reinterpret_cast<const TUint8*>( path.c_str() ) );
+	TBuf<512> buf;
+	buf.FillZ();
+	buf.Copy( ptr );
+
+	int a;
+	switch( mode )
+	{
+	case M_READ:
+		if( f->Open( m_rfs, buf, EFileRead | EFileStream | EFileShareReadersOnly ) != KErrNone )
+		{
+			delete f;
+			f = NULL;
+		}
+		break;
+
+	case M_WRITE:
+		if( f->Replace( m_rfs, buf, EFileWrite | EFileStream ) != KErrNone )
+		{
+			delete f;
+			f = NULL;
+		}
+		break;
+
+	default:
+		delete f;
+		f = NULL;
+		break;
+	}
+
+	return f;
+}
+#endif
 
 std::list<std::string> Filesystem::GetListing( const std::string& path )
 {

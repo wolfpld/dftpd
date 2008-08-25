@@ -12,6 +12,27 @@
 #include "DataBufferFile.hpp"
 #include "DataBufferListing.hpp"
 
+#ifdef SYMBIAN
+
+#include "DataBufferFileSymbian.hpp"
+
+Data::Data( const SessionWPtr& session, RFile* file, Mode mode )
+	: m_sock( 0 )
+	, m_mode( mode )
+	, m_session( session )
+	, m_buf( new char[BufSize] )
+{
+	if( mode == M_UPLOAD )
+	{
+		m_data.reset( new DataBufferFileSymbian( file, BufSize ) );
+	}
+	else
+	{
+		m_data.reset( new DataBufferFileSymbian( file, BufSize ) );
+	}
+}
+#endif
+
 Data::Data( const SessionWPtr& session, FILE* file, Mode mode )
 	: m_sock( 0 )
 	, m_mode( mode )
