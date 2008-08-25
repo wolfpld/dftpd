@@ -14,7 +14,7 @@
 
 class Data
 {
-	enum { BufSize = 8192 };
+	enum { BufSize = 524288 };
 
 public:
 	enum Mode
