@@ -91,7 +91,6 @@ RFile* Filesystem::FileOpenSymbian( const std::string& file, Mode mode )
 	buf.FillZ();
 	buf.Copy( ptr );
 
-	int a;
 	switch( mode )
 	{
 	case M_READ:

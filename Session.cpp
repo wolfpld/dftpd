@@ -54,6 +54,10 @@ Session::~Session()
 	{
 		close( m_listenSock );
 	}
+
+	// Data (RFile) needs to be freed before Filesystem (RFs) on symbian
+	m_data.reset();
+	m_filesystem.reset();
 }
 
 SessionPtr Session::Create( int controlSock, const SessionControllerPtr& sessionController, const AuthPtr& auth, const std::string& ip, const ServerWPtr& server )
