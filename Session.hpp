@@ -67,6 +67,7 @@ private:
 	void HandleList( const Command& cmd );
 	void HandlePasv( const Command& cmd );
 	void HandleDele( const Command& cmd );
+	void HandleMkd( const Command& cmd );
 
 	void PrintDirectory();
 	void ChangeDirectory( const Command& cmd );

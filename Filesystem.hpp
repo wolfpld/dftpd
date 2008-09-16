@@ -36,6 +36,7 @@ public:
 	std::list<std::string> GetListing( const std::string& path );
 
 	bool Delete( const std::string& file );
+	std::string MkDir( const std::string& dir );
 
 private:
 	std::string MakePath( const PathVector& pv );

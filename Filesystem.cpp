@@ -244,6 +244,24 @@ bool Filesystem::Delete( const std::string& file )
 	return unlink( path.c_str() ) == 0;
 }
 
+std::string Filesystem::MkDir( const std::string& dir )
+{
+	std::string filePath = GetFilePath( dir );
+	if( filePath == "" )
+	{
+		return "";
+	}
+
+	std::string path = m_root + filePath;
+
+	if( mkdir( path.c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH ) == -1 )
+	{
+		return "";
+	}
+
+	return path;
+}
+
 std::string Filesystem::MakePath( const PathVector& pv )
 {
 	std::string ret;

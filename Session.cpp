@@ -332,6 +332,10 @@ void Session::AwaitReady()
 		{
 			HandleDele( cmd );
 		}
+		else if( cmd[0] == "MKD" )
+		{
+			HandleMkd( cmd );
+		}
 		else
 		{
 			throw SyntaxErrorException;
@@ -590,6 +594,25 @@ void Session::HandleDele( const Command& cmd )
 	else
 	{
 		m_control->Write( std::string( "550 No access to " ) + cmd[1] + " (" + strerror( errno ) + ")" );
+	}
+}
+
+void Session::HandleMkd( const Command& cmd )
+{
+	if( cmd.size() != 2 )
+	{
+		throw SyntaxErrorException;
+	}
+
+	std::string ret = m_filesystem->MkDir( cmd[1] );
+
+	if( ret != "" )
+	{
+		m_control->Write( std::string( "257 \"" + ret + "\" created" ) );
+	}
+	else
+	{
+		m_control->Write( "550 Directory not created" );
 	}
 }
 
