@@ -336,6 +336,10 @@ void Session::AwaitReady()
 		{
 			HandleMkd( cmd );
 		}
+		else if( cmd[0] == "RMD" )
+		{
+			HandleRmd( cmd );
+		}
 		else
 		{
 			throw SyntaxErrorException;
@@ -613,6 +617,23 @@ void Session::HandleMkd( const Command& cmd )
 	else
 	{
 		m_control->Write( "550 Directory not created" );
+	}
+}
+
+void Session::HandleRmd( const Command& cmd )
+{
+	if( cmd.size() != 2 )
+	{
+		throw SyntaxErrorException;
+	}
+
+	if( m_filesystem->RmDir( cmd[1] ) )
+	{
+		m_control->Write( "250 OK" );
+	}
+	else
+	{
+		m_control->Write( "550 No access" );
 	}
 }
 

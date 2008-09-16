@@ -37,6 +37,7 @@ public:
 
 	bool Delete( const std::string& file );
 	std::string MkDir( const std::string& dir );
+	bool RmDir( const std::string& dir );
 
 private:
 	std::string MakePath( const PathVector& pv );

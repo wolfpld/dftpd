@@ -262,6 +262,24 @@ std::string Filesystem::MkDir( const std::string& dir )
 	return path;
 }
 
+bool Filesystem::RmDir( const std::string& dir )
+{
+	std::string filePath = GetFilePath( dir );
+	if( filePath == "" )
+	{
+		return false;
+	}
+
+	std::string path = m_root + filePath;
+
+	if( rmdir( path.c_str() ) == -1 )
+	{
+		return false;
+	}
+
+	return true;
+}
+
 std::string Filesystem::MakePath( const PathVector& pv )
 {
 	std::string ret;
