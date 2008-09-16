@@ -2,6 +2,7 @@
 #include <dirent.h>
 #include <time.h>
 #include <unistd.h>
+#include <string.h>
 #include <boost/lexical_cast.hpp>
 #include "Filesystem.hpp"
 #include "String.hpp"
@@ -173,6 +174,10 @@ std::list<std::string> Filesystem::GetListing( const std::string& path )
 	tm timeNow;
 	localtime_r( &now, &timeNow );
 
+	// Symbian readdir() doesn't report "." and ".."
+	bool hasDot = false;
+	bool hasDotDot = false;
+
 	dirent* de;
 	struct stat s;
 	while( ( de = readdir( d ) ) )
@@ -206,10 +211,28 @@ std::list<std::string> Filesystem::GetListing( const std::string& path )
 
 		entry += " 1 root root " + boost::lexical_cast<std::string>( s.st_size ) + dateBuf + de->d_name;
 
+		if( strcmp( de->d_name, "." ) == 0 )
+		{
+			hasDot = true;
+		}
+		if( strcmp( de->d_name, ".." ) == 0 )
+		{
+			hasDotDot = true;
+		}
+
 		ret.push_back( entry );
 	}
 
 	closedir( d );
+
+	if( !hasDotDot )
+	{
+		ret.push_front( "drwxr-xr-x 1 root root 0 Jan  1  1970 .." );
+	}
+	if( !hasDot )
+	{
+		ret.push_front( "drwxr-xr-x 1 root root 0 Jan  1  1970 ." );
+	}
 
 	return ret;
 }
