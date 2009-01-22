@@ -1,7 +1,7 @@
 &EN,PL
 
 ; standard SIS file header
-#{"dftpd", "dftpd"},(0xA0102039),0,1,0
+#{"dftpd", "dftpd"},(0xA0102039),0,1,1
 
 ;Localised Vendor name
 %{"Vendor-EN", "Vendor-PL"}
