@@ -6,6 +6,7 @@
 #include <sys/select.h>
 #include "Telnet.hpp"
 #include "Exceptions.hpp"
+#include "Log.hpp"
 
 static const char CRLF[] = { 13, 10, 0 };
 static const char IAC[] = { 255, 0 };
@@ -84,6 +85,10 @@ bool Telnet::Read()
 
 void Telnet::Write( const std::string& msg )
 {
+#ifdef DEBUG
+	g_log->Print( "> " + msg );
+#endif
+
 	std::string buf;
 	for( unsigned int i=0; i<msg.size(); i++ )
 	{
@@ -130,6 +135,10 @@ std::string Telnet::GetBuf()
 	ret = m_readBuf.substr( 0, pos );
 
 	m_readBuf.erase( 0, pos + 2 );
+
+#ifdef DEBUG
+	g_log->Print( "< " + ret );
+#endif
 
 	return ret;
 }
