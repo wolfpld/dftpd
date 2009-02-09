@@ -14,6 +14,7 @@ OBJ = \
 	DataBufferListing.o \
 	Exceptions.o \
 	Filesystem.o \
+	IO.o \
 	Listener.o \
 	LogSTDOUT.o \
 	Main.o \

@@ -5,6 +5,7 @@
 #include <string.h>
 #include <boost/lexical_cast.hpp>
 #include "Filesystem.hpp"
+#include "IO.hpp"
 #include "String.hpp"
 
 Filesystem::Filesystem( const std::string& root )
@@ -254,7 +255,7 @@ std::string Filesystem::MkDir( const std::string& dir )
 
 	std::string path = m_root + filePath;
 
-	if( mkdir( path.c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH ) == -1 )
+	if( !IO::MkDir( path ) )
 	{
 		return "";
 	}
@@ -272,7 +273,7 @@ bool Filesystem::RmDir( const std::string& dir )
 
 	std::string path = m_root + filePath;
 
-	if( rmdir( path.c_str() ) == -1 )
+	if( !IO::RmDir( path ) )
 	{
 		return false;
 	}
