@@ -3,6 +3,8 @@
 
 #ifdef _WIN32
 #include <windows.h>
+#define S_ISDIR(mode) (((mode) & _S_IFMT) == (_S_IFDIR))
+#define S_ISREG(mode) (((mode) & _S_IFMT) == (_S_IFREG))
 #else
 #include <dirent.h>
 #endif
