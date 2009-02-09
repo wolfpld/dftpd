@@ -1,5 +1,4 @@
 #include <sys/stat.h>
-#include <dirent.h>
 #include <time.h>
 #include <unistd.h>
 #include <string.h>
@@ -166,8 +165,8 @@ std::list<std::string> Filesystem::GetListing( const std::string& path )
 
 	std::string newPath = m_root + MakePath( pv );
 
-	DIR *d = opendir( newPath.c_str() );
-	if( !d )
+	Directory d;
+	if( !d.Open( newPath ) )
 	{
 		return ret;
 	}
@@ -179,11 +178,11 @@ std::list<std::string> Filesystem::GetListing( const std::string& path )
 	bool hasDot = false;
 	bool hasDotDot = false;
 
-	dirent* de;
 	struct stat s;
-	while( ( de = readdir( d ) ) )
+	while( d )
 	{
-		stat( ( newPath + "/" + de->d_name ).c_str(), &s );
+		std::string dirName = d.GetName();
+		stat( ( newPath + "/" + dirName ).c_str(), &s );
 
 		std::string entry;
 
@@ -210,21 +209,21 @@ std::list<std::string> Filesystem::GetListing( const std::string& path )
 			strftime( dateBuf, sizeof( dateBuf ), " %b %e  %Y ", &timeFile );
 		}
 
-		entry += " 1 root root " + boost::lexical_cast<std::string>( s.st_size ) + dateBuf + de->d_name;
+		entry += " 1 root root " + boost::lexical_cast<std::string>( s.st_size ) + dateBuf + dirName;
 
-		if( strcmp( de->d_name, "." ) == 0 )
+		if( dirName == "." )
 		{
 			hasDot = true;
 		}
-		if( strcmp( de->d_name, ".." ) == 0 )
+		else if( dirName == ".." )
 		{
 			hasDotDot = true;
 		}
 
 		ret.push_back( entry );
-	}
 
-	closedir( d );
+		++d;
+	}
 
 	if( !hasDotDot )
 	{

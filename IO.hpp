@@ -2,6 +2,7 @@
 #define __DFTPD__IO_HPP__
 
 #include <string>
+#include <dirent.h>
 
 class IO
 {
@@ -11,6 +12,24 @@ public:
 
 private:
 	IO() {};
+};
+
+class Directory
+{
+public:
+	Directory();
+	~Directory();
+
+	bool Open( const std::string& dir );
+
+	Directory& operator++();
+	operator bool();
+
+	std::string GetName();
+
+private:
+	DIR* m_dir;
+	dirent* m_dirent;
 };
 
 #endif
