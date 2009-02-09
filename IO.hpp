@@ -5,6 +5,7 @@
 #include <windows.h>
 #define S_ISDIR(mode) (((mode) & _S_IFMT) == (_S_IFDIR))
 #define S_ISREG(mode) (((mode) & _S_IFMT) == (_S_IFREG))
+#define localtime_r(a,b) localtime_s(b,a)
 #else
 #include <dirent.h>
 #endif
