@@ -1,13 +1,19 @@
-#include <iostream>
-#include <string.h>
-#include <unistd.h>
-#include <errno.h>
+#ifdef _WIN32
+#include <winsock.h>
+typedef int socklen_t;
+#else
 #include <netdb.h>
-#include <fcntl.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#endif
+
+#include <iostream>
+#include <string.h>
+#include <unistd.h>
+#include <errno.h>
+#include <fcntl.h>
 #include "Listener.hpp"
 #include "Server.hpp"
 #include "Log.hpp"
@@ -19,7 +25,7 @@ Listener::Listener()
 	// Discover machine's IP address
 	char buf[128];
 	gethostname( buf, 128 );
-	
+
 	hostent* h;
 	if( ( h = gethostbyname( buf ) ) == (void*)-1 )
 	{
@@ -55,7 +61,11 @@ void Listener::Listen()
 	}
 
 	// Reuse port
+#ifdef _WIN32
+	char yes = 1;
+#else
 	int yes = 1;
+#endif
 	if( setsockopt( m_sock, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof( int ) ) == -1 )
 	{
 		g_log->Print( strerror( errno ) );

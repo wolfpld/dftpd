@@ -1,9 +1,14 @@
+#ifdef _WIN32
+#include <winsock.h>
+#else
+#include <sys/socket.h>
+#include <sys/select.h>
+#endif
+
 #include <iostream>
 #include <sys/types.h>
-#include <sys/socket.h>
 #include <string.h>
 #include <errno.h>
-#include <sys/select.h>
 #include "Telnet.hpp"
 #include "Exceptions.hpp"
 #include "Log.hpp"

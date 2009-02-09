@@ -1,11 +1,17 @@
+#ifdef _WIN32
+#include <winsock.h>
+typedef int socklen_t;
+#else
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <sys/socket.h>
+#endif
+
 #include <iostream>
 #include <string.h>
 #include <unistd.h>
 #include <errno.h>
 #include <fcntl.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <sys/socket.h>
 #include <boost/lexical_cast.hpp>
 #include "Session.hpp"
 #include "SessionController.hpp"
@@ -553,7 +559,11 @@ void Session::HandlePasv( const Command& cmd )
 		sockaddr_in addr;
 		addr.sin_family = AF_INET;
 		addr.sin_port = 0;
+#ifdef _WIN32
+		addr.sin_addr.s_addr = inet_addr( m_ip.c_str() );
+#else
 		inet_aton( m_ip.c_str(), &addr.sin_addr );
+#endif
 		memset( addr.sin_zero, 0, sizeof( addr.sin_zero ) );
 
 		if( bind( m_listenSock, (sockaddr*)&addr, sizeof( addr ) ) == -1 )

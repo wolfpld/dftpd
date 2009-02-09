@@ -1,11 +1,17 @@
-#include <unistd.h>
+#ifdef _WIN32
+#include <winsock.h>
+typedef int socklen_t;
+#else
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <sys/select.h>
+#endif
+
+#include <unistd.h>
 #include <string.h>
 #include <errno.h>
-#include <sys/select.h>
 #include "Data.hpp"
 #include "Session.hpp"
 #include "Exceptions.hpp"

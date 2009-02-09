@@ -1,5 +1,12 @@
-#include <iostream>
+#ifdef _WIN32
+#include <winsock.h>
+#undef min
+#undef max
+#else
 #include <sys/select.h>
+#endif
+
+#include <iostream>
 #include <string.h>
 #include <errno.h>
 #include "Server.hpp"
