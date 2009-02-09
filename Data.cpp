@@ -41,11 +41,11 @@ Data::Data( const SessionWPtr& session, FILE* file, Mode mode )
 {
 	if( mode == M_UPLOAD )
 	{
-		m_data.reset( new DataBufferFile( file, BufSize, DataBuffer::M_READ ) );
+		m_data.reset( new DataBufferFile( file, BufSize ) );
 	}
 	else
 	{
-		m_data.reset( new DataBufferFile( file, BufSize, DataBuffer::M_WRITE ) );
+		m_data.reset( new DataBufferFile( file, BufSize ) );
 	}
 }
 
