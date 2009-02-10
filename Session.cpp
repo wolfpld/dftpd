@@ -53,12 +53,20 @@ Session::~Session()
 	if( m_controlSock != 0 )
 	{
 		g_log->Print( std::string("[Session] Closing control socket ") + boost::lexical_cast<std::string>( m_id ) );
+#ifdef _WIN32
+		closesocket( m_controlSock );
+#else
 		close( m_controlSock );
+#endif
 	}
 
 	if( m_listenSock != 0 )
 	{
+#ifdef _WIN32
+		closesocket( m_listenSock );
+#else
 		close( m_listenSock );
+#endif
 	}
 
 	// Data (RFile) needs to be freed before Filesystem (RFs) on symbian

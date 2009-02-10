@@ -51,7 +51,11 @@ Listener::~Listener()
 	if( m_sock != 0 )
 	{
 		g_log->Print( "[Listener] Closing socket" );
+#ifdef _WIN32
+		closesocket( m_sock );
+#else
 		close( m_sock );
+#endif
 	}
 }
 

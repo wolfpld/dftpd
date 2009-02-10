@@ -70,7 +70,11 @@ Data::~Data()
 
 	if( m_sock != 0 )
 	{
+#ifdef _WIN32
+		closesocket( m_sock );
+#else
 		close( m_sock );
+#endif
 	}
 }
 
