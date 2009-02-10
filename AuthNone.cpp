@@ -14,6 +14,8 @@ std::string AuthNone::GetRoot( const std::string& login )
 {
 #ifdef SYMBIAN
 	return "E:";
+#elif defined _WIN32
+	return "C:";
 #else
 	return "/";
 #endif
