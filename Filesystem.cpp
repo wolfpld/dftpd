@@ -141,11 +141,11 @@ std::list<std::string> Filesystem::GetListing( const std::string& path )
 		if( now > s.st_mtime && now - s.st_mtime < 60*60*24*180 )
 		{
 			// File is "recent"
-			strftime( dateBuf, sizeof( dateBuf ), " %b %e %H:%M ", &timeFile );
+			strftime( dateBuf, sizeof( dateBuf ), " %b %m %H:%M ", &timeFile );
 		}
 		else
 		{
-			strftime( dateBuf, sizeof( dateBuf ), " %b %e  %Y ", &timeFile );
+			strftime( dateBuf, sizeof( dateBuf ), " %b %m  %Y ", &timeFile );
 		}
 
 		entry += " 1 root root " + boost::lexical_cast<std::string>( s.st_size ) + dateBuf + path;
@@ -202,11 +202,11 @@ std::list<std::string> Filesystem::GetListing( const std::string& path )
 		if( now > s.st_mtime && now - s.st_mtime < 60*60*24*180 )
 		{
 			// File is "recent"
-			strftime( dateBuf, sizeof( dateBuf ), " %b %e %H:%M ", &timeFile );
+			strftime( dateBuf, sizeof( dateBuf ), " %b %m %H:%M ", &timeFile );
 		}
 		else
 		{
-			strftime( dateBuf, sizeof( dateBuf ), " %b %e  %Y ", &timeFile );
+			strftime( dateBuf, sizeof( dateBuf ), " %b %m  %Y ", &timeFile );
 		}
 
 		entry += " 1 root root " + boost::lexical_cast<std::string>( s.st_size ) + dateBuf + dirName;
