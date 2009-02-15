@@ -597,9 +597,9 @@ void Session::HandlePasv( const Command& cmd )
 
 	std::replace( ip.begin(), ip.end(), '.', ',' );
 
-	m_control->Write( std::string( "227 Entering passive mode " ) + ip +
+	m_control->Write( std::string( "227 Entering passive mode (" ) + ip +
 			"," + boost::lexical_cast<std::string>( port >> 8 ) +
-			"," + boost::lexical_cast<std::string>( port & 0xFF ) );
+			"," + boost::lexical_cast<std::string>( port & 0xFF ) + ")" );
 }
 
 void Session::HandleDele( const Command& cmd )
