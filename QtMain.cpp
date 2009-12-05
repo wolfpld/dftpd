@@ -1,8 +1,9 @@
 #include <QTimer>
 #include "AuthNone.hpp"
 #include "AuthToken.hpp"
-#include "Server.hpp"
+#include "LogNull.hpp"
 #include "QtMain.hpp"
+#include "Server.hpp"
 
 Log* g_log = NULL;
 
@@ -14,6 +15,7 @@ QtApp::QtApp( int argc, char** argv )
 
 QtApp::~QtApp()
 {
+	g_log = new LogNull;
 	delete m_app;
 }
 
