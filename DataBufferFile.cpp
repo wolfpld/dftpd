@@ -27,7 +27,7 @@ int DataBufferFile::Read( void* ptr, int size )
 
 int DataBufferFile::Write( void* ptr, int size )
 {
-	return fwrite( ptr, size, 1, m_file );
+	return fwrite( ptr, 1, size, m_file );
 }
 
 void DataBufferFile::Store( void* ptr, int size )
