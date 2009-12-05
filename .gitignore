@@ -2,3 +2,4 @@ dftpd
 *.o
 *.swp
 *.d
+qt/Makefile
