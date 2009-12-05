@@ -35,8 +35,11 @@ int QtApp::Run()
 	widget->setLayout( layout );
 
 	QAction* token = new QAction( "Generate token", this );
+	connect( token, SIGNAL( triggered() ), this, SLOT( GenerateToken() ) );
 	QAction* none = new QAction( "Disable authentication", this );
+	connect( none, SIGNAL( triggered() ), this, SLOT( DisableAuthentication() ) );
 	QAction* about = new QAction( "About", this );
+	connect( about, SIGNAL( triggered() ), this, SLOT( About() ) );
 
 #ifdef Q_WS_MAEMO_5
 	QMenu* menu = menuBar()->addMenu( "" );
@@ -86,6 +89,18 @@ void QtApp::TimerTick()
 	{
 		ServerCrashed();
 	}
+}
+
+void QtApp::About()
+{
+}
+
+void QtApp::GenerateToken()
+{
+}
+
+void QtApp::DisableAuthentication()
+{
 }
 
 int main( int argc, char** argv )
