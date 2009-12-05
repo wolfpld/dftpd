@@ -1,6 +1,6 @@
-#include <QTimer>
 #include "AuthNone.hpp"
 #include "AuthToken.hpp"
+#include "Exceptions.hpp"
 #include "LogNull.hpp"
 #include "QtMain.hpp"
 #include "Server.hpp"
@@ -32,11 +32,18 @@ int QtApp::Run()
 	layout->addWidget( m_logbox );
 	window.setLayout( layout );
 
-	m_server = Server::Create( AuthPtr( new AuthToken ) );
+	m_timer = new QTimer( this );
+	connect( m_timer, SIGNAL( timeout() ), this, SLOT( TimerTick() ) );
+	m_timer->start( 10 );
 
-	QTimer* timer = new QTimer( this );
-	connect( timer, SIGNAL( timeout() ), this, SLOT( TimerTick() ) );
-	timer->start( 10 );
+	try
+	{
+		m_server = Server::Create( AuthPtr( new AuthToken ) );
+	}
+	catch( ServerCrash& e )
+	{
+		ServerCrashed();
+	}
 
 	return m_app->exec();
 }
@@ -46,10 +53,24 @@ void QtApp::Print( const std::string& text )
 	m_logbox->append( QString( text.c_str() ) );
 }
 
+void QtApp::ServerCrashed()
+{
+	Print( "Server crashed" );
+
+	m_server.reset();
+	m_timer->stop();
+}
 
 void QtApp::TimerTick()
 {
-	m_server->Tick();
+	try
+	{
+		m_server->Tick();
+	}
+	catch( ServerCrash& e )
+	{
+		ServerCrashed();
+	}
 }
 
 int main( int argc, char** argv )

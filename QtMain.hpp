@@ -1,3 +1,4 @@
+#include <QTimer>
 #include <QObject>
 #include <QtGui>
 #include "Log.hpp"
@@ -15,8 +16,11 @@ public:
 	void Print( const std::string& text );
 
 private:
+	void ServerCrashed();
+
 	QApplication* m_app;
 	QTextEdit* m_logbox;
+	QTimer* m_timer;
 
 	ServerPtr m_server;
 
