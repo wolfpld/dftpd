@@ -27,6 +27,7 @@ int QtApp::Run()
 
 	m_logbox = new QTextEdit();
 	m_logbox->setReadOnly( true );
+	m_logbox->setTextInteractionFlags( Qt::NoTextInteraction );
 
 	QVBoxLayout* layout = new QVBoxLayout();
 	layout->addWidget( m_logbox );
