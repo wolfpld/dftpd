@@ -21,23 +21,12 @@ typedef int socklen_t;
 
 Listener::Listener()
 	: m_sock( 0 )
+	, m_ipaddr( "0.0.0.0" )
 {
 #ifdef _WIN32
 	WSADATA wsaData;
 	WSAStartup( MAKEWORD( 2, 2 ), &wsaData );
 #endif
-
-	// Discover machine's IP address
-	char buf[128];
-	gethostname( buf, 128 );
-
-	hostent* h;
-	if( ( h = gethostbyname( buf ) ) == (void*)-1 )
-	{
-		g_log->Print( strerror( errno ) );
-		throw ServerCrashException;
-	}
-	m_ipaddr = inet_ntoa( *((in_addr*)h->h_addr) );
 }
 
 Listener::Listener( const std::string& ip )
