@@ -1,6 +1,7 @@
 #include <QTimer>
 #include <QObject>
 #include <QtGui>
+#include "Auth.hpp"
 #include "Log.hpp"
 #include "ServerPtr.hpp"
 
@@ -23,6 +24,8 @@ private:
 	QTimer* m_timer;
 
 	ServerPtr m_server;
+	bool m_authenticationEnabled;
+	AuthPtr	m_auth;
 
 private slots:
 	void TimerTick();

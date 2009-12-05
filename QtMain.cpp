@@ -9,6 +9,7 @@ Log* g_log = NULL;
 
 QtApp::QtApp( QApplication* app )
 	: m_app( app )
+	, m_authenticationEnabled( true )
 {
 	g_log = this;
 }
@@ -56,7 +57,8 @@ int QtApp::Run()
 
 	try
 	{
-		m_server = Server::Create( AuthPtr( new AuthToken ) );
+		m_auth.reset( new AuthToken );
+		m_server = Server::Create( m_auth );
 	}
 	catch( ServerCrash& e )
 	{
@@ -97,10 +99,28 @@ void QtApp::About()
 
 void QtApp::GenerateToken()
 {
+	if( m_server )
+	{
+		if( !m_authenticationEnabled )
+		{
+			g_log->Print( "Enabling authentication" );
+			m_auth.reset( new AuthToken );
+			m_server->SetAuth( m_auth );
+			m_authenticationEnabled = true;
+		}
+		((AuthToken*)m_auth.get())->GenerateToken();
+	}
 }
 
 void QtApp::DisableAuthentication()
 {
+	if( m_server && m_authenticationEnabled )
+	{
+		g_log->Print( "Authentication disabled" );
+		m_auth.reset( new AuthNone );
+		m_server->SetAuth( m_auth );
+		m_authenticationEnabled = false;
+	}
 }
 
 int main( int argc, char** argv )
