@@ -7,8 +7,8 @@
 
 Log* g_log = NULL;
 
-QtApp::QtApp( int argc, char** argv )
-	: m_app( new QApplication( argc, argv ) )
+QtApp::QtApp( QApplication* app )
+	: m_app( app )
 {
 	g_log = this;
 }
@@ -16,14 +16,15 @@ QtApp::QtApp( int argc, char** argv )
 QtApp::~QtApp()
 {
 	g_log = new LogNull;
-	delete m_app;
 }
 
 int QtApp::Run()
 {
-	QWidget window;
-	window.show();
-	window.setWindowTitle( "Dump FTP server" );
+	QWidget* widget = new QWidget;
+	setCentralWidget( widget );
+
+	show();
+	setWindowTitle( "Dump FTP server" );
 
 	m_logbox = new QTextEdit();
 	m_logbox->setReadOnly( true );
@@ -31,7 +32,20 @@ int QtApp::Run()
 
 	QVBoxLayout* layout = new QVBoxLayout();
 	layout->addWidget( m_logbox );
-	window.setLayout( layout );
+	widget->setLayout( layout );
+
+	QAction* token = new QAction( "Generate token", this );
+	QAction* none = new QAction( "Disable authentication", this );
+	QAction* about = new QAction( "About", this );
+
+#ifdef Q_WS_MAEMO_5
+	QMenu* menu = menuBar()->addMenu( "" );
+#else
+	QMenu* menu = menuBar()->addMenu( "Actions" );
+#endif
+	menu->addAction( token );
+	menu->addAction( none );
+	menu->addAction( about );
 
 	m_timer = new QTimer( this );
 	connect( m_timer, SIGNAL( timeout() ), this, SLOT( TimerTick() ) );
@@ -76,6 +90,6 @@ void QtApp::TimerTick()
 
 int main( int argc, char** argv )
 {
-	QtApp app( argc, argv );
+	QtApp app( new QApplication( argc, argv ) );
 	return app.Run();
 }

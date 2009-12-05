@@ -4,12 +4,12 @@
 #include "Log.hpp"
 #include "ServerPtr.hpp"
 
-class QtApp : public QObject, public Log
+class QtApp : public QMainWindow, public Log
 {
 	Q_OBJECT
 
 public:
-	QtApp( int argc, char** argv );
+	QtApp( QApplication* app );
 	~QtApp();
 
 	int Run();
