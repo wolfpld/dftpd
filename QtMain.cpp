@@ -9,6 +9,8 @@ int main( int argc, char** argv )
 	window.setWindowTitle( "Dump FTP server" );
 
 	QTextEdit* logBox = new QTextEdit();
+	logBox->setReadOnly( true );
+
 	QVBoxLayout* layout = new QVBoxLayout();
 	layout->addWidget( logBox );
 	window.setLayout( layout );
