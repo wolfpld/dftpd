@@ -1,3 +1,8 @@
+#include <sys/ioctl.h>
+#include <net/if.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
 #include "AuthNone.hpp"
 #include "AuthToken.hpp"
 #include "Exceptions.hpp"
@@ -59,6 +64,27 @@ int QtApp::Run()
 	{
 		m_auth.reset( new AuthToken );
 		m_server = Server::Create( m_auth );
+
+		int sock = socket( AF_INET, SOCK_DGRAM, 0 );
+
+		char buf[1024];
+		struct ifconf ifc;
+		ifc.ifc_len = sizeof( buf );
+		ifc.ifc_buf = buf;
+
+		ioctl( sock, SIOCGIFCONF, &ifc );
+
+		struct ifreq* ifr = ifc.ifc_req;
+		int num = ifc.ifc_len / sizeof( struct ifreq );
+
+		g_log->Print( "Network interface list:" );
+		while( num-- )
+		{
+			g_log->Print( std::string( ifr->ifr_name ) + ": " + inet_ntoa(((struct sockaddr_in *)&ifr->ifr_addr)->sin_addr) );
+			ifr++;
+		}
+
+		::close( sock );
 	}
 	catch( ServerCrash& e )
 	{
