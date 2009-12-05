@@ -90,7 +90,15 @@ void Listener::Listen()
 	if( bind( m_sock, (sockaddr*)&addr, sizeof( addr ) ) == -1 )
 	{
 		g_log->Print( strerror( errno ) );
-		throw ServerCrashException;
+		g_log->Print( "[Listener] Unable to bind to port 21, retrying with port 2121" );
+		
+		addr.sin_port = htons( 2121 );
+
+		if( bind( m_sock, (sockaddr*)&addr, sizeof( addr ) ) == -1 )
+		{
+			g_log->Print( strerror( errno ) );
+			throw ServerCrashException;
+		}
 	}
 
 	if( listen( m_sock, 5 ) == -1 )
