@@ -1,53 +1,54 @@
-#include <QtGui>
+#include <QTimer>
 #include "AuthNone.hpp"
 #include "AuthToken.hpp"
-#include "Log.hpp"
 #include "Server.hpp"
-#include "ServerPtr.hpp"
+#include "QtMain.hpp"
 
 Log* g_log = NULL;
 
-class QtApp : public Log
+QtApp::QtApp( int argc, char** argv )
+	: m_app( new QApplication( argc, argv ) )
 {
-public:
-	QtApp( int argc, char** argv )
-		: m_app( new QApplication( argc, argv ) )
-	{
-		g_log = this;
-	}
+	g_log = this;
+}
 
-	~QtApp()
-	{
-		delete m_app;
-	}
+QtApp::~QtApp()
+{
+	delete m_app;
+}
 
-	int Run()
-	{
-		QWidget window;
-		window.show();
-		window.setWindowTitle( "Dump FTP server" );
+int QtApp::Run()
+{
+	QWidget window;
+	window.show();
+	window.setWindowTitle( "Dump FTP server" );
 
-		m_logbox = new QTextEdit();
-		m_logbox->setReadOnly( true );
+	m_logbox = new QTextEdit();
+	m_logbox->setReadOnly( true );
 
-		QVBoxLayout* layout = new QVBoxLayout();
-		layout->addWidget( m_logbox );
-		window.setLayout( layout );
+	QVBoxLayout* layout = new QVBoxLayout();
+	layout->addWidget( m_logbox );
+	window.setLayout( layout );
 
-		ServerPtr server( Server::Create( AuthPtr( new AuthToken ) ) );
+	m_server = Server::Create( AuthPtr( new AuthToken ) );
 
-		return m_app->exec();
-	}
+	QTimer* timer = new QTimer( this );
+	connect( timer, SIGNAL( timeout() ), this, SLOT( TimerTick() ) );
+	timer->start( 10 );
 
-	void Print( const std::string& text )
-	{
-		m_logbox->append( QString( text.c_str() ) );
-	}
+	return m_app->exec();
+}
 
-private:
-	QApplication* m_app;
-	QTextEdit* m_logbox;
-};
+void QtApp::Print( const std::string& text )
+{
+	m_logbox->append( QString( text.c_str() ) );
+}
+
+
+void QtApp::TimerTick()
+{
+	m_server->Tick();
+}
 
 int main( int argc, char** argv )
 {

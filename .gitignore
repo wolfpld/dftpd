@@ -3,3 +3,4 @@ dftpd
 *.swp
 *.d
 qt/Makefile
+moc_*
