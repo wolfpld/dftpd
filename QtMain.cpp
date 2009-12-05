@@ -95,6 +95,7 @@ void QtApp::TimerTick()
 
 void QtApp::About()
 {
+	QMessageBox::about( this, "Dumb FTP server", "Made by Bartosz Taudul\nemail: wolf.pld@gmail.com\nhttp://repo.or.cz/w/dftpd.git\nhttp://zgredowo.blogspot.com" );
 }
 
 void QtApp::GenerateToken()
