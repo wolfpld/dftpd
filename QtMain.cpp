@@ -30,7 +30,7 @@ int QtApp::Run()
 	setCentralWidget( widget );
 
 	show();
-	setWindowTitle( "Dump FTP server" );
+	setWindowTitle( "Dumb FTP server" );
 
 	m_logbox = new QTextEdit();
 	m_logbox->setReadOnly( true );
