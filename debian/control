@@ -1,0 +1,37 @@
+Source: dftpd
+Section: user/network
+Priority: extra
+Maintainer: Bartosz Taudul <wolf@pld-linux.org>
+Build-Depends: debhelper (>= 5), libqt4-maemo5-dev
+Standards-Version: 3.7.2
+
+Package: dftpd
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Dumb FTP Server
+ Dump FTP Server
+XB-Maemo-Icon-26:
+ iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAABHNCSVQICAgI
+ fAhkiAAAAAlwSFlzAAAHfwAAB38BeF7kggAAABl0RVh0U29mdHdhcmUAd3d3
+ Lmlua3NjYXBlLm9yZ5vuPBoAAAOsSURBVEiJvVZLS2RHFP6qbvXt2Ld7emeC
+ GBDMkGQRETKBRFChh9AQQcFktkFCVuIqkM1shPkFrlzOMgsh0BE3AUmDEsgm
+ hCEgbRTNi/Ex45jR6e57b51TJ4u2236a0YEcKG7VqarvO9+tUw8lIvg/zNQr
+ +Xz+zZGRkfX+/n4DAFrrloFKKRwcHFS2t7fvra6ulm5MRES3Jycnh7XWXq/B
+ o6OjODo6ug/g8xsTAQiJiJRSHUTOOTjnEIYhstnsnXw+P2atLXcDFJGTYrH4
+ d08iEYmY2RljGuBEBOccRKTxHRsbe3d4ePj7TCYDrXWjKKWgtcbW1tbziYmJ
+ DzY2Ng56KnLOcZ2gXpi5oUhEICJIpVLpur+ZDACCIGDP814H0J1IKRXGcczM
+ jJ0nDvv/GIjoGrgTQAT1/LzMU4GqzYZStRKGA2n13hdLd7/69gQAxOHRD0uf
+ PmhRFEURJRIJ7J4k8MnHH+G8agGFBthlUK3/X7VWPACTCoDvafz4y/7bAB60
+ KIqiyIkIPO81nJZjHJ5W29f0WhYkDcohVwCgsVmYOQrDUIgInkmA2b0SSUwO
+ WitUwlp2Nu/K0FrLzIyEMbB08xODWBBbh4SnUQmplahYLJK11hERfN8HuZsp
+ ismhGjMEgPEUKmH8AmhNbzAzxbFFMkgivqYiYoFlB+LLec4JBPK0g4iIOHYe
+ UkES1LZGIoATgXOAQC7aqG1mqbU7yInhRP7qqqhKGoGfQCgCJwBdRFmL7npG
+ zLDW/dmVKCaFW8ZHpcJg92pXCBNzTNypiIioyglAa0SWAOBKFb2vspr62EoI
+ oPsahc6HQCMi6UkjV0RQd2ulEMU26krEzDaWJG4FPt6wcrUiubo/lTTY/f1x
+ 5eeB3551EB08i/44crhT2Xzk6hCC2hEmAkDEU0qUXDgFYAUlSjWdhkpBaVMJ
+ xTx9flb9TpYW3UVg8tJldnb2p1KpJIuLi7KwsCD5fP7ey85tUdTLpqen7xtj
+ Jj3PG9jd3W3cQ8lk8uuZmZnpcrn85fr6enQVhmp+Bc3Pzz9USr3fPCCKouTQ
+ 0NBbuVzOy2QyUG13xM7OjhQKhSfpdPqwHVxEPlteXt4B2tYol8u9k06nR5p9
+ x8fH2NzcRKFQQBAEHa+j09NTNTg42D8+Pt7fTnR4eJiq11uIVlZWfmXmvmaf
+ cy7h+/7tbDbrn5+ft2Ph7OyM9/b2HpdKpZP2vr6+vhdzc3MA2n5dL5uamvrQ
+ GHO3Wx8z76+trX3zXxj/As5kajoEmsI/AAAAAElFTkSuQmCC
