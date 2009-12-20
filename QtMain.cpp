@@ -46,6 +46,8 @@ int QtApp::Run()
 	connect( none, SIGNAL( triggered() ), this, SLOT( DisableAuthentication() ) );
 	QAction* about = new QAction( "About", this );
 	connect( about, SIGNAL( triggered() ), this, SLOT( About() ) );
+	QAction* help = new QAction( "Help", this );
+	connect( help, SIGNAL( triggered() ), this, SLOT( Help() ) );
 
 #ifdef Q_WS_MAEMO_5
 	QMenu* menu = menuBar()->addMenu( "" );
@@ -54,6 +56,7 @@ int QtApp::Run()
 #endif
 	menu->addAction( token );
 	menu->addAction( none );
+	menu->addAction( help );
 	menu->addAction( about );
 
 	m_timer = new QTimer( this );
@@ -122,6 +125,17 @@ void QtApp::TimerTick()
 void QtApp::About()
 {
 	QMessageBox::about( this, "Dumb FTP server", "Made by Bartosz Taudul\nemail: wolf.pld@gmail.com\nhttp://repo.or.cz/w/dftpd.git\nhttp://zgredowo.blogspot.com" );
+}
+
+void QtApp::Help()
+{
+	QMessageBox::about( this, "Usage instructions", "To be able to log-in after starting the server you will need to either disable authentication "
+		       					"(any user and password will do, very insecure) or generate an one-time token that is presumably "
+							"only known to you and which will be invalidated after successfully using it as a password (any "
+							"username is accepted).\n\nPlease keep in mind that this server is highly experimental and by design "
+							"doesn't support extravagant FTP commands. You won't be able to transmit EBCDIC encoded 39-bit byte "
+							"record-structured files with telnet format controls in block mode to your DEC TOPS-20s mainframe. "
+							"But you will be able to send and receive photos, videos, programs, etc." );
 }
 
 void QtApp::GenerateToken()

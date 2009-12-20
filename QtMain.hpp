@@ -30,6 +30,7 @@ private:
 private slots:
 	void TimerTick();
 	void About();
+	void Help();
 	void GenerateToken();
 	void DisableAuthentication();
 };
