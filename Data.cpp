@@ -195,7 +195,7 @@ bool Data::CanReceive()
 	FD_SET( m_sock, &fd );
 	timeval tv;
 	tv.tv_sec = 0;
-	tv.tv_usec = 0;
+	tv.tv_usec = 100;
 	select( m_sock + 1, &fd, NULL, NULL, &tv );
 
 	return FD_ISSET( m_sock, &fd );
