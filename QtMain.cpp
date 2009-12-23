@@ -65,9 +65,7 @@ int QtApp::Run()
 
 	try
 	{
-		m_auth.reset( new AuthToken );
-		m_server = Server::Create( m_auth );
-
+		// Search for WLAN IP address
 		int sock = socket( AF_INET, SOCK_DGRAM, 0 );
 
 		char buf[1024];
@@ -80,14 +78,21 @@ int QtApp::Run()
 		struct ifreq* ifr = ifc.ifc_req;
 		int num = ifc.ifc_len / sizeof( struct ifreq );
 
-		g_log->Print( "Network interface list:" );
+		std::string ip = "0.0.0.0";
 		while( num-- )
 		{
-			g_log->Print( std::string( ifr->ifr_name ) + ": " + inet_ntoa(((struct sockaddr_in *)&ifr->ifr_addr)->sin_addr) );
+			if( std::string( ifr->ifr_name ) == "wlan0" )
+			{
+				ip = inet_ntoa(((struct sockaddr_in *)&ifr->ifr_addr)->sin_addr);
+				break;
+			}
 			ifr++;
 		}
 
 		::close( sock );
+
+		m_auth.reset( new AuthToken );
+		m_server = Server::Create( m_auth, ip );
 	}
 	catch( ServerCrash& e )
 	{
