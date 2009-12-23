@@ -28,14 +28,7 @@ Data::Data( const SessionWPtr& session, RFile* file, Mode mode )
 	, m_session( session )
 	, m_buf( new char[BufSize] )
 {
-	if( mode == M_UPLOAD )
-	{
-		m_data.reset( new DataBufferFileSymbian( file, BufSize ) );
-	}
-	else
-	{
-		m_data.reset( new DataBufferFileSymbian( file, BufSize ) );
-	}
+	m_data.reset( new DataBufferFileSymbian( file, BufSize ) );
 }
 #endif
 
@@ -45,14 +38,7 @@ Data::Data( const SessionWPtr& session, FILE* file, Mode mode )
 	, m_session( session )
 	, m_buf( new char[BufSize] )
 {
-	if( mode == M_UPLOAD )
-	{
-		m_data.reset( new DataBufferFile( file, BufSize ) );
-	}
-	else
-	{
-		m_data.reset( new DataBufferFile( file, BufSize ) );
-	}
+	m_data.reset( new DataBufferFile( file, BufSize ) );
 }
 
 Data::Data( const SessionWPtr& session, const std::list<std::string>& list )
