@@ -154,7 +154,7 @@ void Data::Receive()
 
 	while( total < BufSize && CanReceive() )
 	{
-		int size = recv( m_sock, m_buf, BufSize - total, 0 );
+		int size = recv( m_sock, m_buf + total, BufSize - total, 0 );
 		if( size == -1 )
 		{
 			throw SessionErrorException;
@@ -164,18 +164,14 @@ void Data::Receive()
 			m_session.lock()->DataConnectionFinished();
 			return;
 		}
-		else
-		{
-			int writeSize = m_data->Write( m_buf, size );
-
-			if( writeSize != size )
-			{
-				m_session.lock()->OutOfSpace();
-				return;
-			}
-		}
 
 		total += size;
+	}
+
+	int writeSize = m_data->Write( m_buf, total );
+	if( writeSize != total )
+	{
+		m_session.lock()->OutOfSpace();
 	}
 }
 
