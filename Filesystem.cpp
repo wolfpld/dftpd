@@ -6,6 +6,8 @@
 #include "Filesystem.hpp"
 #include "IO.hpp"
 #include "String.hpp"
+#include <utf.h>
+
 
 Filesystem::Filesystem( const std::string& root )
 	: m_root( root )
@@ -88,9 +90,13 @@ RFile* Filesystem::FileOpenSymbian( const std::string& file, Mode mode )
 	}
 
 	TPtrC8 ptr( reinterpret_cast<const TUint8*>( path.c_str() ) );
+
+	TBuf8<512> buf8;
+	buf8.FillZ();
+	buf8.Copy( ptr );
 	TBuf<512> buf;
-	buf.FillZ();
-	buf.Copy( ptr );
+	CnvUtfConverter::ConvertToUnicodeFromUtf8((TDes16&)buf, (TDesC8&)buf8);
+
 
 	switch( mode )
 	{

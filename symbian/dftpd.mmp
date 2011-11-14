@@ -65,5 +65,6 @@ library		efsrv.lib
 library		eikcoctl.lib
 library		eikcore.lib
 library		eiksrv.lib
+library		charconv.lib
 
 capability ReadUserData WriteUserData NetworkServices
