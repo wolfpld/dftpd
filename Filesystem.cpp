@@ -6,7 +6,10 @@
 #include "Filesystem.hpp"
 #include "IO.hpp"
 #include "String.hpp"
-#include <utf.h>
+
+#ifdef SYMBIAN
+#  include <utf.h>
+#endif
 
 
 Filesystem::Filesystem( const std::string& root )
